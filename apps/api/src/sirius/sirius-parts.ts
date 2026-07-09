@@ -22,8 +22,8 @@ export const siriusResourcePartsByItem = {
   Schild: [6, 6, 6, 6],
   Schutz: [16, 15, 15, 14],
   Sniperblaster: [6, 6, 6, 6],
-  Speed: [16, 15, 15, 14],
-  Stun: [6, 6, 6, 6],
+  Beschleuniger: [16, 15, 15, 14],
+  Stunladung: [6, 6, 6, 6],
   Stundome: [6, 6, 6, 6],
   Taunt: [24, 23, 22, 21],
   Thermoblast: [6, 6, 6, 6],
@@ -34,8 +34,39 @@ export const siriusResourcePartsByItem = {
 
 export type SiriusResourceItemName = keyof typeof siriusResourcePartsByItem
 
-export const siriusResourceParts = (itemName: SiriusResourceItemName, tierIndex: number) =>
-  siriusResourcePartsByItem[itemName][tierIndex]
+export const siriusResourceItems = [
+  { name: 'Blaster', itemType: 'Blaster' },
+  { name: 'Sammler', itemType: 'Sammler' },
+  { name: 'Reparaturdroide', itemType: 'Reparaturdroide' },
+  { name: 'Nachbrenner', itemType: 'Nachbrenner' },
+  { name: 'Raketen', itemType: 'Raketen' },
+  { name: 'Zielcomputer', itemType: 'Zielcomputer' },
+  { name: 'Perforator', itemType: 'Perforator' },
+  { name: 'Thermoblast', itemType: 'Thermoblaster' },
+  { name: 'Schild', itemType: 'Schild' },
+  { name: 'Taunt', itemType: 'Taunt' },
+  { name: 'Zielscrambler', itemType: 'Zielscrambler' },
+  { name: 'Aggrobombe', itemType: 'Aggrobombe' },
+  { name: 'Beschleuniger', itemType: 'Beschleuniger' },
+  { name: 'Stunladung', itemType: 'Stunladung' },
+  { name: 'Aggrobeacon', itemType: 'Aggrobeacon' },
+  { name: 'Stundome', itemType: 'Stundome' },
+  { name: 'Zielreparatur', itemType: 'Zielreparatur' },
+  { name: 'Schutz', itemType: 'Protektor' },
+  { name: 'Reparaturfeld', itemType: 'Reparaturfeld' },
+  { name: 'Dosenoeffner', itemType: 'Dosenoeffner' },
+  { name: 'Sniperblaster', itemType: 'Scharfschuetzenblaster' },
+  { name: 'Angriffsdroide', itemType: 'Angriffsdroide' },
+  { name: 'Orbitalschlag', itemType: 'Orbitalschlag' },
+  { name: 'Angriffsladung', itemType: 'Angriffsladung' },
+  { name: 'Reparaturfeldturm', itemType: 'Reparaturturm' },
+  { name: 'Angriffsfeldturm', itemType: 'Angriffsturm' },
+  { name: 'Haftbombe', itemType: 'Haftbombe' },
+  { name: 'Materialisierer', itemType: 'Materialisierer' },
+  { name: 'Mine', itemType: 'Minenleger' },
+] as const satisfies ReadonlyArray<{ name: SiriusResourceItemName; itemType: string }>
+
+export const siriusResourceParts = (itemName: SiriusResourceItemName, tierIndex: number) => siriusResourcePartsByItem[itemName][tierIndex]
 
 export const siriusResourcePartOptionsByRing: Record<number, number[]> = {
   1: [24, 16, 6],

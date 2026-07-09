@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
-import { partsRequiredBySlotGroup, siriusResourceParts, siriusResourcePartsByItem } from '../src/sirius/sirius-parts.js'
+import {
+  partsRequiredBySlotGroup,
+  siriusResourceItems,
+  siriusResourceParts,
+  siriusResourcePartsByItem,
+} from '../src/sirius/sirius-parts.js'
 
 const expectedSiriusResourceParts = {
   Aggrobeacon: [24, 23, 22, 21],
@@ -24,8 +29,8 @@ const expectedSiriusResourceParts = {
   Schild: [6, 6, 6, 6],
   Schutz: [16, 15, 15, 14],
   Sniperblaster: [6, 6, 6, 6],
-  Speed: [16, 15, 15, 14],
-  Stun: [6, 6, 6, 6],
+  Beschleuniger: [16, 15, 15, 14],
+  Stunladung: [6, 6, 6, 6],
   Stundome: [6, 6, 6, 6],
   Taunt: [24, 23, 22, 21],
   Thermoblast: [6, 6, 6, 6],
@@ -51,8 +56,21 @@ describe('Sirius blueprint parts', () => {
 
   it('returns the exact ring value for individual resource blueprints', () => {
     expect(siriusResourceParts('Angriffsladung', 3)).toBe(21)
+    expect(siriusResourceParts('Beschleuniger', 3)).toBe(14)
+    expect(siriusResourceParts('Stunladung', 3)).toBe(6)
     expect(siriusResourceParts('Schutz', 3)).toBe(14)
     expect(siriusResourceParts('Aggrobombe', 3)).toBe(6)
+  })
+
+  it('generates every current Sirius resource blueprint for rings 1-4', () => {
+    const resourceNames = new Set(siriusResourceItems.map((item) => item.name))
+
+    expect(resourceNames.size).toBe(Object.keys(siriusResourcePartsByItem).length)
+    expect(resourceNames).toContain('Beschleuniger')
+    expect(resourceNames).toContain('Materialisierer')
+    expect(resourceNames).toContain('Stunladung')
+    expect(resourceNames).not.toContain('Speed')
+    expect(resourceNames).not.toContain('Stun')
   })
 
   it('keeps ring 5 slot groups aligned with Prelude ancient fragment counts', () => {
@@ -77,10 +95,19 @@ describe('Sirius blueprint parts', () => {
     )
   })
 
-  it('uses current item categories for speed, attack charge and materializer blueprints', () => {
+  it('uses current item categories for renamed and materializer blueprints', () => {
     expect(
-      seedBlueprints.filter((blueprint) => /\bSpeed\b/.test(blueprint.canonicalName)).every((blueprint) => blueprint.itemType === 'Speed'),
+      seedBlueprints
+        .filter((blueprint) => /\bBeschleuniger\b/.test(blueprint.canonicalName))
+        .every((blueprint) => blueprint.itemType === 'Beschleuniger'),
     ).toBe(true)
+    expect(seedBlueprints.some((blueprint) => /\bSpeed\b/.test(blueprint.canonicalName) || blueprint.itemType === 'Speed')).toBe(false)
+    expect(
+      seedBlueprints
+        .filter((blueprint) => /\bStunladung\b/.test(blueprint.canonicalName))
+        .every((blueprint) => blueprint.itemType === 'Stunladung'),
+    ).toBe(true)
+    expect(seedBlueprints.some((blueprint) => /\bStun\b/.test(blueprint.canonicalName) || blueprint.itemType === 'Stun')).toBe(false)
     expect(
       seedBlueprints
         .filter((blueprint) => /\bAngriffsladung\b/.test(blueprint.canonicalName))

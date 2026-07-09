@@ -1233,9 +1233,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Antares Speed",
+    "canonicalName": "Antares Beschleuniger",
     "system": "Antares",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": null,
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1269,9 +1269,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Antares langer Speed",
+    "canonicalName": "Antares langer Beschleuniger",
     "system": "Antares",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Lang",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1296,9 +1296,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Antares starker Speed",
+    "canonicalName": "Antares starker Beschleuniger",
     "system": "Antares",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Stark",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1359,9 +1359,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Draconis Speed",
+    "canonicalName": "Draconis Beschleuniger",
     "system": "Draconis",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": null,
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1422,9 +1422,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Draconis langer Speed",
+    "canonicalName": "Draconis langer Beschleuniger",
     "system": "Draconis",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Lang",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1476,9 +1476,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Draconis starker Speed",
+    "canonicalName": "Draconis starker Beschleuniger",
     "system": "Draconis",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Stark",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1512,9 +1512,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Gemini Speed",
+    "canonicalName": "Gemini Beschleuniger",
     "system": "Gemini",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": null,
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1548,9 +1548,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Gemini langer Speed",
+    "canonicalName": "Gemini langer Beschleuniger",
     "system": "Gemini",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Lang",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1575,9 +1575,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Gemini starker Speed",
+    "canonicalName": "Gemini starker Beschleuniger",
     "system": "Gemini",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Stark",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1611,9 +1611,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Mizar Speed",
+    "canonicalName": "Mizar Beschleuniger",
     "system": "Mizar",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": null,
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1647,9 +1647,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Mizar langer Speed",
+    "canonicalName": "Mizar langer Beschleuniger",
     "system": "Mizar",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Lang",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1674,9 +1674,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Mizar starker Speed",
+    "canonicalName": "Mizar starker Beschleuniger",
     "system": "Mizar",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Stark",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1737,9 +1737,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sirius Speed",
+    "canonicalName": "Sirius Beschleuniger",
     "system": "Sirius",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": null,
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1800,9 +1800,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sirius langer Speed",
+    "canonicalName": "Sirius langer Beschleuniger",
     "system": "Sirius",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Lang",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1854,9 +1854,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sirius starker Speed",
+    "canonicalName": "Sirius starker Beschleuniger",
     "system": "Sirius",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Stark",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1899,9 +1899,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sol Speed",
+    "canonicalName": "Sol Beschleuniger",
     "system": "Sol",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": null,
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1944,9 +1944,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sol langer Speed",
+    "canonicalName": "Sol langer Beschleuniger",
     "system": "Sol",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Lang",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -1980,9 +1980,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sol starker Speed",
+    "canonicalName": "Sol starker Beschleuniger",
     "system": "Sol",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Stark",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -2007,9 +2007,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Vega Speed",
+    "canonicalName": "Vega Beschleuniger",
     "system": "Vega",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": null,
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -2025,9 +2025,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Vega langer Speed",
+    "canonicalName": "Vega langer Beschleuniger",
     "system": "Vega",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Lang",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -2043,9 +2043,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Vega starker Speed",
+    "canonicalName": "Vega starker Beschleuniger",
     "system": "Vega",
-    "itemType": "Speed",
+    "itemType": "Beschleuniger",
     "variant": "Stark",
     "slotGroup": "SLOT_5",
     "rarity": "ANCIENT",
@@ -2133,9 +2133,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Antares Stun",
+    "canonicalName": "Antares Stunladung",
     "system": "Antares",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": null,
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2160,9 +2160,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Antares langer Stun",
+    "canonicalName": "Antares lange Stunladung",
     "system": "Antares",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Lang",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2214,9 +2214,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Antares starker Stun",
+    "canonicalName": "Antares starke Stunladung",
     "system": "Antares",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Stark",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2331,9 +2331,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Draconis Stun",
+    "canonicalName": "Draconis Stunladung",
     "system": "Draconis",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": null,
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2403,9 +2403,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Draconis langer Stun",
+    "canonicalName": "Draconis lange Stunladung",
     "system": "Draconis",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Lang",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2574,9 +2574,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Draconis starker Stun",
+    "canonicalName": "Draconis starke Stunladung",
     "system": "Draconis",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Stark",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2664,9 +2664,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Gemini Stun",
+    "canonicalName": "Gemini Stunladung",
     "system": "Gemini",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": null,
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2718,9 +2718,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Gemini langer Stun",
+    "canonicalName": "Gemini lange Stunladung",
     "system": "Gemini",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Lang",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2817,9 +2817,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Gemini starker Stun",
+    "canonicalName": "Gemini starke Stunladung",
     "system": "Gemini",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Stark",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2907,9 +2907,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Mizar Stun",
+    "canonicalName": "Mizar Stunladung",
     "system": "Mizar",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": null,
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -2961,9 +2961,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Mizar langer Stun",
+    "canonicalName": "Mizar lange Stunladung",
     "system": "Mizar",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Lang",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3060,9 +3060,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Mizar starker Stun",
+    "canonicalName": "Mizar starke Stunladung",
     "system": "Mizar",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Stark",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3195,9 +3195,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sirius Stun",
+    "canonicalName": "Sirius Stunladung",
     "system": "Sirius",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": null,
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3267,9 +3267,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sirius langer Stun",
+    "canonicalName": "Sirius lange Stunladung",
     "system": "Sirius",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Lang",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3438,9 +3438,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sirius starker Stun",
+    "canonicalName": "Sirius starke Stunladung",
     "system": "Sirius",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Stark",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3555,9 +3555,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sol Stun",
+    "canonicalName": "Sol Stunladung",
     "system": "Sol",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": null,
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3618,9 +3618,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sol langer Stun",
+    "canonicalName": "Sol lange Stunladung",
     "system": "Sol",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Lang",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3762,9 +3762,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Sol starker Stun",
+    "canonicalName": "Sol starke Stunladung",
     "system": "Sol",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Stark",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3825,9 +3825,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Vega Stun",
+    "canonicalName": "Vega Stunladung",
     "system": "Vega",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": null,
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3852,9 +3852,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Vega langer Stun",
+    "canonicalName": "Vega lange Stunladung",
     "system": "Vega",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Lang",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",
@@ -3897,9 +3897,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Vega starker Stun",
+    "canonicalName": "Vega starke Stunladung",
     "system": "Vega",
-    "itemType": "Stun",
+    "itemType": "Stunladung",
     "variant": "Stark",
     "slotGroup": "SLOT_2",
     "rarity": "ANCIENT",

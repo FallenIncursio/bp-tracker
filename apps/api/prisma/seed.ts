@@ -5,7 +5,7 @@ import path from 'node:path'
 import { PrismaClient, type BlueprintRarity, type BlueprintSlotGroup } from '../src/generated/prisma/client.js'
 import type { SiriusTechTier } from '../src/generated/prisma/client.js'
 import { PrismaPg } from '@prisma/adapter-pg'
-import { partsRequiredBySlotGroup, siriusResourceParts, type SiriusResourceItemName } from '../src/sirius/sirius-parts.js'
+import { partsRequiredBySlotGroup, siriusResourceItems, siriusResourceParts } from '../src/sirius/sirius-parts.js'
 
 type BlueprintSeed = {
   canonicalName: string
@@ -114,37 +114,6 @@ const siriusResourceTiers: Array<{ ring: number; techTier: SiriusTechTier; label
   { ring: 4, techTier: 'KENYTE', label: 'Kenyte' },
 ]
 
-const siriusResourceItems: Array<{ name: SiriusResourceItemName; itemType: string }> = [
-  { name: 'Blaster', itemType: 'Blaster' },
-  { name: 'Sammler', itemType: 'Sammler' },
-  { name: 'Reparaturdroide', itemType: 'Reparaturdroide' },
-  { name: 'Nachbrenner', itemType: 'Nachbrenner' },
-  { name: 'Raketen', itemType: 'Raketen' },
-  { name: 'Zielcomputer', itemType: 'Zielcomputer' },
-  { name: 'Perforator', itemType: 'Perforator' },
-  { name: 'Thermoblast', itemType: 'Thermoblaster' },
-  { name: 'Schild', itemType: 'Schild' },
-  { name: 'Taunt', itemType: 'Taunt' },
-  { name: 'Zielscrambler', itemType: 'Zielscrambler' },
-  { name: 'Aggrobombe', itemType: 'Aggrobombe' },
-  { name: 'Speed', itemType: 'Speed' },
-  { name: 'Stun', itemType: 'Stun' },
-  { name: 'Aggrobeacon', itemType: 'Aggrobeacon' },
-  { name: 'Stundome', itemType: 'Stundome' },
-  { name: 'Zielreparatur', itemType: 'Zielreparatur' },
-  { name: 'Schutz', itemType: 'Protektor' },
-  { name: 'Reparaturfeld', itemType: 'Reparaturfeld' },
-  { name: 'Dosenoeffner', itemType: 'Dosenoeffner' },
-  { name: 'Sniperblaster', itemType: 'Scharfschuetzenblaster' },
-  { name: 'Angriffsdroide', itemType: 'Angriffsdroide' },
-  { name: 'Orbitalschlag', itemType: 'Orbitalschlag' },
-  { name: 'Angriffsladung', itemType: 'Angriffsladung' },
-  { name: 'Reparaturfeldturm', itemType: 'Reparaturturm' },
-  { name: 'Angriffsfeldturm', itemType: 'Angriffsturm' },
-  { name: 'Haftbombe', itemType: 'Haftbombe' },
-  { name: 'Mine', itemType: 'Minenleger' },
-]
-
 const blueprintTermNames: Record<string, LocalizedSeedName> = {
   '6070-ER': { de: '6070-ER', en: '6070-ER', es: '6070-ER' },
   Aggrobeacon: { de: 'Aggrobeacon', en: 'Aggro Beacon', es: 'Señuelo' },
@@ -155,6 +124,7 @@ const blueprintTermNames: Record<string, LocalizedSeedName> = {
   Angriffsladung: { de: 'Angriffsladung', en: 'Attack Charge', es: 'Carga de Ataque' },
   Angriffsturm: { de: 'Angriffsturm', en: 'Attack Turret', es: 'Torreta de Ataque' },
   Antik: { de: 'Antik', en: 'Ancient', es: 'Antiguo' },
+  Beschleuniger: { de: 'Beschleuniger', en: 'Accelerator', es: 'Acelerador' },
   Blaster: { de: 'Blaster', en: 'Blaster', es: 'Cañón' },
   Bruderschaft: { de: 'Bruderschaft', en: 'Brotherhood', es: 'Hermandad' },
   Chaos: { de: 'Chaos', en: 'Chaos', es: 'Caos' },
@@ -186,6 +156,7 @@ const blueprintTermNames: Record<string, LocalizedSeedName> = {
   Sniperblaster: { de: 'Sniperblaster', en: 'Sniper Blaster', es: 'Cañón de Francotirador' },
   Speed: { de: 'Speed', en: 'Speed', es: 'Velocidad' },
   Stun: { de: 'Stun', en: 'Stun' },
+  Stunladung: { de: 'Stunladung', en: 'Stun Charge', es: 'Carga aturdidora' },
   Stundome: { de: 'Stundome', en: 'Stun Dome', es: 'Cúpula Aturdidora' },
   Taunt: { de: 'Taunt', en: 'Taunt', es: 'Provocación' },
   Thermoblast: { de: 'Thermoblast', en: 'Thermoblast' },
@@ -196,8 +167,41 @@ const blueprintTermNames: Record<string, LocalizedSeedName> = {
   Zielscrambler: { de: 'Zielscrambler', en: 'Aim Scrambler', es: 'Interferidor de Mira' },
 }
 
-const blueprintCanonicalRenames = [{ from: '6070.0', to: '6070-ER' }] as const
 const legacyBlueprintAliases = new Map<string, string[]>([['6070-ER', ['6070.0']]])
+
+const legacyBlueprintTermRenames = [
+  { from: 'Speed', to: 'Beschleuniger' },
+  {
+    from: 'Stun',
+    to: 'Stunladung',
+    reverseModifiers: [
+      { from: 'lange', to: 'langer' },
+      { from: 'starke', to: 'starker' },
+    ],
+  },
+] as const
+
+const replaceExactTerm = (value: string, from: string, to: string) =>
+  value
+    .split(' ')
+    .map((part) => (part === from ? to : part))
+    .join(' ')
+
+const legacyAliasesForBlueprint = (canonicalName: string) => {
+  const aliases = new Set(legacyBlueprintAliases.get(canonicalName) ?? [])
+
+  for (const rename of legacyBlueprintTermRenames) {
+    if (!canonicalName.split(' ').includes(rename.to)) continue
+
+    let alias = replaceExactTerm(canonicalName, rename.to, rename.from)
+    for (const modifier of 'reverseModifiers' in rename ? rename.reverseModifiers : []) {
+      alias = alias.replace(new RegExp(`\\b${modifier.from} ${rename.from}\\b`, 'g'), `${modifier.to} ${rename.from}`)
+    }
+    aliases.add(alias)
+  }
+
+  return Array.from(aliases)
+}
 
 const translatedBlueprintTerms = Object.keys(blueprintTermNames).sort((a, b) => b.length - a.length)
 
@@ -356,12 +360,19 @@ const normalizeCode = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
-const itemTypeRenames = [{ from: '6070.0', to: '6070-ER' }] as const
+const itemTypeRenames = [
+  { from: '6070.0', to: '6070-ER' },
+  { from: 'Speed', to: 'Beschleuniger' },
+  { from: 'Stun', to: 'Stunladung' },
+] as const
 
 const main = async () => {
   const blueprints = [...readJson<BlueprintSeed[]>('data/seeds/blueprints.json'), ...buildSiriusResourceBlueprints()]
   const planets = readJson<SiriusPlanetSeed[]>('data/seeds/sirius-planets.json')
   const ships = readJson<ShipSeed[]>('data/seeds/ships.json')
+  const blueprintCanonicalRenames = blueprints.flatMap((bp) =>
+    legacyAliasesForBlueprint(bp.canonicalName).map((alias) => ({ from: alias, to: bp.canonicalName })),
+  )
 
   for (const rename of blueprintCanonicalRenames) {
     const [legacy, target] = await Promise.all([
@@ -461,7 +472,7 @@ const main = async () => {
       },
     })
     await upsertBlueprintTranslations(createdBlueprint.id, names)
-    for (const alias of legacyBlueprintAliases.get(bp.canonicalName) ?? []) {
+    for (const alias of legacyAliasesForBlueprint(bp.canonicalName)) {
       await prisma.blueprintAlias.upsert({
         where: { blueprintId_alias: { blueprintId: createdBlueprint.id, alias } },
         update: { language: null, source: 'legacy-name' },

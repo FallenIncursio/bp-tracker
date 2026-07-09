@@ -92,7 +92,7 @@
     "className": "Storm",
     "requirements": [
       "Sirius Blaster",
-      "Sirius Speed",
+      "Sirius Beschleuniger",
       "Sirius Raketen",
       "Sirius Zielcomputer",
       "Sirius Aggrobombe",
@@ -122,7 +122,7 @@
     "system": "Tau Ceti",
     "className": "Sniper",
     "requirements": [
-      "Sirius Stun",
+      "Sirius Stunladung",
       "Sirius Reparaturfeld",
       "Sirius Thermoblast",
       "Sirius Zielscrambler",

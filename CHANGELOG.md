@@ -2,6 +2,11 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.3 - 2026-07-09
+
+- Added missing Oolyte, Dolomyte, Clay, and Kenyte Materialisierer resource blueprints.
+- Renamed Speed blueprints to Beschleuniger and Stun blueprints to Stunladung while keeping legacy aliases searchable.
+
 ## 0.2.2 - 2026-07-09
 
 - Marked Sirius slot blueprints as Ancient rarity in seed data.
