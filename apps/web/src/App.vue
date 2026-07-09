@@ -39,7 +39,7 @@ const mobileNavOpen = ref(false)
 const githubUrl = import.meta.env.VITE_GITHUB_URL ?? 'https://github.com/FallenIncursio/bp-tracker'
 const apiDocsUrl = '/api/docs/'
 const kofiUrl = 'https://ko-fi.com/fallenincursio'
-const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.2.0'
+const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.2.1'
 const authRedirectQuery = computed(() => {
   const existingRedirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
   const redirectSource = route.path === '/login' || route.path === '/register' ? existingRedirect : route.fullPath
@@ -96,7 +96,7 @@ const navLinks = computed(() =>
       visible: true,
     },
     { to: '/about', label: t('nav.about'), icon: markRaw(Info), visible: true },
-  ].filter(link => link.visible),
+  ].filter((link) => link.visible),
 )
 
 const updateLocale = (value: string) => {

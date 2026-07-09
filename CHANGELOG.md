@@ -2,6 +2,11 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.1 - 2026-07-09
+
+- Added sortable blueprint columns with mobile sort controls.
+- Sorted blueprint slots numerically from 2-slot to 18-slot and back.
+
 ## 0.2.0 - 2026-07-09
 
 - Added wanted blueprint alerts for active Sirius hits.

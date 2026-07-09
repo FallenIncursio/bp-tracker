@@ -1491,7 +1491,7 @@ export const openApiSpec: OpenApiSpec = {
   openapi: '3.1.0',
   info: {
     title: 'BP Tracker API',
-    version: '0.2.0',
+    version: '0.2.1',
     description: 'HTTP API for the open-source Pirate Galaxy blueprint tracker. Authentication uses an HTTP-only session cookie.',
     license: { name: 'MIT' },
   },

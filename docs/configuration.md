@@ -77,7 +77,7 @@ The bot needs access to the selected server and the selected channels. Required 
 | --------------------------- | ---------------------------------------------- | ----------------------------------- |
 | `VITE_GITHUB_URL`           | `https://github.com/FallenIncursio/bp-tracker` | Link shown in app navigation/about. |
 | `VITE_PROJECT_HOMEPAGE_URL` | `https://bp-tracker.arcenciel.io`              | Public project/app URL.             |
-| `VITE_APP_VERSION`          | `0.2.0`                                        | Displayed app version.              |
+| `VITE_APP_VERSION`          | `0.2.1`                                        | Displayed app version.              |
 
 `VITE_*` variables are embedded at web build time. Rebuild the web image after changing them.
 

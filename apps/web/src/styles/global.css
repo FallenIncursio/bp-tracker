@@ -28,7 +28,13 @@
   --wanted-bg: #fff2d6;
   --unknown-bg: #eef1f4;
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
 }
 
 :root[data-theme='dark'] {
@@ -427,6 +433,35 @@ th {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.table-sort-button {
+  width: 100%;
+  min-height: 26px;
+  border: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.table-sort-button:hover,
+.table-sort-button.is-active {
+  color: var(--text);
+}
+
+.table-sort-icon {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.table-sort-button.is-active .table-sort-icon {
+  color: var(--primary);
 }
 
 tr:last-child td {
@@ -1042,9 +1077,7 @@ textarea {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--primary) 9%, transparent), transparent 44%),
-    var(--surface);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 9%, transparent), transparent 44%), var(--surface);
 }
 
 .guest-callout h2 {
@@ -1093,6 +1126,28 @@ textarea {
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid var(--border);
+}
+
+.mobile-sort-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.mobile-sort-toolbar label {
+  min-width: 0;
+}
+
+.mobile-sort-toolbar select {
+  width: 100%;
+}
+
+.sort-direction-button {
+  min-width: 94px;
 }
 
 .bulk-actionbar {
@@ -1571,7 +1626,9 @@ td[rowspan] {
 }
 
 .slot-editor-row-with-enemy {
-  grid-template-columns: minmax(120px, 0.8fr) minmax(120px, 0.8fr) minmax(260px, 2.4fr) 38px;
+  grid-template-columns:
+    minmax(120px, 0.8fr) minmax(120px, 0.8fr) minmax(260px, 2.4fr)
+    38px;
 }
 
 .slot-editor-row label {
@@ -3223,15 +3280,22 @@ td[rowspan] {
 
   .filters,
   .selection-toolbar,
+  .mobile-sort-toolbar,
   .bulk-actionbar {
     align-items: stretch;
   }
 
   .filters > label,
   .filters > button,
+  .mobile-sort-toolbar > label,
+  .mobile-sort-toolbar .secondary-button,
   .selection-toolbar .secondary-button,
   .bulk-actionbar .secondary-button {
     width: 100%;
+  }
+
+  .mobile-sort-toolbar {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .selection-toolbar {

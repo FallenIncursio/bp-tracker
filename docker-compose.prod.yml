@@ -9,7 +9,7 @@ services:
     volumes:
       - bp_tracker_postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bp_tracker} -d ${POSTGRES_DB:-bp_tracker}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-bp_tracker} -d ${POSTGRES_DB:-bp_tracker}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -40,10 +40,10 @@ services:
       args:
         VITE_GITHUB_URL: ${VITE_GITHUB_URL:-https://github.com/FallenIncursio/bp-tracker}
         VITE_PROJECT_HOMEPAGE_URL: ${VITE_PROJECT_HOMEPAGE_URL:-https://bp-tracker.arcenciel.io}
-        VITE_APP_VERSION: ${VITE_APP_VERSION:-0.2.0}
+        VITE_APP_VERSION: ${VITE_APP_VERSION:-0.2.1}
     restart: always
     ports:
-      - "8080:80"
+      - '8080:80'
     depends_on:
       - api
 
