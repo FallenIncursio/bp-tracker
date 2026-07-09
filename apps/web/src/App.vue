@@ -19,9 +19,11 @@ import {
   Sun,
   UserCircle,
   UserPlus,
+  Users,
   X,
 } from '@lucide/vue'
 import { useAuth } from './composables/useAuth'
+import { useClans } from './composables/useClans'
 import { useTheme } from './composables/useTheme'
 import { localeOptions, setLocalePreference, supportedLocales, type SupportedLocale } from './i18n'
 import BrandGithubIcon from './components/BrandGithubIcon.vue'
@@ -29,6 +31,7 @@ import BrandKofiIcon from './components/BrandKofiIcon.vue'
 import ClanSwitcher from './components/ClanSwitcher.vue'
 
 const { user, init, logout, isAdmin } = useAuth()
+const { canManageSelectedClan } = useClans()
 const { t, locale } = useI18n()
 const { isDark, toggleTheme } = useTheme()
 const route = useRoute()
@@ -36,24 +39,64 @@ const mobileNavOpen = ref(false)
 const githubUrl = import.meta.env.VITE_GITHUB_URL ?? 'https://github.com/FallenIncursio/bp-tracker'
 const apiDocsUrl = '/api/docs/'
 const kofiUrl = 'https://ko-fi.com/fallenincursio'
-const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.1.0'
+const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.2.0'
 const authRedirectQuery = computed(() => {
   const existingRedirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
   const redirectSource = route.path === '/login' || route.path === '/register' ? existingRedirect : route.fullPath
   const redirect = redirectSource.startsWith('/') && !redirectSource.startsWith('//') ? redirectSource : '/'
   return { redirect }
 })
+const adminNavLabel = computed(() => {
+  if (isAdmin.value) return t('nav.admin')
+  return canManageSelectedClan.value ? t('nav.clanManagement') : t('nav.clanMembers')
+})
+const adminNavIcon = computed(() => markRaw(isAdmin.value || canManageSelectedClan.value ? Shield : Users))
 const navLinks = computed(() =>
   [
-    { to: '/', label: t('nav.dashboard'), icon: markRaw(LayoutDashboard), visible: true },
-    { to: '/blueprints', label: t('nav.blueprints'), icon: markRaw(ScrollText), visible: true },
-    { to: '/sirius', label: t('nav.sirius'), icon: markRaw(Orbit), visible: true },
-    { to: '/checker', label: t('nav.checker'), icon: markRaw(CheckSquare), visible: true },
-    { to: '/account', label: t('nav.account'), icon: markRaw(UserCircle), visible: Boolean(user.value) },
-    { to: '/admin', label: t('nav.admin'), icon: markRaw(Shield), visible: Boolean(user.value || isAdmin.value) },
-    { to: '/help', label: t('nav.help'), icon: markRaw(HelpCircle), visible: true },
+    {
+      to: '/',
+      label: t('nav.dashboard'),
+      icon: markRaw(LayoutDashboard),
+      visible: true,
+    },
+    {
+      to: '/blueprints',
+      label: t('nav.blueprints'),
+      icon: markRaw(ScrollText),
+      visible: true,
+    },
+    {
+      to: '/sirius',
+      label: t('nav.sirius'),
+      icon: markRaw(Orbit),
+      visible: true,
+    },
+    {
+      to: '/checker',
+      label: t('nav.checker'),
+      icon: markRaw(CheckSquare),
+      visible: true,
+    },
+    {
+      to: '/account',
+      label: t('nav.account'),
+      icon: markRaw(UserCircle),
+      visible: Boolean(user.value),
+    },
+    {
+      to: '/admin',
+      label: adminNavLabel.value,
+      icon: adminNavIcon.value,
+      visible: Boolean(user.value || isAdmin.value),
+    },
+    {
+      to: '/help',
+      label: t('nav.help'),
+      icon: markRaw(HelpCircle),
+      visible: true,
+    },
     { to: '/about', label: t('nav.about'), icon: markRaw(Info), visible: true },
-  ].filter(link => link.visible)
+  ].filter(link => link.visible),
 )
 
 const updateLocale = (value: string) => {
@@ -107,7 +150,13 @@ watch(() => route.fullPath, closeMobileNav)
             <Sun v-if="isDark" :size="17" />
             <Moon v-else :size="17" />
           </button>
-          <button v-if="user" class="icon-button mobile-header-button" :title="t('app.logout')" :aria-label="t('app.logout')" @click="logout">
+          <button
+            v-if="user"
+            class="icon-button mobile-header-button"
+            :title="t('app.logout')"
+            :aria-label="t('app.logout')"
+            @click="logout"
+          >
             <LogOut :size="17" />
           </button>
           <button
@@ -154,7 +203,11 @@ watch(() => route.fullPath, closeMobileNav)
             <RouterLink class="topbar-auth-link" :to="{ path: '/login', query: authRedirectQuery }" @click="closeMobileNav">
               <LogIn :size="16" /> {{ t('auth.login') }}
             </RouterLink>
-            <RouterLink class="topbar-auth-link topbar-auth-primary" :to="{ path: '/register', query: authRedirectQuery }" @click="closeMobileNav">
+            <RouterLink
+              class="topbar-auth-link topbar-auth-primary"
+              :to="{ path: '/register', query: authRedirectQuery }"
+              @click="closeMobileNav"
+            >
               <UserPlus :size="16" /> {{ t('auth.register') }}
             </RouterLink>
           </div>
@@ -184,7 +237,13 @@ watch(() => route.fullPath, closeMobileNav)
         <div class="topbar-actions">
           <label class="locale-select" :title="t('app.language')">
             <Languages :size="16" />
-            <select id="app-language" name="app-language" :value="locale" :aria-label="t('app.language')" @change="updateLocale(($event.target as HTMLSelectElement).value)">
+            <select
+              id="app-language"
+              name="app-language"
+              :value="locale"
+              :aria-label="t('app.language')"
+              @change="updateLocale(($event.target as HTMLSelectElement).value)"
+            >
               <option v-for="option in localeOptions" :key="option.value" :value="option.value">
                 {{ option.label }}
               </option>

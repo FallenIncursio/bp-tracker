@@ -40,7 +40,7 @@ services:
       args:
         VITE_GITHUB_URL: ${VITE_GITHUB_URL:-https://github.com/FallenIncursio/bp-tracker}
         VITE_PROJECT_HOMEPAGE_URL: ${VITE_PROJECT_HOMEPAGE_URL:-https://bp-tracker.arcenciel.io}
-        VITE_APP_VERSION: ${VITE_APP_VERSION:-0.1.0}
+        VITE_APP_VERSION: ${VITE_APP_VERSION:-0.2.0}
     restart: always
     ports:
       - "8080:80"

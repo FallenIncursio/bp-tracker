@@ -17,7 +17,7 @@ const githubUrl = import.meta.env.VITE_GITHUB_URL ?? 'https://github.com/FallenI
 const homepageUrl = import.meta.env.VITE_PROJECT_HOMEPAGE_URL ?? 'https://bp-tracker.arcenciel.io'
 const apiDocsUrl = '/api/docs/'
 const kofiUrl = 'https://ko-fi.com/fallenincursio'
-const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.1.0'
+const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.2.0'
 
 const credits = computed(() => tm('about.credits.items') as CreditItem[])
 </script>

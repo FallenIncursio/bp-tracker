@@ -7,7 +7,11 @@ const storageKey = 'bp-tracker:locale'
 
 const browserLocale = typeof navigator === 'undefined' ? null : navigator.language.slice(0, 2)
 const storedLocale = localStorage.getItem(storageKey)
-const initialLocale: SupportedLocale = isSupportedLocale(storedLocale) ? storedLocale : isSupportedLocale(browserLocale) ? browserLocale : 'de'
+const initialLocale: SupportedLocale = isSupportedLocale(storedLocale)
+  ? storedLocale
+  : isSupportedLocale(browserLocale)
+    ? browserLocale
+    : 'de'
 
 const baseMessages = {
   de: {
@@ -49,6 +53,8 @@ const baseMessages = {
       checker: 'Checker',
       account: 'Account',
       admin: 'Admin',
+      clanManagement: 'Clanverwaltung',
+      clanMembers: 'Clan-Mitglieder',
       help: 'Hilfe',
       about: 'Über',
     },
@@ -123,7 +129,8 @@ const baseMessages = {
       openJourneyPlanner: 'Roadmap öffnen',
       noJourney: 'Noch keine Clan-Route geplant.',
       guestTitle: 'Du liest im Gastmodus',
-      guestSubtitle: 'Öffentliche Drop-Daten bleiben sichtbar. Login zeigt dir eigene Statuspflege, Benachrichtigungen und claninterne Roadmap.',
+      guestSubtitle:
+        'Öffentliche Drop-Daten bleiben sichtbar. Login zeigt dir eigene Statuspflege, Benachrichtigungen und claninterne Roadmap.',
     },
     blueprints: {
       title: 'Baupläne',
@@ -406,6 +413,10 @@ const baseMessages = {
     admin: {
       title: 'Admin',
       subtitle: 'Clan-Mitglieder, Registrierungen und Rollen',
+      clanManagementTitle: 'Clanverwaltung',
+      clanManagementSubtitle: 'Clan-Mitglieder, Registrierungen und Rollen',
+      memberDirectoryTitle: 'Clan-Mitglieder',
+      memberDirectorySubtitle: 'Mitglieder und Tracking-Status im ausgewählten Clan',
       createClan: 'Clan erstellen',
       name: 'Name',
       slug: 'Slug',
@@ -487,12 +498,11 @@ const baseMessages = {
         'Zeigt aktive Sirius-Planeten im ausgewählten Clan und zählt, welche aktiven Baupläne Mitgliedern fehlen oder auf Wunsch stehen.',
       blueprints:
         'Hier pflegst du deinen persönlichen Bauplan-Status. Markiere mehrere Einträge und setze sie gemeinsam auf Voll, Fehlt oder Wunsch.',
-      sirius:
-        'Trage Sirius-Planetenläufe ein und wähle nur Baupläne aus, die im jeweiligen Ring und Slot tatsächlich fallen können.',
+      sirius: 'Trage Sirius-Planetenläufe ein und wähle nur Baupläne aus, die im jeweiligen Ring und Slot tatsächlich fallen können.',
       checker:
         'Vergleicht Schiffe, Systeme oder Spezialgruppen mit dem Clan-Bestand und zeigt pro Mitglied fehlende oder gewünschte Baupläne.',
-      admin:
-        'Verwalte Clan-Mitglieder, Registrierungen, Rollen, Passwort-Resets und Discord-Kanäle.',
+      admin: 'Verwalte Clan-Mitglieder, Registrierungen, Rollen, Passwort-Resets und Discord-Kanäle.',
+      clanMembers: 'Zeigt Mitglieder des ausgewählten Clans und ihren Tracking-Status ohne Verwaltungsfelder.',
       bulkSelection: 'Setzt den gewählten Status für alle aktuell ausgewählten sichtbaren Baupläne.',
       siriusSlot2: '2er-Slots im 5. Ring brauchen Soris, Amarna oder Giza als Gegnerauswahl.',
     },
@@ -526,10 +536,7 @@ const baseMessages = {
         },
         checker: {
           title: 'BP Checker',
-          items: [
-            'Schiffe prüfen genau die benötigten Baupläne des gewählten Schiffes.',
-            'Systeme prüfen alle Baupläne eines Systems.',
-          ],
+          items: ['Schiffe prüfen genau die benötigten Baupläne des gewählten Schiffes.', 'Systeme prüfen alle Baupläne eines Systems.'],
         },
         roles: {
           title: 'Rollen',
@@ -564,9 +571,17 @@ const baseMessages = {
         title: 'Danksagung',
         items: [
           { text: 'Pirate Galaxy Community-Daten und Erfahrungswerte.' },
-          { label: 'Leader_Of_Dark', text: 'für Bauplan- und Spielreferenzen.', href: 'https://github.com/mandree95' },
-          { text: 'prelude-myzen.co.uk für historische Pirate-Galaxy-Übersichten.' },
-          { text: 'Community-gepflegte Referenzdaten zur Normalisierung der Standarddaten.' },
+          {
+            label: 'Leader_Of_Dark',
+            text: 'für Bauplan- und Spielreferenzen.',
+            href: 'https://github.com/mandree95',
+          },
+          {
+            text: 'prelude-myzen.co.uk für historische Pirate-Galaxy-Übersichten.',
+          },
+          {
+            text: 'Community-gepflegte Referenzdaten zur Normalisierung der Standarddaten.',
+          },
           { text: 'ArcEnCiel Hosting und Projektpflege.' },
         ],
       },
@@ -670,6 +685,8 @@ const baseMessages = {
       checker: 'Checker',
       account: 'Account',
       admin: 'Admin',
+      clanManagement: 'Clan management',
+      clanMembers: 'Clan members',
       help: 'Help',
       about: 'About',
     },
@@ -744,7 +761,8 @@ const baseMessages = {
       openJourneyPlanner: 'Open roadmap',
       noJourney: 'No clan route planned yet.',
       guestTitle: 'You are browsing as a guest',
-      guestSubtitle: 'Public drop data remains visible. Logging in unlocks personal status tracking, notifications, and the internal clan roadmap.',
+      guestSubtitle:
+        'Public drop data remains visible. Logging in unlocks personal status tracking, notifications, and the internal clan roadmap.',
     },
     blueprints: {
       title: 'Blueprints',
@@ -1027,6 +1045,10 @@ const baseMessages = {
     admin: {
       title: 'Admin',
       subtitle: 'Clan members, registrations and roles',
+      clanManagementTitle: 'Clan management',
+      clanManagementSubtitle: 'Clan members, registrations and roles',
+      memberDirectoryTitle: 'Clan members',
+      memberDirectorySubtitle: 'Members and tracking status in the selected clan',
       createClan: 'Create clan',
       name: 'Name',
       slug: 'Slug',
@@ -1104,16 +1126,12 @@ const baseMessages = {
       systemActor: 'System',
     },
     tooltips: {
-      dashboard:
-        'Shows active Sirius planets in the selected clan and counts which active blueprints are missing or wanted by members.',
-      blueprints:
-        'Manage your personal blueprint status here. Select multiple records and set them to owned, missing or wanted at once.',
-      sirius:
-        'Enter Sirius planet runs and select only blueprints that can actually drop in the chosen ring and slot.',
-      checker:
-        'Compares ships, systems or special groups with clan progress and shows missing or wanted blueprints per member.',
-      admin:
-        'Manage clan members, registrations, roles, password resets and Discord channels.',
+      dashboard: 'Shows active Sirius planets in the selected clan and counts which active blueprints are missing or wanted by members.',
+      blueprints: 'Manage your personal blueprint status here. Select multiple records and set them to owned, missing or wanted at once.',
+      sirius: 'Enter Sirius planet runs and select only blueprints that can actually drop in the chosen ring and slot.',
+      checker: 'Compares ships, systems or special groups with clan progress and shows missing or wanted blueprints per member.',
+      admin: 'Manage clan members, registrations, roles, password resets and Discord channels.',
+      clanMembers: 'Shows members of the selected clan and their tracking status without management fields.',
       bulkSelection: 'Applies the selected status to all currently selected visible blueprints.',
       siriusSlot2: '2-slot drops in ring 5 require Soris, Amarna or Giza as the enemy.',
     },
@@ -1147,10 +1165,7 @@ const baseMessages = {
         },
         checker: {
           title: 'BP Checker',
-          items: [
-            'Ships check exactly the blueprints required by the selected ship.',
-            'Systems check all blueprints in a system.',
-          ],
+          items: ['Ships check exactly the blueprints required by the selected ship.', 'Systems check all blueprints in a system.'],
         },
         roles: {
           title: 'Roles',
@@ -1185,9 +1200,17 @@ const baseMessages = {
         title: 'Credits',
         items: [
           { text: 'Pirate Galaxy community data and experience.' },
-          { label: 'Leader_Of_Dark', text: 'for blueprint and game references.', href: 'https://github.com/mandree95' },
-          { text: 'prelude-myzen.co.uk for historical Pirate Galaxy overviews.' },
-          { text: 'Community-maintained reference data used to normalize default seeds.' },
+          {
+            label: 'Leader_Of_Dark',
+            text: 'for blueprint and game references.',
+            href: 'https://github.com/mandree95',
+          },
+          {
+            text: 'prelude-myzen.co.uk for historical Pirate Galaxy overviews.',
+          },
+          {
+            text: 'Community-maintained reference data used to normalize default seeds.',
+          },
           { text: 'ArcEnCiel hosting and project maintenance.' },
         ],
       },
@@ -1270,8 +1293,7 @@ type DeepPartial<T> = T extends readonly (infer Item)[]
     ? { readonly [K in keyof T]?: DeepPartial<T[K]> }
     : T
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
 
 const mergeMessages = <T extends Record<string, unknown>>(base: T, overrides: DeepPartial<T>): T => {
   const result: Record<string, unknown> = { ...base }
@@ -1314,8 +1336,12 @@ const esOverrides = {
   nav: {
     dashboard: 'Panel',
     blueprints: 'Planos',
+    sirius: 'Sirius',
     checker: 'Comprobador',
     account: 'Cuenta',
+    admin: 'Administración',
+    clanManagement: 'Gestión del clan',
+    clanMembers: 'Miembros del clan',
     help: 'Ayuda',
     about: 'Acerca de',
   },
@@ -1388,7 +1414,8 @@ const esOverrides = {
     openJourneyPlanner: 'Abrir ruta',
     noJourney: 'Todavía no hay una ruta del clan planificada.',
     guestTitle: 'Estás navegando como invitado',
-    guestSubtitle: 'Los datos públicos de drops siguen visibles. Iniciar sesión habilita estado personal, notificaciones y ruta interna del clan.',
+    guestSubtitle:
+      'Los datos públicos de drops siguen visibles. Iniciar sesión habilita estado personal, notificaciones y ruta interna del clan.',
   },
   blueprints: {
     title: 'Planos',
@@ -1670,6 +1697,10 @@ const esOverrides = {
   admin: {
     title: 'Administración',
     subtitle: 'Miembros del clan, registros y roles',
+    clanManagementTitle: 'Gestión del clan',
+    clanManagementSubtitle: 'Miembros del clan, registros y roles',
+    memberDirectoryTitle: 'Miembros del clan',
+    memberDirectorySubtitle: 'Miembros y estado de seguimiento del clan seleccionado',
     createClan: 'Crear clan',
     name: 'Nombre',
     slugPlaceholder: 'mi-clan',
@@ -1748,14 +1779,11 @@ const esOverrides = {
   tooltips: {
     dashboard:
       'Muestra los planetas Sirius activos del clan seleccionado y cuenta qué planos activos faltan o son deseados por los miembros.',
-    blueprints:
-      'Aquí gestionas tu estado personal de planos. Selecciona varios registros y márcalos juntos como completo, falta o deseo.',
-    sirius:
-      'Registra recorridos de planetas Sirius y elige solo planos que realmente puedan caer en ese anillo y ranura.',
-    checker:
-      'Compara naves, sistemas o grupos especiales con el progreso del clan y muestra planos faltantes o deseados por miembro.',
-    admin:
-      'Gestiona miembros del clan, registros, roles, restablecimientos de contraseña y canales de Discord.',
+    blueprints: 'Aquí gestionas tu estado personal de planos. Selecciona varios registros y márcalos juntos como completo, falta o deseo.',
+    sirius: 'Registra recorridos de planetas Sirius y elige solo planos que realmente puedan caer en ese anillo y ranura.',
+    checker: 'Compara naves, sistemas o grupos especiales con el progreso del clan y muestra planos faltantes o deseados por miembro.',
+    admin: 'Gestiona miembros del clan, registros, roles, restablecimientos de contraseña y canales de Discord.',
+    clanMembers: 'Muestra los miembros del clan seleccionado y su estado de seguimiento sin campos administrativos.',
     bulkSelection: 'Aplica el estado seleccionado a todos los planos visibles seleccionados.',
     siriusSlot2: 'Las ranuras de 2 del anillo 5 requieren Soris, Amarna o Giza como enemigo.',
   },
@@ -1825,9 +1853,17 @@ const esOverrides = {
       title: 'Créditos',
       items: [
         { text: 'Datos y experiencia de la comunidad de Pirate Galaxy.' },
-        { label: 'Leader_Of_Dark', text: 'por referencias de planos y del juego.', href: 'https://github.com/mandree95' },
-        { text: 'prelude-myzen.co.uk por resúmenes históricos de Pirate Galaxy.' },
-        { text: 'Datos de referencia mantenidos por la comunidad para normalizar seeds por defecto.' },
+        {
+          label: 'Leader_Of_Dark',
+          text: 'por referencias de planos y del juego.',
+          href: 'https://github.com/mandree95',
+        },
+        {
+          text: 'prelude-myzen.co.uk por resúmenes históricos de Pirate Galaxy.',
+        },
+        {
+          text: 'Datos de referencia mantenidos por la comunidad para normalizar seeds por defecto.',
+        },
         { text: 'Hosting y mantenimiento del proyecto por ArcEnCiel.' },
       ],
     },
@@ -1902,4 +1938,3 @@ export const setLocalePreference = (locale: SupportedLocale) => {
 }
 
 document.documentElement.lang = initialLocale
-

@@ -1,6 +1,6 @@
 {
   "name": "bp-tracker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Open-source multi-clan Pirate Galaxy blueprint tracker.",
   "license": "MIT",
@@ -17,6 +17,7 @@
     "build": "npm run build -w @bp-tracker/contracts && npm run build -w @bp-tracker/api && npm run build -w @bp-tracker/web",
     "typecheck": "npm run typecheck -w @bp-tracker/contracts && npm run build -w @bp-tracker/contracts && npm run typecheck -w @bp-tracker/api && npm run typecheck -w @bp-tracker/web && npm run typecheck:scripts",
     "typecheck:scripts": "tsc -p tsconfig.scripts.json",
+    "version:check": "node scripts/check-version.mjs",
     "lint": "npm run typecheck",
     "test": "npm run test -w @bp-tracker/contracts && npm run test -w @bp-tracker/api && npm run test -w @bp-tracker/web",
     "test:coverage": "npm run test:coverage -w @bp-tracker/contracts && npm run test:coverage -w @bp-tracker/api && npm run test:coverage -w @bp-tracker/web",

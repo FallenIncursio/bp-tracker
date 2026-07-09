@@ -24,6 +24,7 @@ import {
 import { createNotification } from '../notifications/notification.service.js'
 import { publishClanDiscordStatus } from '../notifications/discord-status.service.js'
 import { logAudit } from '../utils/audit.js'
+import { serializeClanMember } from './clan-member.dto.js'
 
 export const clansRouter = Router()
 
@@ -42,7 +43,7 @@ const serializeDiscordSettings = (
     statusPinMessages: boolean
     statusLastPublishedAt: Date | string | null
     statusLastError: string | null
-  } | null
+  } | null,
 ): ClanDiscordSettingsDto => ({
   clanId,
   guildId: settings?.guildId ?? null,
@@ -83,11 +84,7 @@ const discordChannelsQuerySchema = z.object({
     .or(z.literal('')),
 })
 
-const resolveDiscordChannel = async (input: {
-  guildId: string | null
-  channelId: string | null
-  channelName: string | null
-}) => {
+const resolveDiscordChannel = async (input: { guildId: string | null; channelId: string | null; channelName: string | null }) => {
   if (!input.channelId || !env.discordBotToken) {
     ensureAllowedDiscordGuild(input.guildId)
     return {
@@ -138,7 +135,7 @@ clansRouter.get(
         memberCount: clan.memberships.length,
       })),
     })
-  })
+  }),
 )
 
 clansRouter.post(
@@ -165,7 +162,7 @@ clansRouter.post(
     })
 
     res.status(201).json({ clan })
-  })
+  }),
 )
 
 clansRouter.get(
@@ -173,9 +170,11 @@ clansRouter.get(
   requireClanRole('ADMIRAL'),
   asyncHandler(async (req, res) => {
     const clanId = routeParam(req, 'clanId')
-    const settings = await prisma.clanDiscordSettings.findUnique({ where: { clanId } })
+    const settings = await prisma.clanDiscordSettings.findUnique({
+      where: { clanId },
+    })
     res.json({ settings: serializeDiscordSettings(clanId, settings) })
-  })
+  }),
 )
 
 clansRouter.patch(
@@ -247,7 +246,7 @@ clansRouter.patch(
     })
 
     res.json({ settings: serializeDiscordSettings(clanId, settings) })
-  })
+  }),
 )
 
 clansRouter.get(
@@ -256,7 +255,9 @@ clansRouter.get(
   asyncHandler(async (req, res) => {
     const clanId = routeParam(req, 'clanId')
     const input = discordChannelsQuerySchema.parse(req.query)
-    const settings = await prisma.clanDiscordSettings.findUnique({ where: { clanId } })
+    const settings = await prisma.clanDiscordSettings.findUnique({
+      where: { clanId },
+    })
     const guildId = input.guildId?.trim() || settings?.guildId
 
     if (!guildId) {
@@ -278,8 +279,11 @@ clansRouter.get(
       throw new HttpError(502, result.error)
     }
 
-    res.json({ available: true, channels: result.data.map(serializeDiscordChannel) })
-  })
+    res.json({
+      available: true,
+      channels: result.data.map(serializeDiscordChannel),
+    })
+  }),
 )
 
 clansRouter.post(
@@ -292,7 +296,9 @@ clansRouter.post(
       throw new HttpError(404, 'Clan not found.')
     }
 
-    const settings = await prisma.clanDiscordSettings.findUnique({ where: { clanId } })
+    const settings = await prisma.clanDiscordSettings.findUnique({
+      where: { clanId },
+    })
     if (!settings?.enabled || !settings.notificationChannelId) {
       throw new HttpError(400, 'Discord notifications are not enabled for this clan.')
     }
@@ -316,7 +322,7 @@ clansRouter.post(
     })
 
     res.json({ ok: true })
-  })
+  }),
 )
 
 clansRouter.post(
@@ -325,13 +331,17 @@ clansRouter.post(
   asyncHandler(async (req, res) => {
     const clanId = routeParam(req, 'clanId')
     const input = publishClanDiscordStatusSchema.parse(req.body ?? {})
-    const settings = await prisma.clanDiscordSettings.findUnique({ where: { clanId } })
+    const settings = await prisma.clanDiscordSettings.findUnique({
+      where: { clanId },
+    })
     if (!settings?.statusEnabled || !settings.statusChannelId) {
       throw new HttpError(400, 'Discord status publishing is not enabled for this clan.')
     }
 
     ensureAllowedDiscordGuild(settings.guildId)
-    const result = await publishClanDiscordStatus(clanId, { recreateMessages: input.recreateMessages })
+    const result = await publishClanDiscordStatus(clanId, {
+      recreateMessages: input.recreateMessages,
+    })
 
     await prisma.auditLog.create({
       data: {
@@ -345,13 +355,19 @@ clansRouter.post(
       },
     })
 
-    const nextSettings = await prisma.clanDiscordSettings.findUnique({ where: { clanId } })
-    res.json({ result, settings: serializeDiscordSettings(clanId, nextSettings) })
-  })
+    const nextSettings = await prisma.clanDiscordSettings.findUnique({
+      where: { clanId },
+    })
+    res.json({
+      result,
+      settings: serializeDiscordSettings(clanId, nextSettings),
+    })
+  }),
 )
 
 clansRouter.get(
   '/:clanId/members',
+  requireClanRole('MEMBER'),
   asyncHandler(async (req, res) => {
     const clanId = routeParam(req, 'clanId')
     const clan = await prisma.clan.findUnique({ where: { id: clanId } })
@@ -370,19 +386,9 @@ clansRouter.get(
     })
 
     res.json({
-      members: memberships.map(membership => ({
-        userId: membership.userId,
-        displayName: membership.user.displayName,
-        username: membership.user.username,
-        role: membership.role,
-        status: membership.status,
-        trackingExcluded: membership.trackingExcluded,
-        trackingExcludedAt: membership.trackingExcludedAt,
-        trackingExcludedReason: membership.trackingExcludedReason,
-        approvedAt: membership.approvedAt,
-      })),
+      members: memberships.map(membership => serializeClanMember(membership, canManage)),
     })
-  })
+  }),
 )
 
 clansRouter.get(
@@ -405,7 +411,7 @@ clansRouter.get(
         requestedAt: membership.createdAt,
       })),
     })
-  })
+  }),
 )
 
 clansRouter.post(
@@ -448,12 +454,16 @@ clansRouter.post(
         action: 'clan.membership.approve',
         entityType: 'ClanMembership',
         entityId: membership.id,
-        afterJson: { clanId: membership.clanId, userId: membership.userId, role: membership.role },
+        afterJson: {
+          clanId: membership.clanId,
+          userId: membership.userId,
+          role: membership.role,
+        },
       },
     })
 
     res.json({ membership })
-  })
+  }),
 )
 
 clansRouter.post(
@@ -477,7 +487,7 @@ clansRouter.post(
     })
 
     res.json({ membership })
-  })
+  }),
 )
 
 clansRouter.patch(
@@ -508,7 +518,7 @@ clansRouter.patch(
     })
 
     res.json({ membership })
-  })
+  }),
 )
 
 clansRouter.patch(
@@ -579,5 +589,5 @@ clansRouter.patch(
         approvedAt: membership.approvedAt,
       },
     })
-  })
+  }),
 )

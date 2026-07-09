@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
 import { CalendarClock, LogIn, RefreshCw, Route, UserPlus } from '@lucide/vue'
@@ -110,6 +110,7 @@ const spawnWindows = ref<SpawnWindow[]>([])
 const journeyStops = ref<JourneyStop[]>([])
 const loading = ref(false)
 const timerRefreshQueued = ref(false)
+const activeRotationMetricKey = ref('')
 
 const activeSlots = computed(() => appearances.value.flatMap(appearance => appearance.slots))
 const wantedCount = computed(() => activeSlots.value.reduce((sum, slot) => sum + (slot.counts?.wanted ?? 0), 0))
@@ -247,6 +248,23 @@ const slotTooltip = (slot: SiriusAppearance['slots'][number], kind: CountKind) =
   })
 }
 
+const rotationMetricKey = (scope: 'appearance' | 'slot', id: string, kind: CountKind) => `${scope}-${id}-${kind}`
+const rotationMetricPopoverId = (key: string) => `rotation-metric-${key}`
+const isRotationMetricOpen = (key: string) => activeRotationMetricKey.value === key
+const toggleRotationMetric = (key: string) => {
+  activeRotationMetricKey.value = isRotationMetricOpen(key) ? '' : key
+}
+const closeRotationMetric = () => {
+  activeRotationMetricKey.value = ''
+}
+const handleRotationMetricPointerDown = (event: PointerEvent) => {
+  if (event.target instanceof Element && event.target.closest('.rotation-metric-popover-wrap')) return
+  closeRotationMetric()
+}
+const handleRotationMetricKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') closeRotationMetric()
+}
+
 const loadActive = async () => {
   if (!selectedClanId.value) return
   loading.value = true
@@ -289,11 +307,21 @@ const scheduleTimerRefresh = () => {
 }
 
 onMounted(async () => {
+  document.addEventListener('pointerdown', handleRotationMetricPointerDown)
+  document.addEventListener('keydown', handleRotationMetricKeydown)
   await loadClans()
   await refreshDashboard()
 })
 
-watch([selectedClanId, canViewSelectedClanDetails], refreshDashboard)
+onBeforeUnmount(() => {
+  document.removeEventListener('pointerdown', handleRotationMetricPointerDown)
+  document.removeEventListener('keydown', handleRotationMetricKeydown)
+})
+
+watch([selectedClanId, canViewSelectedClanDetails], () => {
+  closeRotationMetric()
+  void refreshDashboard()
+})
 </script>
 
 <template>
@@ -436,21 +464,45 @@ watch([selectedClanId, canViewSelectedClanDetails], refreshDashboard)
               />
             </div>
             <div class="rotation-counts">
-              <span
-                class="metric metric-missing metric-with-tooltip"
-                tabindex="0"
-                :aria-label="appearanceTooltip(appearance, 'missing')"
-                :data-tooltip="appearanceTooltip(appearance, 'missing')"
-              >
-                {{ appearanceMissing(appearance) }}
+              <span class="rotation-metric-popover-wrap">
+                <button
+                  class="metric metric-missing rotation-metric-trigger"
+                  type="button"
+                  :aria-label="appearanceTooltip(appearance, 'missing')"
+                  :aria-expanded="isRotationMetricOpen(rotationMetricKey('appearance', appearance.id, 'missing'))"
+                  :aria-controls="rotationMetricPopoverId(rotationMetricKey('appearance', appearance.id, 'missing'))"
+                  @click.stop="toggleRotationMetric(rotationMetricKey('appearance', appearance.id, 'missing'))"
+                >
+                  {{ appearanceMissing(appearance) }}
+                </button>
+                <span
+                  v-if="isRotationMetricOpen(rotationMetricKey('appearance', appearance.id, 'missing'))"
+                  :id="rotationMetricPopoverId(rotationMetricKey('appearance', appearance.id, 'missing'))"
+                  class="rotation-metric-popover"
+                  role="tooltip"
+                >
+                  {{ appearanceTooltip(appearance, 'missing') }}
+                </span>
               </span>
-              <span
-                class="metric metric-wanted metric-with-tooltip"
-                tabindex="0"
-                :aria-label="appearanceTooltip(appearance, 'wanted')"
-                :data-tooltip="appearanceTooltip(appearance, 'wanted')"
-              >
-                {{ appearanceWanted(appearance) }}
+              <span class="rotation-metric-popover-wrap">
+                <button
+                  class="metric metric-wanted rotation-metric-trigger"
+                  type="button"
+                  :aria-label="appearanceTooltip(appearance, 'wanted')"
+                  :aria-expanded="isRotationMetricOpen(rotationMetricKey('appearance', appearance.id, 'wanted'))"
+                  :aria-controls="rotationMetricPopoverId(rotationMetricKey('appearance', appearance.id, 'wanted'))"
+                  @click.stop="toggleRotationMetric(rotationMetricKey('appearance', appearance.id, 'wanted'))"
+                >
+                  {{ appearanceWanted(appearance) }}
+                </button>
+                <span
+                  v-if="isRotationMetricOpen(rotationMetricKey('appearance', appearance.id, 'wanted'))"
+                  :id="rotationMetricPopoverId(rotationMetricKey('appearance', appearance.id, 'wanted'))"
+                  class="rotation-metric-popover"
+                  role="tooltip"
+                >
+                  {{ appearanceTooltip(appearance, 'wanted') }}
+                </span>
               </span>
             </div>
           </header>
@@ -476,27 +528,49 @@ watch([selectedClanId, canViewSelectedClanDetails], refreshDashboard)
                       {{ blueprintName(slot) }}
                     </span>
                   </td>
-                  <td :data-label="t('dashboard.missing')">
-                    <span
-                      v-if="slot.counts"
-                      class="count-tooltip metric-with-tooltip"
-                      tabindex="0"
-                      :aria-label="slotTooltip(slot, 'missing')"
-                      :data-tooltip="slotTooltip(slot, 'missing')"
-                    >
-                      {{ slot.counts.missing }}
+                  <td class="metric-cell" :data-label="t('dashboard.missing')">
+                    <span v-if="slot.counts" class="rotation-metric-popover-wrap rotation-metric-popover-wrap-inline">
+                      <button
+                        class="count-tooltip rotation-metric-trigger"
+                        type="button"
+                        :aria-label="slotTooltip(slot, 'missing')"
+                        :aria-expanded="isRotationMetricOpen(rotationMetricKey('slot', slot.id, 'missing'))"
+                        :aria-controls="rotationMetricPopoverId(rotationMetricKey('slot', slot.id, 'missing'))"
+                        @click.stop="toggleRotationMetric(rotationMetricKey('slot', slot.id, 'missing'))"
+                      >
+                        {{ slot.counts.missing }}
+                      </button>
+                      <span
+                        v-if="isRotationMetricOpen(rotationMetricKey('slot', slot.id, 'missing'))"
+                        :id="rotationMetricPopoverId(rotationMetricKey('slot', slot.id, 'missing'))"
+                        class="rotation-metric-popover"
+                        role="tooltip"
+                      >
+                        {{ slotTooltip(slot, 'missing') }}
+                      </span>
                     </span>
                     <span v-else>-</span>
                   </td>
-                  <td :data-label="t('dashboard.wanted')">
-                    <span
-                      v-if="slot.counts"
-                      class="count-tooltip metric-with-tooltip"
-                      tabindex="0"
-                      :aria-label="slotTooltip(slot, 'wanted')"
-                      :data-tooltip="slotTooltip(slot, 'wanted')"
-                    >
-                      {{ slot.counts.wanted }}
+                  <td class="metric-cell" :data-label="t('dashboard.wanted')">
+                    <span v-if="slot.counts" class="rotation-metric-popover-wrap rotation-metric-popover-wrap-inline">
+                      <button
+                        class="count-tooltip rotation-metric-trigger"
+                        type="button"
+                        :aria-label="slotTooltip(slot, 'wanted')"
+                        :aria-expanded="isRotationMetricOpen(rotationMetricKey('slot', slot.id, 'wanted'))"
+                        :aria-controls="rotationMetricPopoverId(rotationMetricKey('slot', slot.id, 'wanted'))"
+                        @click.stop="toggleRotationMetric(rotationMetricKey('slot', slot.id, 'wanted'))"
+                      >
+                        {{ slot.counts.wanted }}
+                      </button>
+                      <span
+                        v-if="isRotationMetricOpen(rotationMetricKey('slot', slot.id, 'wanted'))"
+                        :id="rotationMetricPopoverId(rotationMetricKey('slot', slot.id, 'wanted'))"
+                        class="rotation-metric-popover"
+                        role="tooltip"
+                      >
+                        {{ slotTooltip(slot, 'wanted') }}
+                      </span>
                     </span>
                     <span v-else>-</span>
                   </td>

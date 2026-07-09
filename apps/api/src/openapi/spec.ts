@@ -38,7 +38,9 @@ import {
 import { env } from '../utils/env.js'
 
 type JsonSchema = Record<string, unknown>
-type OpenApiContent = { content: { 'application/json': { schema: JsonSchema } } }
+type OpenApiContent = {
+  content: { 'application/json': { schema: JsonSchema } }
+}
 type OpenApiResponse = { description: string } & Partial<OpenApiContent>
 type OpenApiOperation = {
   tags: string[]
@@ -76,15 +78,25 @@ const stripJsonSchemaMeta = (value: unknown): unknown => {
   return Object.fromEntries(
     Object.entries(value)
       .filter(([key]) => key !== '$schema')
-      .map(([key, nested]) => [key, stripJsonSchemaMeta(nested)])
+      .map(([key, nested]) => [key, stripJsonSchemaMeta(nested)]),
   )
 }
 
 const fromZod = (schema: ZodTypeAny) => stripJsonSchemaMeta(z.toJSONSchema(schema, { io: 'input' })) as JsonSchema
-const ref = (name: string): JsonSchema => ({ $ref: `#/components/schemas/${name}` })
-const arrayOf = (schema: JsonSchema): JsonSchema => ({ type: 'array', items: schema })
-const nullable = (schema: JsonSchema): JsonSchema => ({ anyOf: [schema, { type: 'null' }] })
-const enumSchema = (values: readonly string[]): JsonSchema => ({ type: 'string', enum: [...values] })
+const ref = (name: string): JsonSchema => ({
+  $ref: `#/components/schemas/${name}`,
+})
+const arrayOf = (schema: JsonSchema): JsonSchema => ({
+  type: 'array',
+  items: schema,
+})
+const nullable = (schema: JsonSchema): JsonSchema => ({
+  anyOf: [schema, { type: 'null' }],
+})
+const enumSchema = (values: readonly string[]): JsonSchema => ({
+  type: 'string',
+  enum: [...values],
+})
 const stringSchema = (format?: string): JsonSchema => (format ? { type: 'string', format } : { type: 'string' })
 const id = stringSchema('uuid')
 const dateTime = stringSchema('date-time')
@@ -115,7 +127,9 @@ const ok = (schema: JsonSchema, description = 'OK'): OpenApiResponse => ({
   content: { 'application/json': { schema } },
 })
 
-const empty = (description = 'No content'): OpenApiResponse => ({ description })
+const empty = (description = 'No content'): OpenApiResponse => ({
+  description,
+})
 
 const errorResponses = {
   '400': ok(ref('ApiError'), 'Bad request'),
@@ -127,7 +141,13 @@ const errorResponses = {
 
 const cookieAuth = [{ cookieAuth: [] }]
 
-const param = (name: string, schema: JsonSchema, description: string, location: 'path' | 'query' = 'path', required = location === 'path') => ({
+const param = (
+  name: string,
+  schema: JsonSchema,
+  description: string,
+  location: 'path' | 'query' = 'path',
+  required = location === 'path',
+) => ({
   name,
   in: location,
   required,
@@ -148,20 +168,25 @@ const siriusScopeQuery = param(
   enumSchema(['own', 'all-ring5']),
   'Sirius checker scope. Only applies when the selected system is Sirius.',
   'query',
-  false
+  false,
 )
 const includeSiriusResourcesQuery = param(
   'includeSiriusResources',
   { type: 'boolean' },
   'Include Sirius ring 1-4 resource blueprints. Only applies when the selected system is Sirius.',
   'query',
-  false
+  false,
 )
 
 const secured = (operation: OpenApiOperation, role?: string): OpenApiOperation => ({
   ...operation,
   security: cookieAuth,
-  ...(role ? { 'x-required-role': role, description: [operation.description, `Required role: ${role}.`].filter(Boolean).join('\n\n') } : {}),
+  ...(role
+    ? {
+        'x-required-role': role,
+        description: [operation.description, `Required role: ${role}.`].filter(Boolean).join('\n\n'),
+      }
+    : {}),
 })
 
 const schemas: Record<string, JsonSchema> = {
@@ -170,7 +195,7 @@ const schemas: Record<string, JsonSchema> = {
       error: stringSchema(),
       details: looseObject('Optional validation or diagnostic details.'),
     },
-    ['error']
+    ['error'],
   ),
   GlobalRole: enumSchema(globalRoles),
   ClanRole: enumSchema(clanRoles),
@@ -216,7 +241,7 @@ const schemas: Record<string, JsonSchema> = {
       missingBpAlerts: z.boolean().optional(),
       wantedBpAlerts: z.boolean().optional(),
       planetExpiryAlerts: z.boolean().optional(),
-    })
+    }),
   ),
   CreateBlueprintRequest: fromZod(
     z.object({
@@ -234,7 +259,7 @@ const schemas: Record<string, JsonSchema> = {
       level: z.number().int().positive().optional(),
       price: z.number().int().nonnegative().optional(),
       sourceNotes: z.string().max(2000).optional(),
-    })
+    }),
   ),
   UpdateUserRequest: fromZod(
     z.object({
@@ -244,7 +269,7 @@ const schemas: Record<string, JsonSchema> = {
       globalRole: z.enum(globalRoles).optional(),
       discordUserId: z.string().max(120).nullable().optional(),
       newPassword: z.string().min(8).max(200).optional(),
-    })
+    }),
   ),
   AuthUser: objectSchema({
     id,
@@ -266,7 +291,7 @@ const schemas: Record<string, JsonSchema> = {
         role: ref('ClanRole'),
         status: ref('MembershipStatus'),
         trackingExcluded: { type: 'boolean' },
-      })
+      }),
     ),
   }),
   Clan: objectSchema({
@@ -276,6 +301,20 @@ const schemas: Record<string, JsonSchema> = {
     isPublic: { type: 'boolean' },
     memberCount: { type: 'integer', minimum: 0 },
   }),
+  ClanMember: objectSchema(
+    {
+      userId: id,
+      displayName: stringSchema(),
+      role: ref('ClanRole'),
+      status: ref('MembershipStatus'),
+      trackingExcluded: { type: 'boolean' },
+      username: stringSchema(),
+      trackingExcludedAt: nullable(dateTime),
+      trackingExcludedReason: nullable(stringSchema()),
+      approvedAt: nullable(dateTime),
+    },
+    ['userId', 'displayName', 'role', 'status', 'trackingExcluded'],
+  ),
   ClanDiscordSettings: objectSchema({
     clanId: id,
     guildId: nullable(stringSchema()),
@@ -447,7 +486,12 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Check whether first-admin setup is open',
       operationId: 'getSetupState',
       responses: {
-        '200': ok(objectSchema({ setupRequired: { type: 'boolean' }, setupTokenRequired: { type: 'boolean' } })),
+        '200': ok(
+          objectSchema({
+            setupRequired: { type: 'boolean' },
+            setupTokenRequired: { type: 'boolean' },
+          }),
+        ),
       },
     },
   },
@@ -457,7 +501,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Create the first global admin',
       operationId: 'setupAdmin',
       requestBody: jsonBody(ref('SetupAdminRequest')),
-      responses: { '201': ok(objectSchema({ user: ref('AuthUser') })), ...errorResponses },
+      responses: {
+        '201': ok(objectSchema({ user: ref('AuthUser') })),
+        ...errorResponses,
+      },
     },
   },
   '/api/auth/register': {
@@ -466,7 +513,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Register a user with pending clan membership',
       operationId: 'register',
       requestBody: jsonBody(ref('RegisterRequest')),
-      responses: { '201': ok(objectSchema({ user: ref('AuthUser') })), ...errorResponses },
+      responses: {
+        '201': ok(objectSchema({ user: ref('AuthUser') })),
+        ...errorResponses,
+      },
     },
   },
   '/api/auth/login': {
@@ -475,7 +525,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Login with username and password',
       operationId: 'login',
       requestBody: jsonBody(ref('LoginRequest')),
-      responses: { '200': ok(objectSchema({ user: ref('AuthUser') })), ...errorResponses },
+      responses: {
+        '200': ok(objectSchema({ user: ref('AuthUser') })),
+        ...errorResponses,
+      },
     },
   },
   '/api/auth/discord': {
@@ -488,7 +541,10 @@ const paths: OpenApiSpec['paths'] = {
         param('redirect', stringSchema(), 'Relative web redirect after OAuth.', 'query', false),
         param('clanId', id, 'Clan to request when registering.', 'query', false),
       ],
-      responses: { '302': { description: 'Redirects to Discord authorize URL.' }, ...errorResponses },
+      responses: {
+        '302': { description: 'Redirects to Discord authorize URL.' },
+        ...errorResponses,
+      },
     },
   },
   '/api/auth/discord/link': {
@@ -498,9 +554,12 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Create a Discord linking URL for the current user',
         operationId: 'createDiscordLinkUrl',
         requestBody: jsonBody(ref('DiscordLinkRequest'), false),
-        responses: { '200': ok(objectSchema({ authorizeUrl: stringSchema() })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ authorizeUrl: stringSchema() })),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/auth/discord/unlink': {
@@ -510,9 +569,12 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Unlink Discord from the current user',
         operationId: 'unlinkDiscord',
         requestBody: jsonBody(ref('DiscordUnlinkRequest')),
-        responses: { '200': ok(objectSchema({ user: ref('AuthUser') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ user: ref('AuthUser') })),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/auth/discord/callback': {
@@ -524,7 +586,10 @@ const paths: OpenApiSpec['paths'] = {
         param('code', stringSchema(), 'Discord OAuth authorization code.', 'query', false),
         param('state', stringSchema(), 'Signed OAuth state.', 'query', false),
       ],
-      responses: { '302': { description: 'Redirects back to the web app.' }, ...errorResponses },
+      responses: {
+        '302': { description: 'Redirects back to the web app.' },
+        ...errorResponses,
+      },
     },
   },
   '/api/auth/logout': {
@@ -535,7 +600,7 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'logout',
         responses: { '204': empty(), ...errorResponses },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/auth/change-password': {
@@ -547,7 +612,7 @@ const paths: OpenApiSpec['paths'] = {
         requestBody: jsonBody(ref('ChangePasswordRequest')),
         responses: { '204': empty(), ...errorResponses },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/auth/set-password': {
@@ -559,7 +624,7 @@ const paths: OpenApiSpec['paths'] = {
         requestBody: jsonBody(ref('SetPasswordRequest')),
         responses: { '204': empty(), ...errorResponses },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/auth/me': {
@@ -567,7 +632,9 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Auth'],
       summary: 'Get current session user',
       operationId: 'getCurrentUser',
-      responses: { '200': ok(objectSchema({ user: nullable(ref('AuthUser')) })) },
+      responses: {
+        '200': ok(objectSchema({ user: nullable(ref('AuthUser')) })),
+      },
     },
   },
   '/api/clans': {
@@ -583,9 +650,12 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Create a clan',
         operationId: 'createClan',
         requestBody: jsonBody(ref('CreateClanRequest')),
-        responses: { '201': ok(objectSchema({ clan: looseObject('Created clan record.') })), ...errorResponses },
+        responses: {
+          '201': ok(objectSchema({ clan: looseObject('Created clan record.') })),
+          ...errorResponses,
+        },
       },
-      'Global ADMIN'
+      'Global ADMIN',
     ),
   },
   '/api/clans/{clanId}/discord-settings': {
@@ -595,9 +665,12 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Get clan Discord settings',
         operationId: 'getClanDiscordSettings',
         parameters: [clanIdParam],
-        responses: { '200': ok(objectSchema({ settings: ref('ClanDiscordSettings') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ settings: ref('ClanDiscordSettings') })),
+          ...errorResponses,
+        },
       },
-      'Clan ADMIRAL'
+      'Clan ADMIRAL',
     ),
     patch: secured(
       {
@@ -606,9 +679,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateClanDiscordSettings',
         parameters: [clanIdParam],
         requestBody: jsonBody(ref('UpdateClanDiscordSettingsRequest')),
-        responses: { '200': ok(objectSchema({ settings: ref('ClanDiscordSettings') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ settings: ref('ClanDiscordSettings') })),
+          ...errorResponses,
+        },
       },
-      'Clan ADMIRAL'
+      'Clan ADMIRAL',
     ),
   },
   '/api/clans/{clanId}/discord-channels': {
@@ -617,7 +693,10 @@ const paths: OpenApiSpec['paths'] = {
         tags: ['Clans'],
         summary: 'List bot-visible Discord channels for a clan server',
         operationId: 'listClanDiscordChannels',
-        parameters: [clanIdParam, param('guildId', stringSchema(), 'Discord server ID. Falls back to stored clan settings when omitted.', 'query', false)],
+        parameters: [
+          clanIdParam,
+          param('guildId', stringSchema(), 'Discord server ID. Falls back to stored clan settings when omitted.', 'query', false),
+        ],
         responses: {
           '200': ok(
             objectSchema(
@@ -626,14 +705,14 @@ const paths: OpenApiSpec['paths'] = {
                 channels: arrayOf(ref('DiscordGuildChannel')),
                 error: nullable(stringSchema()),
               },
-              ['available', 'channels']
-            )
+              ['available', 'channels'],
+            ),
           ),
           ...errorResponses,
           '502': ok(ref('ApiError')),
         },
       },
-      'Clan ADMIRAL'
+      'Clan ADMIRAL',
     ),
   },
   '/api/clans/{clanId}/discord-settings/test': {
@@ -643,9 +722,14 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Send a test Discord notification for a clan',
         operationId: 'testClanDiscordSettings',
         parameters: [clanIdParam],
-        responses: { '200': ok(objectSchema({ ok: { type: 'boolean' } })), ...errorResponses, '502': ok(ref('ApiError')), '503': ok(ref('ApiError')) },
+        responses: {
+          '200': ok(objectSchema({ ok: { type: 'boolean' } })),
+          ...errorResponses,
+          '502': ok(ref('ApiError')),
+          '503': ok(ref('ApiError')),
+        },
       },
-      'Clan ADMIRAL'
+      'Clan ADMIRAL',
     ),
   },
   '/api/clans/{clanId}/discord-settings/status/publish': {
@@ -661,24 +745,31 @@ const paths: OpenApiSpec['paths'] = {
             objectSchema({
               result: ref('DiscordStatusPublishResult'),
               settings: ref('ClanDiscordSettings'),
-            })
+            }),
           ),
           ...errorResponses,
           '502': ok(ref('ApiError')),
           '503': ok(ref('ApiError')),
         },
       },
-      'Clan ADMIRAL'
+      'Clan ADMIRAL',
     ),
   },
   '/api/clans/{clanId}/members': {
-    get: {
-      tags: ['Clans'],
-      summary: 'List clan members',
-      operationId: 'listClanMembers',
-      parameters: [clanIdParam],
-      responses: { '200': ok(objectSchema({ members: arrayOf(looseObject('Clan member row.')) })), ...errorResponses },
-    },
+    get: secured(
+      {
+        tags: ['Clans'],
+        summary: 'List clan members',
+        description: 'Regular members receive a redacted directory. Clan managers also receive usernames and tracking details.',
+        operationId: 'listClanMembers',
+        parameters: [clanIdParam],
+        responses: {
+          '200': ok(objectSchema({ members: arrayOf(ref('ClanMember')) })),
+          ...errorResponses,
+        },
+      },
+      'Clan MEMBER',
+    ),
   },
   '/api/clans/{clanId}/registrations': {
     get: secured(
@@ -687,9 +778,16 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'List pending clan registrations',
         operationId: 'listClanRegistrations',
         parameters: [clanIdParam],
-        responses: { '200': ok(objectSchema({ registrations: arrayOf(looseObject('Pending registration row.')) })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              registrations: arrayOf(looseObject('Pending registration row.')),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER'
+      'Clan COMMANDER',
     ),
   },
   '/api/clans/{clanId}/registrations/{userId}/approve': {
@@ -700,9 +798,16 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'approveClanRegistration',
         parameters: [clanIdParam, userIdParam],
         requestBody: jsonBody(ref('ApproveMembershipRequest'), false),
-        responses: { '200': ok(objectSchema({ membership: looseObject('Updated membership record.') })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              membership: looseObject('Updated membership record.'),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER'
+      'Clan COMMANDER',
     ),
   },
   '/api/clans/{clanId}/registrations/{userId}/reject': {
@@ -712,9 +817,16 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Reject a pending clan registration',
         operationId: 'rejectClanRegistration',
         parameters: [clanIdParam, userIdParam],
-        responses: { '200': ok(objectSchema({ membership: looseObject('Updated membership record.') })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              membership: looseObject('Updated membership record.'),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER'
+      'Clan COMMANDER',
     ),
   },
   '/api/clans/{clanId}/members/{userId}/role': {
@@ -725,9 +837,16 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateClanMemberRole',
         parameters: [clanIdParam, userIdParam],
         requestBody: jsonBody(ref('UpdateMembershipRoleRequest')),
-        responses: { '200': ok(objectSchema({ membership: looseObject('Updated membership record.') })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              membership: looseObject('Updated membership record.'),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Clan role manager; cannot assign above own authority'
+      'Clan role manager; cannot assign above own authority',
     ),
   },
   '/api/clans/{clanId}/members/{userId}/tracking': {
@@ -738,9 +857,16 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateClanMemberTracking',
         parameters: [clanIdParam, userIdParam],
         requestBody: jsonBody(ref('UpdateMembershipTrackingRequest')),
-        responses: { '200': ok(objectSchema({ membership: looseObject('Updated membership record.') })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              membership: looseObject('Updated membership record.'),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER'
+      'Clan COMMANDER',
     ),
   },
   '/api/blueprints/systems': {
@@ -748,7 +874,9 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Blueprints'],
       summary: 'List game systems',
       operationId: 'listBlueprintSystems',
-      responses: { '200': ok(objectSchema({ systems: arrayOf(looseObject('Game system.')) })) },
+      responses: {
+        '200': ok(objectSchema({ systems: arrayOf(looseObject('Game system.')) })),
+      },
     },
   },
   '/api/blueprints/item-types': {
@@ -756,7 +884,13 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Blueprints'],
       summary: 'List blueprint item types',
       operationId: 'listBlueprintItemTypes',
-      responses: { '200': ok(objectSchema({ itemTypes: arrayOf(looseObject('Blueprint item type.')) })) },
+      responses: {
+        '200': ok(
+          objectSchema({
+            itemTypes: arrayOf(looseObject('Blueprint item type.')),
+          }),
+        ),
+      },
     },
   },
   '/api/blueprints/me/statuses': {
@@ -765,9 +899,16 @@ const paths: OpenApiSpec['paths'] = {
         tags: ['Blueprints'],
         summary: 'List current user blueprint statuses',
         operationId: 'listMyBlueprintStatuses',
-        responses: { '200': ok(objectSchema({ statuses: arrayOf(looseObject('User blueprint status.')) })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              statuses: arrayOf(looseObject('User blueprint status.')),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
     put: secured(
       {
@@ -775,9 +916,16 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Bulk update current user blueprint statuses',
         operationId: 'bulkUpdateMyBlueprintStatuses',
         requestBody: jsonBody(ref('BulkUpdateBlueprintStatusRequest')),
-        responses: { '200': ok(objectSchema({ statuses: arrayOf(looseObject('User blueprint status.')) })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              statuses: arrayOf(looseObject('User blueprint status.')),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/blueprints/me/statuses/{blueprintId}': {
@@ -788,9 +936,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateMyBlueprintStatus',
         parameters: [blueprintIdParam],
         requestBody: jsonBody(ref('UpdateBlueprintStatusRequest')),
-        responses: { '200': ok(objectSchema({ status: looseObject('User blueprint status.') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ status: looseObject('User blueprint status.') })),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/blueprints': {
@@ -804,7 +955,9 @@ const paths: OpenApiSpec['paths'] = {
         param('systemId', id, 'System ID filter.', 'query', false),
         param('itemTypeId', id, 'Item type ID filter.', 'query', false),
       ],
-      responses: { '200': ok(objectSchema({ blueprints: arrayOf(ref('Blueprint')) })) },
+      responses: {
+        '200': ok(objectSchema({ blueprints: arrayOf(ref('Blueprint')) })),
+      },
     },
     post: secured(
       {
@@ -812,9 +965,16 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Create a blueprint master-data record',
         operationId: 'createBlueprint',
         requestBody: jsonBody(ref('CreateBlueprintRequest')),
-        responses: { '201': ok(objectSchema({ blueprint: looseObject('Created blueprint record.') })), ...errorResponses },
+        responses: {
+          '201': ok(
+            objectSchema({
+              blueprint: looseObject('Created blueprint record.'),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Global ADMIN'
+      'Global ADMIN',
     ),
   },
   '/api/blueprints/{blueprintId}/members': {
@@ -823,7 +983,14 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'List member status for one blueprint in a clan',
       operationId: 'listBlueprintMembers',
       parameters: [blueprintIdParam, clanIdQuery],
-      responses: { '200': ok(objectSchema({ members: arrayOf(looseObject('Member blueprint status row.')) })), ...errorResponses },
+      responses: {
+        '200': ok(
+          objectSchema({
+            members: arrayOf(looseObject('Member blueprint status row.')),
+          }),
+        ),
+        ...errorResponses,
+      },
     },
   },
   '/api/blueprints/{blueprintId}': {
@@ -832,7 +999,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Get one blueprint',
       operationId: 'getBlueprint',
       parameters: [blueprintIdParam],
-      responses: { '200': ok(objectSchema({ blueprint: looseObject('Blueprint detail record.') })), ...errorResponses },
+      responses: {
+        '200': ok(objectSchema({ blueprint: looseObject('Blueprint detail record.') })),
+        ...errorResponses,
+      },
     },
   },
   '/api/sirius/planets': {
@@ -840,7 +1010,13 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Sirius'],
       summary: 'List known Sirius planets',
       operationId: 'listSiriusPlanets',
-      responses: { '200': ok(objectSchema({ planets: arrayOf(looseObject('Sirius planet record.')) })) },
+      responses: {
+        '200': ok(
+          objectSchema({
+            planets: arrayOf(looseObject('Sirius planet record.')),
+          }),
+        ),
+      },
     },
   },
   '/api/sirius/drop-rules': {
@@ -859,7 +1035,7 @@ const paths: OpenApiSpec['paths'] = {
             techTier: ref('SiriusTechTier'),
             slotGroups: arrayOf(ref('BlueprintSlotGroup')),
             blueprints: arrayOf(ref('Blueprint')),
-          })
+          }),
         ),
         ...errorResponses,
       },
@@ -871,7 +1047,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'List active and upcoming Sirius appearances for a clan',
       operationId: 'listActiveSiriusAppearances',
       parameters: [clanIdParam],
-      responses: { '200': ok(objectSchema({ appearances: arrayOf(ref('SiriusAppearance')) })), ...errorResponses },
+      responses: {
+        '200': ok(objectSchema({ appearances: arrayOf(ref('SiriusAppearance')) })),
+        ...errorResponses,
+      },
     },
   },
   '/api/sirius/clans/{clanId}/spawn-plan': {
@@ -880,7 +1059,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'List expected Sirius planet respawns for a clan',
       operationId: 'listSiriusSpawnPlan',
       parameters: [clanIdParam],
-      responses: { '200': ok(objectSchema({ spawnWindows: arrayOf(ref('SiriusSpawnWindow')) })), ...errorResponses },
+      responses: {
+        '200': ok(objectSchema({ spawnWindows: arrayOf(ref('SiriusSpawnWindow')) })),
+        ...errorResponses,
+      },
     },
   },
   '/api/sirius/clans/{clanId}/journey': {
@@ -890,9 +1072,12 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'List the clan journey roadmap',
         operationId: 'listClanJourney',
         parameters: [clanIdParam],
-        responses: { '200': ok(objectSchema({ stops: arrayOf(ref('ClanJourneyStop')) })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ stops: arrayOf(ref('ClanJourneyStop')) })),
+          ...errorResponses,
+        },
       },
-      'Clan MEMBER'
+      'Clan MEMBER',
     ),
     post: secured(
       {
@@ -901,9 +1086,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'createClanJourneyStop',
         parameters: [clanIdParam],
         requestBody: jsonBody(ref('CreateClanJourneyStopRequest')),
-        responses: { '201': ok(objectSchema({ stop: ref('ClanJourneyStop') })), ...errorResponses },
+        responses: {
+          '201': ok(objectSchema({ stop: ref('ClanJourneyStop') })),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER'
+      'Clan COMMANDER',
     ),
   },
   '/api/sirius/clans/{clanId}/journey/reorder': {
@@ -914,9 +1102,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'reorderClanJourneyStops',
         parameters: [clanIdParam],
         requestBody: jsonBody(ref('ReorderClanJourneyStopsRequest')),
-        responses: { '200': ok(objectSchema({ stops: arrayOf(ref('ClanJourneyStop')) })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ stops: arrayOf(ref('ClanJourneyStop')) })),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER'
+      'Clan COMMANDER',
     ),
   },
   '/api/sirius/clans/{clanId}/history': {
@@ -925,7 +1116,14 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'List Sirius drop history for a clan',
       operationId: 'listSiriusHistory',
       parameters: [clanIdParam],
-      responses: { '200': ok(objectSchema({ history: arrayOf(looseObject('Sirius history row.')) })), ...errorResponses },
+      responses: {
+        '200': ok(
+          objectSchema({
+            history: arrayOf(looseObject('Sirius history row.')),
+          }),
+        ),
+        ...errorResponses,
+      },
     },
   },
   '/api/sirius/clans/{clanId}/appearances': {
@@ -936,9 +1134,16 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'createSiriusAppearance',
         parameters: [clanIdParam],
         requestBody: jsonBody(ref('CreateSiriusAppearanceRequest')),
-        responses: { '201': ok(objectSchema({ appearance: looseObject('Created Sirius appearance.') })), ...errorResponses },
+        responses: {
+          '201': ok(
+            objectSchema({
+              appearance: looseObject('Created Sirius appearance.'),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER'
+      'Clan COMMANDER',
     ),
   },
   '/api/sirius/appearances/{appearanceId}': {
@@ -949,9 +1154,16 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateSiriusAppearance',
         parameters: [appearanceIdParam],
         requestBody: jsonBody(ref('UpdateSiriusAppearanceRequest')),
-        responses: { '200': ok(objectSchema({ appearance: looseObject('Updated Sirius appearance.') })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              appearance: looseObject('Updated Sirius appearance.'),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER for the appearance clan'
+      'Clan COMMANDER for the appearance clan',
     ),
   },
   '/api/sirius/appearances/{appearanceId}/slots': {
@@ -962,9 +1174,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'createSiriusSlot',
         parameters: [appearanceIdParam],
         requestBody: jsonBody(ref('UpsertSiriusSlotRequest')),
-        responses: { '201': ok(objectSchema({ slot: looseObject('Created Sirius slot.') })), ...errorResponses },
+        responses: {
+          '201': ok(objectSchema({ slot: looseObject('Created Sirius slot.') })),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER for the appearance clan'
+      'Clan COMMANDER for the appearance clan',
     ),
     put: secured(
       {
@@ -973,9 +1188,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'replaceSiriusSlots',
         parameters: [appearanceIdParam],
         requestBody: jsonBody(ref('ReplaceSiriusSlotsRequest')),
-        responses: { '200': ok(objectSchema({ slots: arrayOf(looseObject('Sirius slot.')) })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ slots: arrayOf(looseObject('Sirius slot.')) })),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER for the appearance clan'
+      'Clan COMMANDER for the appearance clan',
     ),
   },
   '/api/sirius/slots/{slotId}': {
@@ -986,9 +1204,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateSiriusSlot',
         parameters: [slotIdParam],
         requestBody: jsonBody(ref('UpsertSiriusSlotRequest')),
-        responses: { '200': ok(objectSchema({ slot: looseObject('Updated Sirius slot.') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ slot: looseObject('Updated Sirius slot.') })),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER for the slot clan'
+      'Clan COMMANDER for the slot clan',
     ),
     delete: secured(
       {
@@ -998,7 +1219,7 @@ const paths: OpenApiSpec['paths'] = {
         parameters: [slotIdParam],
         responses: { '204': empty(), ...errorResponses },
       },
-      'Clan COMMANDER for the slot clan'
+      'Clan COMMANDER for the slot clan',
     ),
   },
   '/api/sirius/journey/{stopId}': {
@@ -1009,9 +1230,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateClanJourneyStop',
         parameters: [journeyStopIdParam],
         requestBody: jsonBody(ref('UpdateClanJourneyStopRequest')),
-        responses: { '200': ok(objectSchema({ stop: ref('ClanJourneyStop') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ stop: ref('ClanJourneyStop') })),
+          ...errorResponses,
+        },
       },
-      'Clan COMMANDER for the stop clan'
+      'Clan COMMANDER for the stop clan',
     ),
     delete: secured(
       {
@@ -1021,7 +1245,7 @@ const paths: OpenApiSpec['paths'] = {
         parameters: [journeyStopIdParam],
         responses: { '204': empty(), ...errorResponses },
       },
-      'Clan COMMANDER for the stop clan'
+      'Clan COMMANDER for the stop clan',
     ),
   },
   '/api/checker/ships': {
@@ -1029,7 +1253,9 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Checker'],
       summary: 'List ships available in the checker',
       operationId: 'listCheckerShips',
-      responses: { '200': ok(objectSchema({ ships: arrayOf(looseObject('Checker ship row.')) })) },
+      responses: {
+        '200': ok(objectSchema({ ships: arrayOf(looseObject('Checker ship row.')) })),
+      },
     },
   },
   '/api/checker/ships/{shipId}': {
@@ -1038,7 +1264,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Get one ship with blueprint requirements',
       operationId: 'getCheckerShip',
       parameters: [param('shipId', id, 'Ship ID.')],
-      responses: { '200': ok(objectSchema({ ship: looseObject('Ship detail record.') })), ...errorResponses },
+      responses: {
+        '200': ok(objectSchema({ ship: looseObject('Ship detail record.') })),
+        ...errorResponses,
+      },
     },
   },
   '/api/checker/ships/{shipId}/check': {
@@ -1047,7 +1276,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Run checker for a ship against a clan',
       operationId: 'checkShip',
       parameters: [param('shipId', id, 'Ship ID.'), clanIdQuery, includeExcludedQuery],
-      responses: { '200': ok(looseObject('Checker result.')), ...errorResponses },
+      responses: {
+        '200': ok(looseObject('Checker result.')),
+        ...errorResponses,
+      },
     },
   },
   '/api/checker/systems': {
@@ -1055,7 +1287,13 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Checker'],
       summary: 'List systems available in the checker',
       operationId: 'listCheckerSystems',
-      responses: { '200': ok(objectSchema({ systems: arrayOf(looseObject('Checker system row.')) })) },
+      responses: {
+        '200': ok(
+          objectSchema({
+            systems: arrayOf(looseObject('Checker system row.')),
+          }),
+        ),
+      },
     },
   },
   '/api/checker/systems/{systemId}/check': {
@@ -1064,7 +1302,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Run checker for a system against a clan',
       operationId: 'checkSystem',
       parameters: [param('systemId', id, 'System ID.'), clanIdQuery, includeExcludedQuery, siriusScopeQuery, includeSiriusResourcesQuery],
-      responses: { '200': ok(looseObject('Checker result.')), ...errorResponses },
+      responses: {
+        '200': ok(looseObject('Checker result.')),
+        ...errorResponses,
+      },
     },
   },
   '/api/checker/groups': {
@@ -1072,7 +1313,9 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Checker'],
       summary: 'List special checker groups',
       operationId: 'listCheckerGroups',
-      responses: { '200': ok(objectSchema({ groups: arrayOf(looseObject('Checker group row.')) })) },
+      responses: {
+        '200': ok(objectSchema({ groups: arrayOf(looseObject('Checker group row.')) })),
+      },
     },
   },
   '/api/checker/groups/{groupId}/check': {
@@ -1081,7 +1324,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Run checker for a special group against a clan',
       operationId: 'checkGroup',
       parameters: [param('groupId', stringSchema(), 'Checker group ID.'), clanIdQuery, includeExcludedQuery],
-      responses: { '200': ok(looseObject('Checker result.')), ...errorResponses },
+      responses: {
+        '200': ok(looseObject('Checker result.')),
+        ...errorResponses,
+      },
     },
   },
   '/api/checker/check': {
@@ -1090,7 +1336,10 @@ const paths: OpenApiSpec['paths'] = {
       summary: 'Run checker for arbitrary blueprint IDs',
       operationId: 'runChecker',
       requestBody: jsonBody(ref('CheckerRequest')),
-      responses: { '200': ok(looseObject('Checker result.')), ...errorResponses },
+      responses: {
+        '200': ok(looseObject('Checker result.')),
+        ...errorResponses,
+      },
     },
   },
   '/api/notifications': {
@@ -1099,9 +1348,16 @@ const paths: OpenApiSpec['paths'] = {
         tags: ['Notifications'],
         summary: 'List current user notifications',
         operationId: 'listNotifications',
-        responses: { '200': ok(objectSchema({ notifications: arrayOf(looseObject('Notification record.')) })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              notifications: arrayOf(looseObject('Notification record.')),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/notifications/preferences': {
@@ -1110,9 +1366,12 @@ const paths: OpenApiSpec['paths'] = {
         tags: ['Notifications'],
         summary: 'Get current user notification preferences',
         operationId: 'getNotificationPreferences',
-        responses: { '200': ok(objectSchema({ preferences: ref('NotificationPreferences') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ preferences: ref('NotificationPreferences') })),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
     patch: secured(
       {
@@ -1120,9 +1379,12 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Update current user notification preferences',
         operationId: 'updateNotificationPreferences',
         requestBody: jsonBody(ref('UpdateNotificationPreferencesRequest'), false),
-        responses: { '200': ok(objectSchema({ preferences: ref('NotificationPreferences') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ preferences: ref('NotificationPreferences') })),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/notifications/{notificationId}/read': {
@@ -1132,9 +1394,16 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Mark one notification as read',
         operationId: 'markNotificationRead',
         parameters: [param('notificationId', id, 'Notification ID.')],
-        responses: { '200': ok(objectSchema({ notification: nullable(looseObject('Notification record.')) })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              notification: nullable(looseObject('Notification record.')),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/users/me': {
@@ -1144,9 +1413,16 @@ const paths: OpenApiSpec['paths'] = {
         summary: 'Update current user profile',
         operationId: 'updateMyProfile',
         requestBody: jsonBody(ref('UpdateMyProfileRequest')),
-        responses: { '200': ok(objectSchema({ profile: objectSchema({ displayName: stringSchema() }) })), ...errorResponses },
+        responses: {
+          '200': ok(
+            objectSchema({
+              profile: objectSchema({ displayName: stringSchema() }),
+            }),
+          ),
+          ...errorResponses,
+        },
       },
-      'Authenticated user'
+      'Authenticated user',
     ),
   },
   '/api/users': {
@@ -1155,9 +1431,12 @@ const paths: OpenApiSpec['paths'] = {
         tags: ['Users'],
         summary: 'List users for admin management',
         operationId: 'listUsers',
-        responses: { '200': ok(objectSchema({ users: arrayOf(looseObject('User admin row.')) })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ users: arrayOf(looseObject('User admin row.')) })),
+          ...errorResponses,
+        },
       },
-      'Global ADMIN'
+      'Global ADMIN',
     ),
   },
   '/api/users/{userId}': {
@@ -1168,9 +1447,12 @@ const paths: OpenApiSpec['paths'] = {
         operationId: 'updateUser',
         parameters: [userIdParam],
         requestBody: jsonBody(ref('UpdateUserRequest')),
-        responses: { '200': ok(objectSchema({ user: looseObject('Updated user row.') })), ...errorResponses },
+        responses: {
+          '200': ok(objectSchema({ user: looseObject('Updated user row.') })),
+          ...errorResponses,
+        },
       },
-      'Global ADMIN'
+      'Global ADMIN',
     ),
   },
   '/api/audit': {
@@ -1189,11 +1471,18 @@ const paths: OpenApiSpec['paths'] = {
           param('limit', { type: 'integer', minimum: 1, maximum: 100 }, 'Page size.', 'query', false),
         ],
         responses: {
-          '200': ok(objectSchema({ logs: arrayOf(ref('AuditLog')), total: { type: 'integer', minimum: 0 }, page: { type: 'integer' }, limit: { type: 'integer' } })),
+          '200': ok(
+            objectSchema({
+              logs: arrayOf(ref('AuditLog')),
+              total: { type: 'integer', minimum: 0 },
+              page: { type: 'integer' },
+              limit: { type: 'integer' },
+            }),
+          ),
           ...errorResponses,
         },
       },
-      'Global ADMIN'
+      'Global ADMIN',
     ),
   },
 }
@@ -1202,9 +1491,8 @@ export const openApiSpec: OpenApiSpec = {
   openapi: '3.1.0',
   info: {
     title: 'BP Tracker API',
-    version: '0.1.0',
-    description:
-      'HTTP API for the open-source Pirate Galaxy blueprint tracker. Authentication uses an HTTP-only session cookie.',
+    version: '0.2.0',
+    description: 'HTTP API for the open-source Pirate Galaxy blueprint tracker. Authentication uses an HTTP-only session cookie.',
     license: { name: 'MIT' },
   },
   servers: [
@@ -1215,14 +1503,32 @@ export const openApiSpec: OpenApiSpec = {
   ],
   tags: [
     { name: 'System', description: 'Health and API documentation.' },
-    { name: 'Auth', description: 'Login, registration, sessions, passwords, and Discord OAuth.' },
-    { name: 'Clans', description: 'Clan records, memberships, registrations, and Discord settings.' },
-    { name: 'Blueprints', description: 'Blueprint catalog and user blueprint status.' },
-    { name: 'Sirius', description: 'Sirius planets, drop rules, active rotations, slots, and history.' },
+    {
+      name: 'Auth',
+      description: 'Login, registration, sessions, passwords, and Discord OAuth.',
+    },
+    {
+      name: 'Clans',
+      description: 'Clan records, memberships, registrations, and Discord settings.',
+    },
+    {
+      name: 'Blueprints',
+      description: 'Blueprint catalog and user blueprint status.',
+    },
+    {
+      name: 'Sirius',
+      description: 'Sirius planets, drop rules, active rotations, slots, and history.',
+    },
     { name: 'Checker', description: 'Blueprint checker presets and results.' },
-    { name: 'Notifications', description: 'In-app notifications and notification preferences.' },
+    {
+      name: 'Notifications',
+      description: 'In-app notifications and notification preferences.',
+    },
     { name: 'Users', description: 'Profile and admin user management.' },
-    { name: 'Audit', description: 'Admin audit log for important changes and actions.' },
+    {
+      name: 'Audit',
+      description: 'Admin audit log for important changes and actions.',
+    },
   ],
   paths,
   components: {

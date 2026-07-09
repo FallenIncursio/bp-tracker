@@ -90,6 +90,7 @@ describe('OpenAPI specification', () => {
     expect(openApiSpec.paths['/api/sirius/clans/{clanId}/appearances']?.post['x-required-role']).toBe('Clan COMMANDER')
     expect(openApiSpec.paths['/api/sirius/clans/{clanId}/journey']?.get['x-required-role']).toBe('Clan MEMBER')
     expect(openApiSpec.paths['/api/sirius/clans/{clanId}/journey']?.post['x-required-role']).toBe('Clan COMMANDER')
+    expect(openApiSpec.paths['/api/clans/{clanId}/members']?.get['x-required-role']).toBe('Clan MEMBER')
     expect(openApiSpec.paths['/api/clans/{clanId}/members/{userId}/tracking']?.patch['x-required-role']).toBe('Clan COMMANDER')
     expect(openApiSpec.paths['/api/clans/{clanId}/discord-settings/status/publish']?.post['x-required-role']).toBe('Clan ADMIRAL')
     expect(openApiSpec.paths['/api/audit']?.get['x-required-role']).toBe('Global ADMIN')

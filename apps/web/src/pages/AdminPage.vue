@@ -13,12 +13,13 @@ import { formatDateTime } from '../utils/labels'
 type Member = {
   userId: string
   displayName: string
-  username: string
+  username?: string
   role: string
   status: string
   trackingExcluded: boolean
-  trackingExcludedAt: string | null
-  trackingExcludedReason: string | null
+  trackingExcludedAt?: string | null
+  trackingExcludedReason?: string | null
+  approvedAt?: string | null
 }
 
 type ClanDiscordSettings = {
@@ -61,10 +62,17 @@ type AuditLog = {
 }
 
 const { user, isAdmin } = useAuth()
-const { selectedClanId, canManageSelectedClan, loadClans } = useClans()
+const { selectedClanId, canManageSelectedClan, canViewSelectedClanDetails, loadClans } = useClans()
 const { t, te, locale } = useI18n()
 const members = ref<Member[]>([])
-const registrations = ref<Array<{ userId: string; displayName: string; username: string; email: string | null }>>([])
+const registrations = ref<
+  Array<{
+    userId: string
+    displayName: string
+    username: string
+    email: string | null
+  }>
+>([])
 const clanForm = ref({ name: '', slug: '' })
 const passwordResets = ref<Record<string, string>>({})
 const trackingReasons = ref<Record<string, string>>({})
@@ -109,10 +117,20 @@ const canManageDiscordSettings = computed(() => {
   if (isAdmin.value) return true
   return (
     user.value?.memberships.some(
-      membership => membership.clanId === selectedClanId.value && membership.status === 'ACTIVE' && membership.role === 'ADMIRAL'
+      membership => membership.clanId === selectedClanId.value && membership.status === 'ACTIVE' && membership.role === 'ADMIRAL',
     ) ?? false
   )
 })
+const pageTitle = computed(() => {
+  if (isAdmin.value) return t('admin.title')
+  return canManageSelectedClan.value ? t('admin.clanManagementTitle') : t('admin.memberDirectoryTitle')
+})
+const pageSubtitle = computed(() => {
+  if (isAdmin.value) return t('admin.subtitle')
+  return canManageSelectedClan.value ? t('admin.clanManagementSubtitle') : t('admin.memberDirectorySubtitle')
+})
+const pageTooltip = computed(() => (isAdmin.value || canManageSelectedClan.value ? t('tooltips.admin') : t('tooltips.clanMembers')))
+const showMemberAdminFields = computed(() => canManageSelectedClan.value)
 
 const normalizeDiscordSettings = (settings: {
   clanId: string
@@ -147,9 +165,11 @@ const normalizeDiscordSettings = (settings: {
 const discordGuildIdPattern = /^\d{17,20}$/
 const canLoadDiscordChannels = computed(() => discordGuildIdPattern.test(discordSettings.value.guildId.trim()))
 const selectedNotificationDiscordChannel = computed(() =>
-  discordChannels.value.find(channel => channel.id === discordSettings.value.notificationChannelId.trim())
+  discordChannels.value.find(channel => channel.id === discordSettings.value.notificationChannelId.trim()),
 )
-const selectedStatusDiscordChannel = computed(() => discordChannels.value.find(channel => channel.id === discordSettings.value.statusChannelId.trim()))
+const selectedStatusDiscordChannel = computed(() =>
+  discordChannels.value.find(channel => channel.id === discordSettings.value.statusChannelId.trim()),
+)
 
 const resetDiscordChannels = () => {
   discordChannels.value = []
@@ -181,9 +201,11 @@ const loadDiscordChannels = async () => {
   discordChannelsBusy.value = true
   try {
     const params = new URLSearchParams({ guildId })
-    const response = await api.get<{ available: boolean; channels: DiscordChannel[]; error?: string }>(
-      `/clans/${selectedClanId.value}/discord-channels?${params}`
-    )
+    const response = await api.get<{
+      available: boolean
+      channels: DiscordChannel[]
+      error?: string
+    }>(`/clans/${selectedClanId.value}/discord-channels?${params}`)
     discordChannels.value = response.channels
     discordChannelsAvailable.value = response.available
     discordChannelsError.value = response.available ? '' : t('admin.discordChannelsUnavailable')
@@ -199,7 +221,11 @@ const loadDiscordChannels = async () => {
 const onDiscordChannelSelect = () => syncDiscordChannelNames()
 
 const loadMembers = async () => {
-  if (!selectedClanId.value || !user.value) return
+  if (!selectedClanId.value || !canViewSelectedClanDetails.value) {
+    members.value = []
+    trackingReasons.value = {}
+    return
+  }
   const response = await api.get<{ members: Member[] }>(`/clans/${selectedClanId.value}/members`)
   members.value = response.members
   trackingReasons.value = Object.fromEntries(response.members.map(member => [member.userId, member.trackingExcludedReason ?? '']))
@@ -213,7 +239,9 @@ const loadRegistrations = async () => {
 
 const loadDiscordSettings = async () => {
   if (!selectedClanId.value || !canManageDiscordSettings.value) return
-  const response = await api.get<{ settings: ReturnType<typeof normalizeDiscordSettings> }>(`/clans/${selectedClanId.value}/discord-settings`)
+  const response = await api.get<{
+    settings: ReturnType<typeof normalizeDiscordSettings>
+  }>(`/clans/${selectedClanId.value}/discord-settings`)
   discordSettings.value = normalizeDiscordSettings(response.settings)
   resetDiscordChannels()
   if (discordSettings.value.guildId) {
@@ -257,7 +285,10 @@ const loadAudit = async () => {
   if (!isAdmin.value) return
   auditBusy.value = true
   try {
-    const params = new URLSearchParams({ page: String(auditPage.value), limit: String(auditLimit) })
+    const params = new URLSearchParams({
+      page: String(auditPage.value),
+      limit: String(auditLimit),
+    })
     if (auditSearch.value.trim()) params.set('search', auditSearch.value.trim())
     if (auditAction.value.trim()) params.set('action', auditAction.value.trim())
     if (auditEntityType.value.trim()) params.set('entityType', auditEntityType.value.trim())
@@ -304,10 +335,9 @@ const saveDiscordSettings = async () => {
   discordError.value = ''
   discordBusy.value = true
   try {
-    const response = await api.patch<{ settings: ReturnType<typeof normalizeDiscordSettings> }>(
-      `/clans/${selectedClanId.value}/discord-settings`,
-      discordSettings.value
-    )
+    const response = await api.patch<{
+      settings: ReturnType<typeof normalizeDiscordSettings>
+    }>(`/clans/${selectedClanId.value}/discord-settings`, discordSettings.value)
     discordSettings.value = normalizeDiscordSettings(response.settings)
     if (discordSettings.value.guildId) {
       await loadDiscordChannels()
@@ -345,10 +375,11 @@ const publishDiscordStatus = async (recreateMessages = false) => {
     discordStatusBusy.value = true
   }
   try {
-    const response = await api.post<{ settings: ReturnType<typeof normalizeDiscordSettings> }>(
-      `/clans/${selectedClanId.value}/discord-settings/status/publish`,
-      { recreateMessages }
-    )
+    const response = await api.post<{
+      settings: ReturnType<typeof normalizeDiscordSettings>
+    }>(`/clans/${selectedClanId.value}/discord-settings/status/publish`, {
+      recreateMessages,
+    })
     discordSettings.value = normalizeDiscordSettings(response.settings)
     discordMessage.value = recreateMessages ? t('admin.discordStatusRecreated') : t('admin.discordStatusPublished')
   } catch (err) {
@@ -371,7 +402,9 @@ const resetPassword = async (member: Member) => {
   try {
     await api.patch(`/users/${member.userId}`, { newPassword })
     passwordResets.value = { ...passwordResets.value, [member.userId]: '' }
-    passwordResetMessage.value = t('admin.passwordSet', { name: member.displayName })
+    passwordResetMessage.value = t('admin.passwordSet', {
+      name: member.displayName,
+    })
   } catch (err) {
     passwordResetError.value = err instanceof Error ? err.message : t('admin.passwordFailed')
   }
@@ -399,12 +432,12 @@ watch(selectedClanId, async () => {
 
 watch(
   () => discordSettings.value.notificationChannelId,
-  () => syncDiscordChannelNames()
+  () => syncDiscordChannelNames(),
 )
 
 watch(
   () => discordSettings.value.statusChannelId,
-  () => syncDiscordChannelNames()
+  () => syncDiscordChannelNames(),
 )
 </script>
 
@@ -412,10 +445,10 @@ watch(
   <section class="page">
     <div class="page-header">
       <div>
-        <h1 class="page-title">{{ t('admin.title') }}</h1>
-        <p class="page-subtitle">{{ t('admin.subtitle') }}</p>
+        <h1 class="page-title">{{ pageTitle }}</h1>
+        <p class="page-subtitle">{{ pageSubtitle }}</p>
       </div>
-      <AppTooltip :text="t('tooltips.admin')" />
+      <AppTooltip :text="pageTooltip" />
     </div>
 
     <AuthPanel />
@@ -431,7 +464,9 @@ watch(
           {{ t('admin.slug') }}
           <input id="admin-clan-slug" v-model="clanForm.slug" name="clanSlug" :placeholder="t('admin.slugPlaceholder')" />
         </label>
-        <button class="primary-button" :disabled="!clanForm.name || !clanForm.slug"><Plus :size="16" /> {{ t('app.actions.create') }}</button>
+        <button class="primary-button" :disabled="!clanForm.name || !clanForm.slug">
+          <Plus :size="16" /> {{ t('app.actions.create') }}
+        </button>
       </form>
     </section>
 
@@ -447,16 +482,29 @@ watch(
         <div class="discord-settings-grid">
           <label>
             {{ t('admin.discordGuildId') }}
-            <input id="discord-guild-id" v-model="discordSettings.guildId" name="discordGuildId" inputmode="numeric" placeholder="123456789012345678" />
+            <input
+              id="discord-guild-id"
+              v-model="discordSettings.guildId"
+              name="discordGuildId"
+              inputmode="numeric"
+              placeholder="123456789012345678"
+            />
           </label>
           <div class="field-action">
             <span>{{ t('admin.discordChannels') }}</span>
-            <button type="button" class="secondary-button" :disabled="discordChannelsBusy || !canLoadDiscordChannels" @click="loadDiscordChannels">
+            <button
+              type="button"
+              class="secondary-button"
+              :disabled="discordChannelsBusy || !canLoadDiscordChannels"
+              @click="loadDiscordChannels"
+            >
               <RefreshCw :size="16" /> {{ t('admin.discordLoadChannels') }}
             </button>
           </div>
         </div>
-        <p v-if="discordChannelsError" class="muted">{{ discordChannelsError }}</p>
+        <p v-if="discordChannelsError" class="muted">
+          {{ discordChannelsError }}
+        </p>
         <p v-else-if="discordChannelsAvailable" class="muted">
           {{ t('admin.discordChannelsLoaded', { count: discordChannels.length }) }}
         </p>
@@ -548,11 +596,22 @@ watch(
             </label>
             <label>
               {{ t('admin.discordStatusChannelId') }}
-              <input id="discord-status-channel-id" v-model="discordSettings.statusChannelId" name="discordStatusChannelId" inputmode="numeric" placeholder="123456789012345678" />
+              <input
+                id="discord-status-channel-id"
+                v-model="discordSettings.statusChannelId"
+                name="discordStatusChannelId"
+                inputmode="numeric"
+                placeholder="123456789012345678"
+              />
             </label>
             <label>
               {{ t('admin.discordStatusChannelName') }}
-              <input id="discord-status-channel-name" v-model="discordSettings.statusChannelName" name="discordStatusChannelName" :placeholder="t('admin.discordStatusChannelPlaceholder')" />
+              <input
+                id="discord-status-channel-name"
+                v-model="discordSettings.statusChannelName"
+                name="discordStatusChannelName"
+                :placeholder="t('admin.discordStatusChannelPlaceholder')"
+              />
             </label>
           </div>
           <label class="toggle-row discord-pin-toggle">
@@ -565,7 +624,9 @@ watch(
             <span>{{ t('admin.discordStatusLastPublished') }}: {{ dateTime(discordSettings.statusLastPublishedAt) }}</span>
           </div>
           <p class="form-hint">{{ t('admin.discordStatusHelp') }}</p>
-          <p v-if="discordSettings.statusLastError" class="error-text">{{ discordSettings.statusLastError }}</p>
+          <p v-if="discordSettings.statusLastError" class="error-text">
+            {{ discordSettings.statusLastError }}
+          </p>
           <div class="form-actions-row">
             <button
               type="button"
@@ -610,7 +671,7 @@ watch(
           <thead>
             <tr>
               <th>{{ t('admin.name') }}</th>
-              <th>{{ t('admin.username') }}</th>
+              <th v-if="showMemberAdminFields">{{ t('admin.username') }}</th>
               <th>{{ t('auth.email') }}</th>
               <th>{{ t('admin.action') }}</th>
             </tr>
@@ -621,28 +682,38 @@ watch(
               <td>{{ registration.username }}</td>
               <td>{{ registration.email ?? '-' }}</td>
               <td class="filters">
-                <button class="secondary-button" @click="approve(registration.userId, 'MEMBER')"><Check :size="16" /> {{ enumLabel('role', 'MEMBER') }}</button>
-                <button class="secondary-button" @click="reject(registration.userId)"><X :size="16" /> {{ t('app.actions.reject') }}</button>
+                <button class="secondary-button" @click="approve(registration.userId, 'MEMBER')">
+                  <Check :size="16" /> {{ enumLabel('role', 'MEMBER') }}
+                </button>
+                <button class="secondary-button" @click="reject(registration.userId)">
+                  <X :size="16" /> {{ t('app.actions.reject') }}
+                </button>
               </td>
             </tr>
             <tr v-if="registrations.length === 0">
-              <td colspan="4" class="muted">{{ t('admin.noRegistrations') }}</td>
+              <td colspan="4" class="muted">
+                {{ t('admin.noRegistrations') }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <section v-if="user" class="panel">
+    <section v-if="canViewSelectedClanDetails" class="panel">
       <h2 class="panel-title">{{ t('admin.members') }}</h2>
-      <p v-if="passwordResetMessage" class="success-text">{{ passwordResetMessage }}</p>
-      <p v-if="passwordResetError" class="error-text">{{ passwordResetError }}</p>
+      <p v-if="passwordResetMessage" class="success-text">
+        {{ passwordResetMessage }}
+      </p>
+      <p v-if="passwordResetError" class="error-text">
+        {{ passwordResetError }}
+      </p>
       <div class="table-wrap" tabindex="0">
         <table>
           <thead>
             <tr>
               <th>{{ t('admin.name') }}</th>
-              <th>{{ t('admin.username') }}</th>
+              <th v-if="showMemberAdminFields">{{ t('admin.username') }}</th>
               <th>{{ t('admin.status') }}</th>
               <th>{{ t('admin.role') }}</th>
               <th>{{ t('admin.tracking') }}</th>
@@ -652,27 +723,36 @@ watch(
           <tbody>
             <tr v-for="member in members" :key="member.userId">
               <td>{{ member.displayName }}</td>
-              <td>{{ member.username }}</td>
+              <td v-if="showMemberAdminFields">{{ member.username ?? '-' }}</td>
               <td>{{ enumLabel('status', member.status) }}</td>
               <td>
                 <select
+                  v-if="canManageSelectedClan"
                   :id="`member-role-${member.userId}`"
                   :name="`memberRole-${member.userId}`"
                   :value="member.role"
-                  :disabled="!canManageSelectedClan"
                   @change="setRole(member, ($event.target as HTMLSelectElement).value)"
                 >
-                  <option value="MEMBER">{{ enumLabel('role', 'MEMBER') }}</option>
-                  <option value="COMMANDER">{{ enumLabel('role', 'COMMANDER') }}</option>
-                  <option value="ADMIRAL" :disabled="!isAdmin">{{ enumLabel('role', 'ADMIRAL') }}</option>
+                  <option value="MEMBER">
+                    {{ enumLabel('role', 'MEMBER') }}
+                  </option>
+                  <option value="COMMANDER">
+                    {{ enumLabel('role', 'COMMANDER') }}
+                  </option>
+                  <option value="ADMIRAL" :disabled="!isAdmin">
+                    {{ enumLabel('role', 'ADMIRAL') }}
+                  </option>
                 </select>
+                <span v-else class="status-chip">{{ enumLabel('role', member.role) }}</span>
               </td>
               <td>
                 <div class="tracking-cell">
                   <span class="status-chip" :class="member.trackingExcluded ? 'status-chip-muted' : 'status-chip-active'">
                     {{ member.trackingExcluded ? t('admin.trackingExcluded') : t('admin.trackingIncluded') }}
                   </span>
-                  <span v-if="member.trackingExcludedReason" class="muted">{{ member.trackingExcludedReason }}</span>
+                  <span v-if="showMemberAdminFields && member.trackingExcludedReason" class="muted">{{
+                    member.trackingExcludedReason
+                  }}</span>
                   <div v-if="canManageSelectedClan" class="tracking-control">
                     <input
                       :id="`member-tracking-reason-${member.userId}`"
@@ -709,7 +789,7 @@ watch(
                     :name="`memberPasswordUsername-${member.userId}`"
                     type="text"
                     autocomplete="username"
-                    :value="member.username"
+                    :value="member.username ?? ''"
                     readonly
                     tabindex="-1"
                     aria-hidden="true"
@@ -722,7 +802,9 @@ watch(
                     autocomplete="new-password"
                     :placeholder="t('admin.newPassword')"
                   />
-                  <button class="secondary-button" :disabled="(passwordResets[member.userId] ?? '').length < 8">{{ t('admin.set') }}</button>
+                  <button class="secondary-button" :disabled="(passwordResets[member.userId] ?? '').length < 8">
+                    {{ t('admin.set') }}
+                  </button>
                 </form>
               </td>
             </tr>
@@ -771,8 +853,12 @@ watch(
             <tr v-for="log in auditLogs" :key="log.id">
               <td>{{ dateTime(log.createdAt) }}</td>
               <td>{{ auditActor(log) }}</td>
-              <td><code>{{ log.action }}</code></td>
-              <td>{{ log.entityType }}<span v-if="log.entityId" class="muted"> / {{ log.entityId }}</span></td>
+              <td>
+                <code>{{ log.action }}</code>
+              </td>
+              <td>
+                {{ log.entityType }}<span v-if="log.entityId" class="muted"> / {{ log.entityId }}</span>
+              </td>
               <td>
                 <details class="audit-details">
                   <summary>{{ log.summary ?? '-' }}</summary>
@@ -790,7 +876,13 @@ watch(
         <button class="secondary-button" :disabled="auditPage <= 1 || auditBusy" @click="previousAuditPage">
           {{ t('app.actions.previous') }}
         </button>
-        <span class="muted">{{ t('admin.auditPage', { page: auditPage, pages: auditPageCount, total: auditTotal }) }}</span>
+        <span class="muted">{{
+          t('admin.auditPage', {
+            page: auditPage,
+            pages: auditPageCount,
+            total: auditTotal,
+          })
+        }}</span>
         <button class="secondary-button" :disabled="auditPage >= auditPageCount || auditBusy" @click="nextAuditPage">
           {{ t('app.actions.next') }}
         </button>

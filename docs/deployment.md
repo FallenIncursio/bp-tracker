@@ -26,12 +26,12 @@ The web container contains Nginx and forwards `/api/*` to the API container.
 
 ## Requirements
 
-| Area | Recommendation |
-| --- | --- |
-| Host | Linux server with Docker and Docker Compose |
-| TLS | External reverse proxy, for example Caddy, Traefik, or Nginx |
-| Data | Persistent Docker volume or managed PostgreSQL |
-| Backups | Regular PostgreSQL backups before updates and imports |
+| Area    | Recommendation                                               |
+| ------- | ------------------------------------------------------------ |
+| Host    | Linux server with Docker and Docker Compose                  |
+| TLS     | External reverse proxy, for example Caddy, Traefik, or Nginx |
+| Data    | Persistent Docker volume or managed PostgreSQL               |
+| Backups | Regular PostgreSQL backups before updates and imports        |
 
 ## Production Start
 
@@ -47,10 +47,10 @@ The API container loads `.env` via `env_file` and overrides central production v
 
 ## Required Secrets
 
-| Variable | Purpose |
-| --- | --- |
-| `POSTGRES_PASSWORD` | Password for the PostgreSQL user. |
-| `SESSION_SECRET` | Secret for sessions. Must be long and random. |
+| Variable            | Purpose                                       |
+| ------------------- | --------------------------------------------- |
+| `POSTGRES_PASSWORD` | Password for the PostgreSQL user.             |
+| `SESSION_SECRET`    | Secret for sessions. Must be long and random. |
 
 For Discord, also set the variables described in [configuration.md](configuration.md).
 
@@ -81,6 +81,23 @@ docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 Production databases should use controlled Prisma migrations. The development stack uses `prisma db push`, which is convenient for development but not the preferred production workflow.
+
+## Releases And Update Notifications
+
+BP Tracker uses semantic versioning. Keep the root, API, web, contracts, web build default, and OpenAPI versions in sync and verify them with:
+
+```bash
+npm run version:check
+```
+
+Publish releases from version tags:
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+The GitHub Release workflow verifies the tag against `package.json`, runs the normal checks, builds the app, and publishes a GitHub Release. Developers who run private/local copies should watch the repository for Releases in GitHub to receive update notifications.
 
 ## Backups
 
