@@ -8,6 +8,7 @@ import { dateLocale } from '../utils/labels'
 const { t, locale } = useI18n()
 const open = ref(false)
 const root = ref<HTMLElement | null>(null)
+const panel = ref<HTMLElement | null>(null)
 const panelId = `app-version-info-${Math.random().toString(36).slice(2)}`
 const commitShortSha = computed(() => (appCommitSha ? appCommitSha.slice(0, 7) : t('app.versionUnknown')))
 const commitDateLabel = computed(() => {
@@ -30,7 +31,9 @@ const close = () => {
 }
 
 const handleDocumentClick = (event: MouseEvent) => {
-  if (!root.value?.contains(event.target as Node)) close()
+  const target = event.target as Node
+  if (root.value?.contains(target) || panel.value?.contains(target)) return
+  close()
 }
 
 const handleDocumentKeydown = (event: KeyboardEvent) => {
@@ -61,29 +64,31 @@ onBeforeUnmount(() => {
       {{ t('app.version', { version: appVersion }) }}
     </button>
 
-    <div v-if="open" :id="panelId" class="app-version-popover" role="dialog" :aria-label="t('app.versionDetails')">
-      <h2>{{ t('app.versionDetails') }}</h2>
-      <dl>
-        <div>
-          <dt>{{ t('app.versionLabel') }}</dt>
-          <dd>{{ appVersion }}</dd>
-        </div>
-        <div>
-          <dt>{{ t('app.versionCommit') }}</dt>
-          <dd>
-            <a v-if="appCommitUrl" :href="appCommitUrl" target="_blank" rel="noreferrer"> <GitCommit :size="14" /> {{ commitShortSha }} </a>
-            <span v-else>{{ commitShortSha }}</span>
-          </dd>
-        </div>
-        <div>
-          <dt>{{ t('app.versionDate') }}</dt>
-          <dd>{{ commitDateLabel }}</dd>
-        </div>
-        <div>
-          <dt>{{ t('app.versionMessage') }}</dt>
-          <dd class="app-version-message">{{ commitMessageLabel }}</dd>
-        </div>
-      </dl>
-    </div>
+    <Teleport to="body">
+      <div v-if="open" :id="panelId" ref="panel" class="app-version-popover" role="dialog" :aria-label="t('app.versionDetails')">
+        <h2>{{ t('app.versionDetails') }}</h2>
+        <dl>
+          <div>
+            <dt>{{ t('app.versionLabel') }}</dt>
+            <dd>{{ appVersion }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('app.versionCommit') }}</dt>
+            <dd>
+              <a v-if="appCommitUrl" :href="appCommitUrl" target="_blank" rel="noreferrer"> <GitCommit :size="14" /> {{ commitShortSha }} </a>
+              <span v-else>{{ commitShortSha }}</span>
+            </dd>
+          </div>
+          <div>
+            <dt>{{ t('app.versionDate') }}</dt>
+            <dd>{{ commitDateLabel }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('app.versionMessage') }}</dt>
+            <dd class="app-version-message">{{ commitMessageLabel }}</dd>
+          </div>
+        </dl>
+      </div>
+    </Teleport>
   </div>
 </template>
