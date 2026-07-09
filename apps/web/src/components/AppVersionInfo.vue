@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
         </div>
         <div>
           <dt>{{ t('app.versionMessage') }}</dt>
-          <dd>{{ commitMessageLabel }}</dd>
+          <dd class="app-version-message">{{ commitMessageLabel }}</dd>
         </div>
       </dl>
     </div>

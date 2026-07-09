@@ -2,6 +2,10 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.7 - 2026-07-09
+
+- Fixed the version details popover so commit messages wrap cleanly and the panel no longer clips into the page content.
+
 ## 0.2.6 - 2026-07-09
 
 - Allowed Sirius 2-slot drops to be saved with an unknown enemy.
