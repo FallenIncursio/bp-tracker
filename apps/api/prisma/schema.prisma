@@ -137,6 +137,7 @@ model User {
   blueprintStatuses UserBlueprintStatus[]
   notifications     Notification[]
   notificationPrefs NotificationPreference?
+  notificationHits  BlueprintNotificationHit[]
 
   @@index([globalRole])
 }
@@ -163,34 +164,35 @@ model Clan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  memberships     ClanMembership[]
-  appearances     SiriusPlanetAppearance[]
-  dropEvents      SiriusDropEvent[]
-  spawnWindows    SiriusSpawnWindow[]
-  journeyStops    ClanJourneyStop[]
-  discordSettings ClanDiscordSettings?
+  memberships      ClanMembership[]
+  appearances      SiriusPlanetAppearance[]
+  dropEvents       SiriusDropEvent[]
+  spawnWindows     SiriusSpawnWindow[]
+  journeyStops     ClanJourneyStop[]
+  discordSettings  ClanDiscordSettings?
+  notificationHits BlueprintNotificationHit[]
 
   @@index([isPublic])
 }
 
 model ClanDiscordSettings {
-  id                       String    @id @default(uuid())
-  clanId                   String    @unique
-  guildId                  String?
-  notificationChannelId    String?
-  notificationChannelName  String?
-  enabled                  Boolean   @default(false)
-  statusEnabled            Boolean   @default(false)
-  statusChannelId          String?
-  statusChannelName        String?
-  statusRoadmapMessageId   String?
-  statusPlanetsMessageId   String?
-  statusPinMessages        Boolean   @default(true)
-  statusLastPublishedAt    DateTime?
-  statusLastError          String?   @db.Text
-  updatedById              String?
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt
+  id                      String    @id @default(uuid())
+  clanId                  String    @unique
+  guildId                 String?
+  notificationChannelId   String?
+  notificationChannelName String?
+  enabled                 Boolean   @default(false)
+  statusEnabled           Boolean   @default(false)
+  statusChannelId         String?
+  statusChannelName       String?
+  statusRoadmapMessageId  String?
+  statusPlanetsMessageId  String?
+  statusPinMessages       Boolean   @default(true)
+  statusLastPublishedAt   DateTime?
+  statusLastError         String?   @db.Text
+  updatedById             String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   clan Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
 }
@@ -236,7 +238,7 @@ model BlueprintItemType {
   nameEn    String?
   sortOrder Int     @default(0)
 
-  blueprints    Blueprint[]
+  blueprints   Blueprint[]
   translations BlueprintItemTypeTranslation[]
 }
 
@@ -268,6 +270,7 @@ model Blueprint {
   siriusDropRules  SiriusBlueprintDropRule[]
   siriusDropEvents SiriusDropEvent[]
   shipRequirements ShipRequiredBlueprint[]
+  notificationHits BlueprintNotificationHit[]
 
   @@index([systemId])
   @@index([itemTypeId])
@@ -348,8 +351,8 @@ model SiriusPlanet {
   isKnown   Boolean @default(true)
   sortOrder Int     @default(0)
 
-  appearances SiriusPlanetAppearance[]
-  dropEvents  SiriusDropEvent[]
+  appearances  SiriusPlanetAppearance[]
+  dropEvents   SiriusDropEvent[]
   journeyStops ClanJourneyStop[]
 }
 
@@ -368,13 +371,14 @@ model SiriusPlanetAppearance {
   createdAt   DateTime               @default(now())
   updatedAt   DateTime               @updatedAt
 
-  clan       Clan                        @relation(fields: [clanId], references: [id], onDelete: Cascade)
-  planet     SiriusPlanet                @relation(fields: [planetId], references: [id], onDelete: Cascade)
-  slots      SiriusPlanetBlueprintSlot[]
-  dropEvents SiriusDropEvent[]
-  journeyStops ClanJourneyStop[]
-  spawnWindowSource   SiriusSpawnWindow? @relation("SpawnWindowSource")
-  spawnWindowResolved SiriusSpawnWindow? @relation("SpawnWindowResolved")
+  clan                Clan                        @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  planet              SiriusPlanet                @relation(fields: [planetId], references: [id], onDelete: Cascade)
+  slots               SiriusPlanetBlueprintSlot[]
+  dropEvents          SiriusDropEvent[]
+  journeyStops        ClanJourneyStop[]
+  notificationHits    BlueprintNotificationHit[]
+  spawnWindowSource   SiriusSpawnWindow?          @relation("SpawnWindowSource")
+  spawnWindowResolved SiriusSpawnWindow?          @relation("SpawnWindowResolved")
 
   @@index([clanId, status])
   @@index([ring])
@@ -395,7 +399,7 @@ model SiriusSpawnWindow {
   updatedAt            DateTime                @updatedAt
 
   clan               Clan                    @relation(fields: [clanId], references: [id], onDelete: Cascade)
-  sourceAppearance   SiriusPlanetAppearance @relation("SpawnWindowSource", fields: [sourceAppearanceId], references: [id], onDelete: Cascade)
+  sourceAppearance   SiriusPlanetAppearance  @relation("SpawnWindowSource", fields: [sourceAppearanceId], references: [id], onDelete: Cascade)
   resolvedAppearance SiriusPlanetAppearance? @relation("SpawnWindowResolved", fields: [resolvedAppearanceId], references: [id], onDelete: SetNull)
 
   @@index([clanId, status, expectedAt])
@@ -405,21 +409,21 @@ model SiriusSpawnWindow {
 }
 
 model ClanJourneyStop {
-  id           String                    @id @default(uuid())
+  id           String                   @id @default(uuid())
   clanId       String
   appearanceId String?
   planetId     String?
   planetName   String?
-  ring         Int                       @default(5)
+  ring         Int                      @default(5)
   arriveAt     DateTime?
   departAt     DateTime?
-  status       ClanJourneyStopStatus     @default(PLANNED)
-  certainty    ClanJourneyStopCertainty  @default(CONFIRMED)
-  sortOrder    Int                       @default(0)
-  notes        String?                   @db.Text
+  status       ClanJourneyStopStatus    @default(PLANNED)
+  certainty    ClanJourneyStopCertainty @default(CONFIRMED)
+  sortOrder    Int                      @default(0)
+  notes        String?                  @db.Text
   createdById  String?
-  createdAt    DateTime                  @default(now())
-  updatedAt    DateTime                  @updatedAt
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
 
   clan       Clan                    @relation(fields: [clanId], references: [id], onDelete: Cascade)
   appearance SiriusPlanetAppearance? @relation(fields: [appearanceId], references: [id], onDelete: SetNull)
@@ -578,8 +582,9 @@ model Notification {
   readAt      DateTime?
   createdAt   DateTime         @default(now())
 
-  user       User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  deliveries NotificationDelivery[]
+  user          User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries    NotificationDelivery[]
+  blueprintHits BlueprintNotificationHit[]
 
   @@index([userId, readAt])
 }
@@ -610,6 +615,33 @@ model NotificationPreference {
   planetExpiryAlerts Boolean @default(true)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BlueprintNotificationHit {
+  id             String           @id @default(uuid())
+  type           NotificationType
+  clanId         String
+  userId         String
+  blueprintId    String
+  appearanceId   String
+  notificationId String?
+  firstSeenAt    DateTime         @default(now())
+  lastSeenAt     DateTime         @default(now())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  clan         Clan                   @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blueprint    Blueprint              @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+  appearance   SiriusPlanetAppearance @relation(fields: [appearanceId], references: [id], onDelete: Cascade)
+  notification Notification?          @relation(fields: [notificationId], references: [id], onDelete: SetNull)
+
+  @@unique([type, clanId, userId, blueprintId, appearanceId])
+  @@index([clanId, type, createdAt])
+  @@index([userId, type])
+  @@index([blueprintId])
+  @@index([appearanceId])
+  @@index([notificationId])
 }
 
 model ImportRun {
@@ -643,4 +675,3 @@ model AuditLog {
   @@index([entityType, entityId])
   @@index([createdAt])
 }
-
