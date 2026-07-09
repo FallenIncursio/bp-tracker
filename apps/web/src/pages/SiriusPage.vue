@@ -22,6 +22,7 @@ import AppTooltip from '../components/AppTooltip.vue'
 import BlueprintCombobox from '../components/BlueprintCombobox.vue'
 import CountdownTimer from '../components/CountdownTimer.vue'
 import { useClans } from '../composables/useClans'
+import { dateTimeInputToSourceIso, formatSourceDateTime, nullableTrimmedText, sourceDateTimeToInput } from '../utils/journey'
 import { formatDateTime, localizedName } from '../utils/labels'
 
 type Planet = { id: string; name: string; ring: number | null }
@@ -262,9 +263,9 @@ const journeyStopClass = (stop: JourneyStop) => ({
   'journey-stop-drag-over': dragOverJourneyStopId.value === stop.id && draggedJourneyStopId.value !== stop.id,
 })
 const journeyTimeLabel = (stop: JourneyStop) => {
-  if (stop.arriveAt && stop.departAt) return `${dateTime(stop.arriveAt)} - ${dateTime(stop.departAt)}`
-  if (stop.arriveAt) return t('sirius.arrivesAt', { date: dateTime(stop.arriveAt) })
-  if (stop.departAt) return t('sirius.departsAt', { date: dateTime(stop.departAt) })
+  if (stop.arriveAt && stop.departAt) return `${formatSourceDateTime(stop.arriveAt, locale.value)} - ${formatSourceDateTime(stop.departAt, locale.value)}`
+  if (stop.arriveAt) return t('sirius.arrivesAt', { date: formatSourceDateTime(stop.arriveAt, locale.value) })
+  if (stop.departAt) return t('sirius.departsAt', { date: formatSourceDateTime(stop.departAt, locale.value) })
   return t('sirius.noJourneyTime')
 }
 const journeySourceLabel = (stop: JourneyStop) => (stop.appearanceId ? t('sirius.linkedJourneyStop') : t('sirius.freeJourneyStop'))
@@ -425,16 +426,6 @@ const blueprintsForRow = (row: SlotRow) => {
   return blueprints
 }
 
-const toDateTimeInput = (value: string | null | undefined) => {
-  if (!value) return ''
-  const date = new Date(value)
-  if (!Number.isFinite(date.getTime())) return ''
-  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000)
-  return localDate.toISOString().slice(0, 16)
-}
-
-const dateInputToIso = (value: string) => (value ? new Date(value).toISOString() : undefined)
-
 const resetJourneyForm = () => {
   editingJourneyStopId.value = ''
   journeyError.value = ''
@@ -463,11 +454,11 @@ const journeyPayload = () => ({
   appearanceId: journeyForm.value.appearanceId || undefined,
   planetName: journeyForm.value.appearanceId ? undefined : journeyForm.value.planetName.trim() || undefined,
   ring: journeyForm.value.ring,
-  arriveAt: dateInputToIso(journeyForm.value.arriveAt),
-  departAt: dateInputToIso(journeyForm.value.departAt),
+  arriveAt: dateTimeInputToSourceIso(journeyForm.value.arriveAt),
+  departAt: dateTimeInputToSourceIso(journeyForm.value.departAt),
   status: journeyForm.value.status,
   certainty: journeyForm.value.certainty,
-  notes: journeyForm.value.notes || undefined,
+  notes: nullableTrimmedText(journeyForm.value.notes),
 })
 
 const createAppearance = async () => {
@@ -515,8 +506,8 @@ const editJourneyStop = (stop: JourneyStop) => {
     appearanceId: stop.appearanceId ?? '',
     planetName: stop.appearanceId ? '' : journeyStopName(stop),
     ring: stop.ring,
-    arriveAt: toDateTimeInput(stop.arriveAt),
-    departAt: toDateTimeInput(stop.departAt),
+    arriveAt: sourceDateTimeToInput(stop.arriveAt),
+    departAt: sourceDateTimeToInput(stop.departAt),
     status: stop.status,
     certainty: stop.certainty,
     notes: stop.notes ?? '',
@@ -611,6 +602,28 @@ const handleJourneyDragEnd = () => {
   dragOverJourneyStopId.value = ''
 }
 
+const closestJourneyActionMenu = (target: EventTarget | null) =>
+  target instanceof Element ? target.closest<HTMLDetailsElement>('.journey-action-menu') : null
+
+const closeJourneyActionMenus = (except?: HTMLDetailsElement | null) => {
+  document.querySelectorAll<HTMLDetailsElement>('.journey-action-menu[open]').forEach(menu => {
+    if (menu !== except) menu.open = false
+  })
+}
+
+const handleJourneyActionPointerDown = (event: PointerEvent) => {
+  closeJourneyActionMenus(closestJourneyActionMenu(event.target))
+}
+
+const handleJourneyActionKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') closeJourneyActionMenus()
+}
+
+const handleJourneyActionMenuToggle = (event: Event) => {
+  const menu = event.currentTarget
+  if (menu instanceof HTMLDetailsElement && menu.open) closeJourneyActionMenus(menu)
+}
+
 const startResolveSpawnWindow = (spawnWindow: SpawnWindow) => {
   resolvingSpawnWindowId.value = spawnWindow.id
   appearanceForm.value.ring = spawnWindow.sourceAppearance.ring
@@ -677,11 +690,15 @@ const setupMobileLayoutObserver = () => {
 
 onMounted(async () => {
   setupMobileLayoutObserver()
+  document.addEventListener('pointerdown', handleJourneyActionPointerDown)
+  document.addEventListener('keydown', handleJourneyActionKeydown)
   await loadClans()
   await Promise.all([loadPlanets(), loadAppearances(), loadHistory(), loadSpawnPlan(), loadJourney()])
 })
 
 onBeforeUnmount(() => {
+  document.removeEventListener('pointerdown', handleJourneyActionPointerDown)
+  document.removeEventListener('keydown', handleJourneyActionKeydown)
   mobileLayoutQuery?.removeEventListener('change', updateMobileLayout)
   mobileLayoutQuery = null
 })
@@ -1008,11 +1025,11 @@ watch(
                     {{ stop.metrics.wanted }}
                   </span>
                 </div>
-                <details v-if="canEditSelectedClan" class="journey-action-menu">
+                <details v-if="canEditSelectedClan" class="journey-action-menu" @toggle="handleJourneyActionMenuToggle">
                   <summary class="icon-button" :title="t('sirius.stopActions')" :aria-label="t('sirius.stopActions')">
                     <MoreHorizontal :size="16" />
                   </summary>
-                  <div class="journey-action-popover">
+                  <div class="journey-action-popover" @click="closeJourneyActionMenus()">
                     <button class="menu-action" type="button" :disabled="index === 0 || journeyReorderBusy" @click="moveJourneyStop(stop, -1)">
                       <ArrowUp :size="16" /> {{ t('sirius.moveUp') }}
                     </button>
