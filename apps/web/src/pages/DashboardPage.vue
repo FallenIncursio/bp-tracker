@@ -32,6 +32,7 @@ type SiriusAppearance = {
     enemyType: string | null
     locationName: string | null
     rawBlueprintName: string | null
+    viewerStatus: string | null
     blueprint: {
       canonicalName: string
       nameDe: string
@@ -112,17 +113,19 @@ const loading = ref(false)
 const timerRefreshQueued = ref(false)
 const activeRotationMetricKey = ref('')
 
-const activeSlots = computed(() => appearances.value.flatMap(appearance => appearance.slots))
+const activeSlots = computed(() => appearances.value.flatMap((appearance) => appearance.slots))
 const wantedCount = computed(() => activeSlots.value.reduce((sum, slot) => sum + (slot.counts?.wanted ?? 0), 0))
 const missingCount = computed(() => activeSlots.value.reduce((sum, slot) => sum + (slot.counts?.missing ?? 0), 0))
 const trackingScopeLabel = computed(() =>
-  t('dashboard.trackingScope', { counted: memberCounts.value.counted, excluded: memberCounts.value.excluded })
+  t('dashboard.trackingScope', { counted: memberCounts.value.counted, excluded: memberCounts.value.excluded }),
 )
-const openSpawnWindows = computed(() => spawnWindows.value.filter(row => row.derivedStatus !== 'RESOLVED' && row.derivedStatus !== 'CANCELLED'))
+const openSpawnWindows = computed(() =>
+  spawnWindows.value.filter((row) => row.derivedStatus !== 'RESOLVED' && row.derivedStatus !== 'CANCELLED'),
+)
 const nextSpawnWindow = computed(() => openSpawnWindows.value[0] ?? null)
 const journeyPreviewStops = computed(() => {
-  const visibleStops = journeyStops.value.filter(stop => stop.status !== 'CANCELLED')
-  const currentIndex = visibleStops.findIndex(stop => stop.status === 'CURRENT')
+  const visibleStops = journeyStops.value.filter((stop) => stop.status !== 'CANCELLED')
+  const currentIndex = visibleStops.findIndex((stop) => stop.status === 'CURRENT')
   if (currentIndex === -1) return visibleStops.slice(0, 6)
   return visibleStops.slice(Math.max(0, currentIndex - 2), currentIndex + 4)
 })
@@ -152,9 +155,10 @@ const enemyLabel = (slot: SiriusAppearance['slots'][number]) => slot.locationNam
 
 const isSiriusBlueprint = (name: string | null | undefined) => Boolean(name?.toLowerCase().startsWith('sirius '))
 const blueprintName = (slot: SiriusAppearance['slots'][number]) =>
-  slot.blueprint ? localizedName(slot.blueprint, locale.value) : slot.rawBlueprintName ?? '-'
+  slot.blueprint ? localizedName(slot.blueprint, locale.value) : (slot.rawBlueprintName ?? '-')
 const dateTime = (value: string | null | undefined) => formatDateTime(value, locale.value)
-const journeyStopName = (stop: JourneyStop) => stop.planetName ?? stop.planet?.name ?? stop.appearance?.planet.name ?? t('sirius.unknownPlanet')
+const journeyStopName = (stop: JourneyStop) =>
+  stop.planetName ?? stop.planet?.name ?? stop.appearance?.planet.name ?? t('sirius.unknownPlanet')
 const journeyStatusLabel = (value: JourneyStop['status']) => t(`sirius.journeyStatuses.${value}`)
 const journeyCertaintyLabel = (value: JourneyStop['certainty']) => t(`sirius.journeyCertainties.${value}`)
 const journeyStopClass = (stop: JourneyStop) => ({
@@ -178,11 +182,9 @@ const spawnStatusClass = (value: SpawnWindow['derivedStatus']) => ({
   'status-chip-danger': value === 'OVERDUE',
 })
 
-const appearanceMissing = (appearance: SiriusAppearance) =>
-  appearance.slots.reduce((sum, slot) => sum + (slot.counts?.missing ?? 0), 0)
+const appearanceMissing = (appearance: SiriusAppearance) => appearance.slots.reduce((sum, slot) => sum + (slot.counts?.missing ?? 0), 0)
 
-const appearanceWanted = (appearance: SiriusAppearance) =>
-  appearance.slots.reduce((sum, slot) => sum + (slot.counts?.wanted ?? 0), 0)
+const appearanceWanted = (appearance: SiriusAppearance) => appearance.slots.reduce((sum, slot) => sum + (slot.counts?.wanted ?? 0), 0)
 
 const countForSlot = (slot: SiriusAppearance['slots'][number], kind: CountKind) => slot.counts?.[kind] ?? 0
 const usersForSlot = (slot: SiriusAppearance['slots'][number], kind: CountKind) => slot.counts?.users?.[kind] ?? []
@@ -190,7 +192,10 @@ const canSeeAffectedUsers = computed(() => canViewSelectedClanDetails.value)
 
 const formatUserList = (users: StatusUser[], max = 18) => {
   if (users.length === 0) return t('dashboard.noAffectedUsers')
-  const visible = users.slice(0, max).map(user => user.displayName).join(', ')
+  const visible = users
+    .slice(0, max)
+    .map((user) => user.displayName)
+    .join(', ')
   const remaining = users.length - max
   return remaining > 0 ? `${visible}, ${t('dashboard.moreUsers', { count: remaining })}` : visible
 }
@@ -199,7 +204,7 @@ const formatUserHits = (users: Array<StatusUser & { count: number }>, max = 12) 
   if (users.length === 0) return t('dashboard.noAffectedUsers')
   const visible = users
     .slice(0, max)
-    .map(user => (user.count > 1 ? `${user.displayName} (${user.count})` : user.displayName))
+    .map((user) => (user.count > 1 ? `${user.displayName} (${user.count})` : user.displayName))
     .join(', ')
   const remaining = users.length - max
   return remaining > 0 ? `${visible}, ${t('dashboard.moreUsers', { count: remaining })}` : visible
@@ -269,7 +274,9 @@ const loadActive = async () => {
   if (!selectedClanId.value) return
   loading.value = true
   try {
-    const response = await api.get<{ appearances: SiriusAppearance[]; memberCounts: MemberCounts }>(`/sirius/clans/${selectedClanId.value}/active`)
+    const response = await api.get<{ appearances: SiriusAppearance[]; memberCounts: MemberCounts }>(
+      `/sirius/clans/${selectedClanId.value}/active`,
+    )
     appearances.value = response.appearances
     memberCounts.value = response.memberCounts
   } finally {
@@ -331,7 +338,7 @@ watch([selectedClanId, canViewSelectedClanDetails], () => {
         <h1 class="page-title">{{ t('dashboard.title') }}</h1>
         <p class="page-subtitle">{{ selectedClan?.name ?? t('app.noClan') }}</p>
       </div>
-        <div class="page-actions">
+      <div class="page-actions">
         <AppTooltip :text="t('tooltips.dashboard')" />
         <button class="secondary-button" :disabled="loading" @click="refreshDashboard">
           <RefreshCw :size="16" /> {{ t('app.actions.refresh') }}
@@ -400,7 +407,9 @@ watch([selectedClanId, canViewSelectedClanDetails], () => {
             </span>
             <span v-if="stop.metrics.missing" class="metric metric-missing">{{ stop.metrics.missing }}</span>
             <span v-if="stop.metrics.wanted" class="metric metric-wanted">{{ stop.metrics.wanted }}</span>
-            <span v-if="stop.warnings.length" class="status-chip status-chip-danger">{{ t('sirius.warningCount', { count: stop.warnings.length }) }}</span>
+            <span v-if="stop.warnings.length" class="status-chip status-chip-danger">{{
+              t('sirius.warningCount', { count: stop.warnings.length })
+            }}</span>
           </div>
         </article>
       </div>
@@ -518,7 +527,7 @@ watch([selectedClanId, canViewSelectedClanDetails], () => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="slot in appearance.slots" :key="slot.id">
+                <tr v-for="slot in appearance.slots" :key="slot.id" :class="{ 'viewer-wanted-row': slot.viewerStatus === 'WANTED' }">
                   <td :data-label="t('dashboard.slot')">{{ slotLabel(slot) }}</td>
                   <td :data-label="t('dashboard.enemy')">
                     <span :class="enemyClass(slot.enemyType ?? slot.locationName)">{{ enemyLabel(slot) }}</span>

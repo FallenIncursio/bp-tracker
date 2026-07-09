@@ -9,6 +9,7 @@ import {
   upsertSiriusSlotSchema,
 } from "@bp-tracker/contracts";
 import type {
+  BlueprintStatus,
   BlueprintSlotGroup,
   Prisma,
   SiriusAppearanceStatus,
@@ -186,14 +187,18 @@ const ensureCanEditAppearance = async (
   return appearance;
 };
 
-const buildSlotCounts = async (
+export const buildSlotCounts = async (
   clanId: string,
   blueprintIds: string[],
   includeStatusUsers = true,
+  viewerUserId?: string,
 ) => {
   const uniqueIds = Array.from(new Set(blueprintIds));
   if (uniqueIds.length === 0) {
-    return new Map<string, SlotCountSummary>();
+    return {
+      counts: new Map<string, SlotCountSummary>(),
+      viewerStatuses: new Map<string, BlueprintStatus>(),
+    };
   }
   const trackableBlueprints = await prisma.blueprint.findMany({
     where: { id: { in: uniqueIds }, rarity: { not: "COSMETIC" } },
@@ -201,7 +206,10 @@ const buildSlotCounts = async (
   });
   const trackableIds = trackableBlueprints.map((blueprint) => blueprint.id);
   if (trackableIds.length === 0) {
-    return new Map<string, SlotCountSummary>();
+    return {
+      counts: new Map<string, SlotCountSummary>(),
+      viewerStatuses: new Map<string, BlueprintStatus>(),
+    };
   }
 
   const memberships = await prisma.clanMembership.findMany({
@@ -214,12 +222,15 @@ const buildSlotCounts = async (
     displayName: membership.user.displayName,
   }));
   const userIds = users.map((user) => user.userId);
+  const statusUserIds = Array.from(
+    new Set(viewerUserId ? [...userIds, viewerUserId] : userIds),
+  );
   const statuses = await prisma.userBlueprintStatus.findMany({
-    where: { userId: { in: userIds }, blueprintId: { in: trackableIds } },
+    where: { userId: { in: statusUserIds }, blueprintId: { in: trackableIds } },
     select: { userId: true, blueprintId: true, status: true },
   });
 
-  const statusByUserAndBlueprint = new Map<string, string>();
+  const statusByUserAndBlueprint = new Map<string, BlueprintStatus>();
   for (const status of statuses) {
     statusByUserAndBlueprint.set(
       `${status.userId}:${status.blueprintId}`,
@@ -228,7 +239,15 @@ const buildSlotCounts = async (
   }
 
   const counts = new Map<string, SlotCountSummary>();
+  const viewerStatuses = new Map<string, BlueprintStatus>();
   for (const blueprintId of trackableIds) {
+    const viewerStatus = viewerUserId
+      ? statusByUserAndBlueprint.get(`${viewerUserId}:${blueprintId}`)
+      : undefined;
+    if (viewerStatus) {
+      viewerStatuses.set(blueprintId, viewerStatus);
+    }
+
     const item: SlotCountSummary = {
       owned: 0,
       missing: 0,
@@ -258,7 +277,7 @@ const buildSlotCounts = async (
     counts.set(blueprintId, item);
   }
 
-  return counts;
+  return { counts, viewerStatuses };
 };
 
 const getTrackingMemberCounts = async (clanId: string) => {
@@ -531,7 +550,10 @@ const listSerializedJourneyStops = async (clanId: string) => {
         .map((slot) => slot.blueprintId)
         .filter((id): id is string => Boolean(id)) ?? [],
   );
-  const countsByBlueprintId = await buildSlotCounts(clanId, blueprintIds);
+  const { counts: countsByBlueprintId } = await buildSlotCounts(
+    clanId,
+    blueprintIds,
+  );
   return stops.map((stop) => serializeJourneyStop(stop, countsByBlueprintId));
 };
 
@@ -614,7 +636,8 @@ siriusRouter.get(
       orderBy: [{ expiresAt: "asc" }, { planet: { sortOrder: "asc" } }],
     });
 
-    const [counts, memberCounts] = await Promise.all([
+    const canViewStatusUsers = hasClanRole(req, clanId, "MEMBER");
+    const [{ counts, viewerStatuses }, memberCounts] = await Promise.all([
       buildSlotCounts(
         clanId,
         appearances.flatMap((appearance) =>
@@ -622,7 +645,8 @@ siriusRouter.get(
             .map((slot) => slot.blueprintId)
             .filter((id): id is string => Boolean(id)),
         ),
-        hasClanRole(req, clanId, "MEMBER"),
+        canViewStatusUsers,
+        canViewStatusUsers ? req.auth?.user.id : undefined,
       ),
       getTrackingMemberCounts(clanId),
     ]);
@@ -651,6 +675,9 @@ siriusRouter.get(
             ? serializeBlueprintSummary(slot.blueprint)
             : null,
           counts: slot.blueprintId ? counts.get(slot.blueprintId) : null,
+          viewerStatus: slot.blueprintId
+            ? (viewerStatuses.get(slot.blueprintId) ?? null)
+            : null,
         })),
       })),
     });
@@ -820,7 +847,10 @@ siriusRouter.post(
       stop.appearance?.slots
         .map((slot) => slot.blueprintId)
         .filter((id): id is string => Boolean(id)) ?? [];
-    const countsByBlueprintId = await buildSlotCounts(clanId, blueprintIds);
+    const { counts: countsByBlueprintId } = await buildSlotCounts(
+      clanId,
+      blueprintIds,
+    );
     scheduleClanDiscordStatusPublish(clanId);
     res
       .status(201)
@@ -1079,7 +1109,7 @@ siriusRouter.patch(
       stop.appearance?.slots
         .map((slot) => slot.blueprintId)
         .filter((id): id is string => Boolean(id)) ?? [];
-    const countsByBlueprintId = await buildSlotCounts(
+    const { counts: countsByBlueprintId } = await buildSlotCounts(
       stop.clanId,
       blueprintIds,
     );

@@ -2,6 +2,10 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.5 - 2026-07-09
+
+- Highlighted active Sirius blueprint rows on the dashboard when the logged-in user personally has the blueprint marked as wanted.
+
 ## 0.2.4 - 2026-07-09
 
 - Corrected the German Ancient label and cosmetic pattern seed from Antik to Ancient.
