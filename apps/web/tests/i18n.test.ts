@@ -33,10 +33,8 @@ describe('i18n locales', () => {
   it('keeps German About credits fully localized', () => {
     const credits = i18n.global.tm('about.credits.items') as Array<{ text: string }>
 
-    expect(credits.map(credit => credit.text)).toContain(
-      'Community-gepflegte Referenzdaten zur Normalisierung der Standarddaten.'
-    )
-    expect(credits.map(credit => credit.text).join(' ')).not.toContain('Community-maintained')
+    expect(credits.map((credit) => credit.text)).toContain('Community-gepflegte Referenzdaten zur Normalisierung der Standarddaten.')
+    expect(credits.map((credit) => credit.text).join(' ')).not.toContain('Community-maintained')
   })
 
   it('keeps German UI terminology localized for common admin and roadmap labels', () => {
@@ -58,11 +56,12 @@ describe('i18n locales', () => {
     collectValues(i18n.global.getLocaleMessage('de'))
 
     expect(values.join(' ')).not.toMatch(
-      /\b(Member|User|Entity|Actor|Summary|Channel ID|Discord Server ID|Inbox|Setup Token|Custom|Missing-|Stop|Stops)\b/
+      /\b(Member|User|Entity|Actor|Summary|Channel ID|Discord Server ID|Inbox|Setup Token|Custom|Missing-|Stop|Stops)\b/,
     )
     expect(i18n.global.t('admin.auditEntity')).toBe('Objekt')
     expect(i18n.global.t('admin.auditActor')).toBe('Akteur')
     expect(i18n.global.t('account.inboxNav')).toBe('Posteingang')
+    expect(i18n.global.t('rarity.ANCIENT')).toBe('Ancient')
     expect(i18n.global.t('slot.CUSTOM')).toBe('Benutzerdefiniert')
   })
 

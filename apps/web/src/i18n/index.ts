@@ -653,7 +653,7 @@ const baseMessages = {
     rarity: {
       STANDARD: 'Standard',
       RARE: 'Selten',
-      ANCIENT: 'Antik',
+      ANCIENT: 'Ancient',
       EVENT: 'Event',
       CONQUEST: 'Conquest',
       SPECIAL: 'Spezial',

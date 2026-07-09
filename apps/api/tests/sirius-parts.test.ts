@@ -126,6 +126,11 @@ describe('Sirius blueprint parts', () => {
     ).toBe(true)
   })
 
+  it('uses Ancient instead of Antik for the cosmetic pattern seed', () => {
+    expect(seedBlueprints.some((blueprint) => blueprint.canonicalName === 'Ancient' && blueprint.itemType === 'Ancient')).toBe(true)
+    expect(seedBlueprints.some((blueprint) => blueprint.canonicalName === 'Antik' || blueprint.itemType === 'Antik')).toBe(false)
+  })
+
   it('marks functional Sirius slot blueprints as ancient rarity', () => {
     const functionalSlotGroups = new Set(['SLOT_18', 'SLOT_14', 'SLOT_12', 'SLOT_5', 'SLOT_2'])
     const functionalBlueprints = seedBlueprints.filter((blueprint) => functionalSlotGroups.has(blueprint.slotGroup))

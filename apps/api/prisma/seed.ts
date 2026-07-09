@@ -123,7 +123,7 @@ const blueprintTermNames: Record<string, LocalizedSeedName> = {
   Angriffsfeldturm: { de: 'Angriffsfeldturm', en: 'Attack Field Turret', es: 'Torreta de Campo de Ataque' },
   Angriffsladung: { de: 'Angriffsladung', en: 'Attack Charge', es: 'Carga de Ataque' },
   Angriffsturm: { de: 'Angriffsturm', en: 'Attack Turret', es: 'Torreta de Ataque' },
-  Antik: { de: 'Antik', en: 'Ancient', es: 'Antiguo' },
+  Ancient: { de: 'Ancient', en: 'Ancient', es: 'Antiguo' },
   Beschleuniger: { de: 'Beschleuniger', en: 'Accelerator', es: 'Acelerador' },
   Blaster: { de: 'Blaster', en: 'Blaster', es: 'Cañón' },
   Bruderschaft: { de: 'Bruderschaft', en: 'Brotherhood', es: 'Hermandad' },
@@ -167,7 +167,10 @@ const blueprintTermNames: Record<string, LocalizedSeedName> = {
   Zielscrambler: { de: 'Zielscrambler', en: 'Aim Scrambler', es: 'Interferidor de Mira' },
 }
 
-const legacyBlueprintAliases = new Map<string, string[]>([['6070-ER', ['6070.0']]])
+const legacyBlueprintAliases = new Map<string, string[]>([
+  ['6070-ER', ['6070.0']],
+  ['Ancient', ['Antik']],
+])
 
 const legacyBlueprintTermRenames = [
   { from: 'Speed', to: 'Beschleuniger' },
@@ -362,6 +365,7 @@ const normalizeCode = (value: string) =>
 
 const itemTypeRenames = [
   { from: '6070.0', to: '6070-ER' },
+  { from: 'Antik', to: 'Ancient' },
   { from: 'Speed', to: 'Beschleuniger' },
   { from: 'Stun', to: 'Stunladung' },
 ] as const

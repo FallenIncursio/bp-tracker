@@ -18,9 +18,9 @@
     "sourceNotes": "Public blueprint seed data."
   },
   {
-    "canonicalName": "Antik",
+    "canonicalName": "Ancient",
     "system": null,
-    "itemType": "Antik",
+    "itemType": "Ancient",
     "variant": "PATTERN",
     "slotGroup": "CUSTOM",
     "rarity": "COSMETIC",
