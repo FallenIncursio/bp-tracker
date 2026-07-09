@@ -198,6 +198,83 @@ button:disabled {
   color: #ffffff;
 }
 
+.app-version-info {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.app-version-button {
+  min-height: 26px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline dotted color-mix(in srgb, currentColor 70%, transparent);
+  text-underline-offset: 3px;
+}
+
+.app-version-button:hover,
+.app-version-button:focus-visible {
+  color: #ffffff;
+  outline: none;
+}
+
+.app-version-popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  width: min(300px, calc(100vw - 40px));
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--surface-elevated);
+  color: var(--text);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+}
+
+.app-version-popover h2 {
+  margin: 0 0 10px;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.app-version-popover dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.app-version-popover dl > div {
+  display: grid;
+  gap: 2px;
+}
+
+.app-version-popover dt {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.app-version-popover dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.app-version-popover dd a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary-strong);
+}
+
 .sidebar-footer a[href*='ko-fi'] .brand-icon {
   color: #29abe0;
 }
@@ -3148,6 +3225,18 @@ td[rowspan] {
   .mobile-nav-footer a:focus-visible {
     color: var(--primary-strong);
     outline: none;
+  }
+
+  .mobile-nav-footer .app-version-button:hover,
+  .mobile-nav-footer .app-version-button:focus-visible {
+    color: var(--primary-strong);
+  }
+
+  .mobile-nav-footer .app-version-popover {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+    box-shadow: none;
   }
 
   .mobile-nav-footer a[href*='ko-fi'] .brand-icon {

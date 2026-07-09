@@ -35,6 +35,7 @@ import {
   updateSiriusAppearanceSchema,
   upsertSiriusSlotSchema,
 } from '@bp-tracker/contracts'
+import { appVersion } from '../utils/app-version.js'
 import { env } from '../utils/env.js'
 
 type JsonSchema = Record<string, unknown>
@@ -1491,7 +1492,7 @@ export const openApiSpec: OpenApiSpec = {
   openapi: '3.1.0',
   info: {
     title: 'BP Tracker API',
-    version: '0.2.1',
+    version: appVersion,
     description: 'HTTP API for the open-source Pirate Galaxy blueprint tracker. Authentication uses an HTTP-only session cookie.',
     license: { name: 'MIT' },
   },

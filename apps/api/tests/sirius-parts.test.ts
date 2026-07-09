@@ -42,9 +42,7 @@ type BlueprintSeed = {
   rarity: string
 }
 
-const seedBlueprints = JSON.parse(
-  readFileSync(new URL('../../../data/seeds/blueprints.json', import.meta.url), 'utf8')
-) as BlueprintSeed[]
+const seedBlueprints = JSON.parse(readFileSync(new URL('../../../data/seeds/blueprints.json', import.meta.url), 'utf8')) as BlueprintSeed[]
 
 describe('Sirius blueprint parts', () => {
   it('maps resource rings 1-4 from the Prelude blueprint reference', () => {
@@ -68,36 +66,44 @@ describe('Sirius blueprint parts', () => {
   })
 
   it('keeps ring 5 aim computers split between cross-system 5-slot and Sirius 2-slot drops', () => {
-    const aimComputers = seedBlueprints.filter(blueprint => blueprint.itemType === 'Zielcomputer')
-    expect(aimComputers.filter(blueprint => blueprint.system === 'Sirius').map(blueprint => blueprint.slotGroup)).toEqual([
+    const aimComputers = seedBlueprints.filter((blueprint) => blueprint.itemType === 'Zielcomputer')
+    expect(aimComputers.filter((blueprint) => blueprint.system === 'Sirius').map((blueprint) => blueprint.slotGroup)).toEqual([
       'SLOT_2',
       'SLOT_2',
       'SLOT_2',
     ])
-    expect(aimComputers.filter(blueprint => blueprint.system !== 'Sirius').every(blueprint => blueprint.slotGroup === 'SLOT_5')).toBe(
-      true
+    expect(aimComputers.filter((blueprint) => blueprint.system !== 'Sirius').every((blueprint) => blueprint.slotGroup === 'SLOT_5')).toBe(
+      true,
     )
   })
 
   it('uses current item categories for speed, attack charge and materializer blueprints', () => {
-    expect(seedBlueprints.filter(blueprint => /\bSpeed\b/.test(blueprint.canonicalName)).every(blueprint => blueprint.itemType === 'Speed')).toBe(
-      true
-    )
     expect(
-      seedBlueprints
-        .filter(blueprint => /\bAngriffsladung\b/.test(blueprint.canonicalName))
-        .every(blueprint => blueprint.itemType === 'Angriffsladung')
+      seedBlueprints.filter((blueprint) => /\bSpeed\b/.test(blueprint.canonicalName)).every((blueprint) => blueprint.itemType === 'Speed'),
     ).toBe(true)
     expect(
       seedBlueprints
-        .filter(blueprint => /\bMaterialisierer\b/.test(blueprint.canonicalName))
-        .every(blueprint => blueprint.itemType === 'Materialisierer')
+        .filter((blueprint) => /\bAngriffsladung\b/.test(blueprint.canonicalName))
+        .every((blueprint) => blueprint.itemType === 'Angriffsladung'),
+    ).toBe(true)
+    expect(
+      seedBlueprints
+        .filter((blueprint) => /\bMaterialisierer\b/.test(blueprint.canonicalName))
+        .every((blueprint) => blueprint.itemType === 'Materialisierer'),
     ).toBe(true)
   })
 
   it('keeps cosmetic patterns out of functional Sirius slot groups', () => {
-    expect(seedBlueprints.filter(blueprint => blueprint.rarity === 'COSMETIC').every(blueprint => blueprint.slotGroup === 'CUSTOM')).toBe(
-      true
-    )
+    expect(
+      seedBlueprints.filter((blueprint) => blueprint.rarity === 'COSMETIC').every((blueprint) => blueprint.slotGroup === 'CUSTOM'),
+    ).toBe(true)
+  })
+
+  it('marks functional Sirius slot blueprints as ancient rarity', () => {
+    const functionalSlotGroups = new Set(['SLOT_18', 'SLOT_14', 'SLOT_12', 'SLOT_5', 'SLOT_2'])
+    const functionalBlueprints = seedBlueprints.filter((blueprint) => functionalSlotGroups.has(blueprint.slotGroup))
+
+    expect(functionalBlueprints.length).toBeGreaterThan(0)
+    expect(functionalBlueprints.every((blueprint) => blueprint.rarity === 'ANCIENT')).toBe(true)
   })
 })

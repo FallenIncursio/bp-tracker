@@ -2,6 +2,12 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.2 - 2026-07-09
+
+- Marked Sirius slot blueprints as Ancient rarity in seed data.
+- Added clickable version details with commit metadata in the app footer.
+- Made package metadata the app version source so env templates no longer need version updates.
+
 ## 0.2.1 - 2026-07-09
 
 - Added sortable blueprint columns with mobile sort controls.

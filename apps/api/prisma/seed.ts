@@ -1,15 +1,11 @@
 import 'dotenv/config'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { PrismaClient, type BlueprintRarity, type BlueprintSlotGroup } from '../src/generated/prisma/client.js'
 import type { SiriusTechTier } from '../src/generated/prisma/client.js'
 import { PrismaPg } from '@prisma/adapter-pg'
-import {
-  partsRequiredBySlotGroup,
-  siriusResourceParts,
-  type SiriusResourceItemName,
-} from '../src/sirius/sirius-parts.js'
+import { partsRequiredBySlotGroup, siriusResourceParts, type SiriusResourceItemName } from '../src/sirius/sirius-parts.js'
 
 type BlueprintSeed = {
   canonicalName: string
@@ -62,7 +58,29 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: databaseUrl }),
 })
 
-const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
+const findRootDir = () => {
+  const starts = [process.cwd(), path.dirname(fileURLToPath(import.meta.url))]
+
+  for (const start of starts) {
+    let current = start
+    while (current !== path.dirname(current)) {
+      const candidate = path.join(current, 'package.json')
+      if (existsSync(candidate)) {
+        try {
+          const packageJson = JSON.parse(readFileSync(candidate, 'utf8')) as { name?: string }
+          if (packageJson.name === 'bp-tracker') return current
+        } catch {
+          // Keep walking; a malformed adjacent package.json should not prevent seeding.
+        }
+      }
+      current = path.dirname(current)
+    }
+  }
+
+  throw new Error('Could not locate bp-tracker repository root for seed data.')
+}
+
+const rootDir = findRootDir()
 
 const readJson = <T>(relativePath: string): T => {
   const fullPath = path.join(rootDir, relativePath)
@@ -264,7 +282,10 @@ const seedTranslationEntries = (names: { nameDe: string; nameEn?: string | null;
   { locale: 'es', name: names.nameEs, source: 'prelude-myzen/dictionary + seed-rule', verified: false },
 ]
 
-const upsertBlueprintTranslations = async (blueprintId: string, names: { nameDe: string; nameEn?: string | null; nameEs?: string | null }) => {
+const upsertBlueprintTranslations = async (
+  blueprintId: string,
+  names: { nameDe: string; nameEn?: string | null; nameEs?: string | null },
+) => {
   for (const translation of seedTranslationEntries(names)) {
     const name = translation.name?.trim()
     if (!name) continue
@@ -283,7 +304,10 @@ const upsertBlueprintTranslations = async (blueprintId: string, names: { nameDe:
   }
 }
 
-const upsertItemTypeTranslations = async (itemTypeId: string, names: { nameDe: string; nameEn?: string | null; nameEs?: string | null }) => {
+const upsertItemTypeTranslations = async (
+  itemTypeId: string,
+  names: { nameDe: string; nameEn?: string | null; nameEs?: string | null },
+) => {
   for (const translation of seedTranslationEntries(names)) {
     const name = translation.name?.trim()
     if (!name) continue
@@ -310,7 +334,7 @@ const legacyEnemyLocations = [
 
 const buildSiriusResourceBlueprints = (): BlueprintSeed[] =>
   siriusResourceTiers.flatMap((tier, tierIndex) =>
-    siriusResourceItems.map(item => ({
+    siriusResourceItems.map((item) => ({
       canonicalName: `${tier.label} ${item.name}`,
       system: 'Sirius',
       itemType: item.itemType,
@@ -321,7 +345,7 @@ const buildSiriusResourceBlueprints = (): BlueprintSeed[] =>
       partsRequired: siriusResourceParts(item.name, tierIndex),
       rarity: 'STANDARD',
       sourceNotes: `Public Sirius resource tier seed; ring ${tier.ring} ${tier.label}.`,
-    }))
+    })),
   )
 
 const normalizeCode = (value: string) =>
@@ -362,9 +386,9 @@ const main = async () => {
     systemNames.set(created.name, created.id)
   }
 
-  const itemTypeNames = Array.from(
-    new Set(blueprints.map(bp => bp.itemType).filter((value): value is string => Boolean(value)))
-  ).sort((a, b) => a.localeCompare(b, 'de'))
+  const itemTypeNames = Array.from(new Set(blueprints.map((bp) => bp.itemType).filter((value): value is string => Boolean(value)))).sort(
+    (a, b) => a.localeCompare(b, 'de'),
+  )
 
   const itemTypeIds = new Map<string, string>()
   for (const rename of itemTypeRenames) {
@@ -404,8 +428,7 @@ const main = async () => {
     const isSiriusBlueprint = bp.system === 'Sirius'
     const siriusRing = bp.siriusRing ?? (isSiriusBlueprint ? 5 : null)
     const siriusTechTier = bp.siriusTechTier ?? (isSiriusBlueprint ? 'ANCIENT' : null)
-    const partsRequired =
-      bp.partsRequired ?? (bp.rarity === 'COSMETIC' ? null : partsRequiredBySlotGroup[bp.slotGroup] ?? null)
+    const partsRequired = bp.partsRequired ?? (bp.rarity === 'COSMETIC' ? null : (partsRequiredBySlotGroup[bp.slotGroup] ?? null))
     const names = blueprintDisplayNames(bp)
     const createdBlueprint = await prisma.blueprint.upsert({
       where: { canonicalName: bp.canonicalName },
@@ -449,7 +472,7 @@ const main = async () => {
 
   const seededBlueprints = await prisma.blueprint.findMany({
     where: {
-      canonicalName: { in: blueprints.map(bp => bp.canonicalName) },
+      canonicalName: { in: blueprints.map((bp) => bp.canonicalName) },
       rarity: { not: 'COSMETIC' },
       OR: [
         { siriusRing: { not: null } },
@@ -492,13 +515,7 @@ const main = async () => {
         : blueprint.system?.name === 'Sirius'
           ? 'Public Sirius blueprint slot seed'
           : 'Public Sirius cross-system R5 seed'
-    const ruleKey = [
-      `r${inferredRing}`,
-      techTier ?? 'any',
-      blueprint.slotGroup,
-      'any',
-      blueprint.id,
-    ].join(':')
+    const ruleKey = [`r${inferredRing}`, techTier ?? 'any', blueprint.slotGroup, 'any', blueprint.id].join(':')
 
     await prisma.siriusBlueprintDropRule.upsert({
       where: { ruleKey },
@@ -574,7 +591,7 @@ const main = async () => {
     await prisma.shipRequiredBlueprint.deleteMany({
       where: {
         shipId: createdShip.id,
-        blueprintId: { notIn: requirementBlueprints.map(blueprint => blueprint.id) },
+        blueprintId: { notIn: requirementBlueprints.map((blueprint) => blueprint.id) },
       },
     })
   }
@@ -598,7 +615,7 @@ const main = async () => {
 }
 
 main()
-  .catch(error => {
+  .catch((error) => {
     console.error(error)
     process.exitCode = 1
   })

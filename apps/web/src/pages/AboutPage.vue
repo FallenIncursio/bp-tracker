@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ExternalLink, HeartHandshake, Info, Scale } from '@lucide/vue'
 import BrandGithubIcon from '../components/BrandGithubIcon.vue'
 import BrandKofiIcon from '../components/BrandKofiIcon.vue'
+import { appVersion } from '../utils/buildInfo'
 
 type CreditItem = {
   label?: string
@@ -17,7 +18,6 @@ const githubUrl = import.meta.env.VITE_GITHUB_URL ?? 'https://github.com/FallenI
 const homepageUrl = import.meta.env.VITE_PROJECT_HOMEPAGE_URL ?? 'https://bp-tracker.arcenciel.io'
 const apiDocsUrl = '/api/docs/'
 const kofiUrl = 'https://ko-fi.com/fallenincursio'
-const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.2.1'
 
 const credits = computed(() => tm('about.credits.items') as CreditItem[])
 </script>

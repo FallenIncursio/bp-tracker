@@ -1,10 +1,14 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
 import { openApiSpec } from '../src/openapi/spec.js'
+
+const rootPackage = JSON.parse(readFileSync(new URL('../../../package.json', import.meta.url), 'utf8')) as { version: string }
 
 describe('OpenAPI specification', () => {
   it('exposes the expected API metadata and security scheme', () => {
     expect(openApiSpec.openapi).toBe('3.1.0')
     expect(openApiSpec.info.title).toBe('BP Tracker API')
+    expect(openApiSpec.info.version).toBe(rootPackage.version)
     expect(openApiSpec.components.securitySchemes.cookieAuth).toMatchObject({
       type: 'apiKey',
       in: 'cookie',

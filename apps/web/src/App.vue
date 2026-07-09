@@ -29,6 +29,7 @@ import { localeOptions, setLocalePreference, supportedLocales, type SupportedLoc
 import BrandGithubIcon from './components/BrandGithubIcon.vue'
 import BrandKofiIcon from './components/BrandKofiIcon.vue'
 import ClanSwitcher from './components/ClanSwitcher.vue'
+import AppVersionInfo from './components/AppVersionInfo.vue'
 
 const { user, init, logout, isAdmin } = useAuth()
 const { canManageSelectedClan } = useClans()
@@ -39,7 +40,6 @@ const mobileNavOpen = ref(false)
 const githubUrl = import.meta.env.VITE_GITHUB_URL ?? 'https://github.com/FallenIncursio/bp-tracker'
 const apiDocsUrl = '/api/docs/'
 const kofiUrl = 'https://ko-fi.com/fallenincursio'
-const appVersion = import.meta.env.VITE_APP_VERSION ?? '0.2.1'
 const authRedirectQuery = computed(() => {
   const existingRedirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
   const redirectSource = route.path === '/login' || route.path === '/register' ? existingRedirect : route.fullPath
@@ -188,7 +188,7 @@ watch(() => route.fullPath, closeMobileNav)
         <a :href="kofiUrl" target="_blank" rel="noreferrer" :aria-label="t('app.kofi')">
           <BrandKofiIcon :size="16" /> {{ t('app.kofi') }}
         </a>
-        <span>{{ t('app.version', { version: appVersion }) }}</span>
+        <AppVersionInfo />
       </footer>
       <button
         v-if="mobileNavOpen"
@@ -226,7 +226,7 @@ watch(() => route.fullPath, closeMobileNav)
             <a :href="kofiUrl" target="_blank" rel="noreferrer" :aria-label="t('app.kofi')">
               <BrandKofiIcon :size="16" /> {{ t('app.kofi') }}
             </a>
-            <span>{{ t('app.version', { version: appVersion }) }}</span>
+            <AppVersionInfo />
           </div>
         </div>
       </Transition>
