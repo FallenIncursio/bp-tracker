@@ -24,10 +24,6 @@ export const validateSiriusSlotShape = (
     throw new HttpError(400, `Slot group ${input.slotGroup} is not available on Sirius ring ${ring}.`)
   }
 
-  if (input.slotGroup === 'SLOT_2' && !input.enemyType) {
-    throw new HttpError(400, 'Soris, Amarna or Giza is required for 2-slot drops.')
-  }
-
   if (input.slotGroup !== 'SLOT_2' && input.enemyType) {
     throw new HttpError(400, 'Enemy type is only valid for 2-slot drops.')
   }

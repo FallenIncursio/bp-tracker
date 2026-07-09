@@ -43,6 +43,8 @@ type BlueprintSeed = {
   canonicalName: string
   system: string | null
   itemType: string | null
+  siriusRing?: number | null
+  siriusTechTier?: string | null
   slotGroup: string
   rarity: string
 }
@@ -120,9 +122,14 @@ describe('Sirius blueprint parts', () => {
     ).toBe(true)
   })
 
-  it('keeps cosmetic patterns out of functional Sirius slot groups', () => {
+  it('keeps cosmetic patterns in Sirius 18-slot drops without making them functional status items', () => {
     expect(
-      seedBlueprints.filter((blueprint) => blueprint.rarity === 'COSMETIC').every((blueprint) => blueprint.slotGroup === 'CUSTOM'),
+      seedBlueprints
+        .filter((blueprint) => blueprint.rarity === 'COSMETIC')
+        .every(
+          (blueprint) =>
+            blueprint.siriusRing === 5 && blueprint.siriusTechTier === 'ANCIENT' && blueprint.slotGroup === 'SLOT_18',
+        ),
     ).toBe(true)
   })
 
@@ -133,7 +140,9 @@ describe('Sirius blueprint parts', () => {
 
   it('marks functional Sirius slot blueprints as ancient rarity', () => {
     const functionalSlotGroups = new Set(['SLOT_18', 'SLOT_14', 'SLOT_12', 'SLOT_5', 'SLOT_2'])
-    const functionalBlueprints = seedBlueprints.filter((blueprint) => functionalSlotGroups.has(blueprint.slotGroup))
+    const functionalBlueprints = seedBlueprints.filter(
+      (blueprint) => functionalSlotGroups.has(blueprint.slotGroup) && blueprint.rarity !== 'COSMETIC',
+    )
 
     expect(functionalBlueprints.length).toBeGreaterThan(0)
     expect(functionalBlueprints.every((blueprint) => blueprint.rarity === 'ANCIENT')).toBe(true)

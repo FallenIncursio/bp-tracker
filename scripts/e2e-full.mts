@@ -550,6 +550,9 @@ const run = async () => {
       await clients.commander.request('DELETE', `/sirius/slots/${slotId}`, undefined, 204)
       const deleted = await prisma.siriusPlanetBlueprintSlot.findUnique({ where: { id: slotId } })
       assert(!deleted, 'Deleted Sirius slot still exists.')
+      await clients.commander.request('PUT', `/sirius/appearances/${appearanceId}/slots`, { slots: [] }, 200)
+      const cleared = await prisma.siriusPlanetBlueprintSlot.count({ where: { appearanceId } })
+      assert(cleared === 0, `Expected all slots to be removed after empty replace, got ${cleared}.`)
     })
 
     await step('journey: roadmap is hidden from guests and editable by commander', async () => {

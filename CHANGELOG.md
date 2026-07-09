@@ -2,6 +2,12 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.6 - 2026-07-09
+
+- Allowed Sirius 2-slot drops to be saved with an unknown enemy.
+- Included cosmetic Sirius pattern drops in the 18-slot selection while keeping them out of member status counts.
+- Added feedback for saving Sirius drop edits and covered empty slot replacement.
+
 ## 0.2.5 - 2026-07-09
 
 - Highlighted active Sirius blueprint rows on the dashboard when the logged-in user personally has the blueprint marked as wanted.

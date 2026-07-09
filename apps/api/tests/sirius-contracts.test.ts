@@ -41,6 +41,11 @@ describe('Sirius API contracts', () => {
       enemyType: 'AMARNA',
       blueprintId: uuid,
     })
+    expect(upsertSiriusSlotSchema.parse({ slotGroup: 'SLOT_2', enemyType: null, blueprintId: uuid })).toEqual({
+      slotGroup: 'SLOT_2',
+      enemyType: null,
+      blueprintId: uuid,
+    })
   })
 
   it('rejects invalid enemies and oversized bulk slot updates', () => {

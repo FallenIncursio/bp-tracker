@@ -193,6 +193,11 @@ describe('Sirius schemas', () => {
       enemyType: 'GIZA',
       blueprintId: uuid,
     })
+    expect(upsertSiriusSlotSchema.parse({ slotGroup: 'SLOT_2', enemyType: null, blueprintId: uuid })).toEqual({
+      slotGroup: 'SLOT_2',
+      enemyType: null,
+      blueprintId: uuid,
+    })
     expect(replaceSiriusSlotsSchema.parse({ slots: [{ slotGroup: 'RESOURCE', blueprintId: uuid }] })).toEqual({
       slots: [{ slotGroup: 'RESOURCE', blueprintId: uuid }],
     })

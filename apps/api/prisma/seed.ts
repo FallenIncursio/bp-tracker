@@ -488,7 +488,6 @@ const main = async () => {
   const seededBlueprints = await prisma.blueprint.findMany({
     where: {
       canonicalName: { in: blueprints.map((bp) => bp.canonicalName) },
-      rarity: { not: 'COSMETIC' },
       OR: [
         { siriusRing: { not: null } },
         {

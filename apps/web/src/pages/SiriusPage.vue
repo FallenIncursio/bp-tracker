@@ -162,6 +162,8 @@ const journeyFormOpen = ref(false)
 const journeyError = ref('')
 const journeyBusy = ref(false)
 const journeyReorderBusy = ref(false)
+const slotSaveMessage = ref('')
+const slotSaveError = ref('')
 const draggedJourneyStopId = ref('')
 const dragOverJourneyStopId = ref('')
 const resolvingSpawnWindowId = ref('')
@@ -224,11 +226,6 @@ const dateTime = (value: string | null | undefined) => formatDateTime(value, loc
 const enumLabel = (scope: 'slot' | 'enemy' | 'techTier', value: string | null | undefined) => {
   if (!value) return '-'
   const key = `${scope}.${value}`
-  return te(key) ? t(key) : value
-}
-const rarityLabel = (value: string | null | undefined) => {
-  if (!value) return '-'
-  const key = `rarity.${value}`
   return te(key) ? t(key) : value
 }
 const sourceLabel = (value: string | null | undefined) => {
@@ -297,12 +294,10 @@ function isSiriusBlueprint(name: string | null | undefined) {
 
 const blueprintName = (blueprint: Blueprint | null | undefined) => localizedName(blueprint, locale.value)
 const slotPartsLabel = (partsRequired: number | null | undefined) => (partsRequired ? `${partsRequired}er` : '-')
-const slotLabel = (slotGroup: string | null | undefined, partsRequired?: number | null, rarity?: string | null) =>
-  rarity === 'COSMETIC'
-    ? rarityLabel(rarity)
-    : slotGroup === 'RESOURCE' && partsRequired
-      ? slotPartsLabel(partsRequired)
-      : enumLabel('slot', slotGroup)
+const slotLabel = (slotGroup: string | null | undefined, partsRequired?: number | null) =>
+  slotGroup === 'RESOURCE' && partsRequired
+    ? slotPartsLabel(partsRequired)
+    : enumLabel('slot', slotGroup)
 const enemyLabel = (slot: Appearance['slots'][number]) => slot.locationName ?? enumLabel('enemy', slot.enemyType)
 const appearanceBlueprintName = (slot: Appearance['slots'][number]) => (slot.blueprint ? blueprintName(slot.blueprint) : slot.rawBlueprintName ?? '-')
 
@@ -642,7 +637,7 @@ const removeSlotRow = (index: number) => {
 }
 
 const onSlotGroupChanged = (row: SlotRow) => {
-  row.enemyType = row.slotGroup === 'SLOT_2' ? row.enemyType ?? 'SORIS' : null
+  row.enemyType = row.slotGroup === 'SLOT_2' ? row.enemyType : null
   row.blueprintId = ''
   row.partsRequired = partsRequiredBySlotGroup[row.slotGroup] ?? null
   void loadDropRules(selectedRing.value, row.slotGroup)
@@ -662,6 +657,8 @@ const saveSlots = async () => {
   const appearance = selectedAppearance.value
   if (!appearance) return
   saveSlotsBusy.value = true
+  slotSaveMessage.value = ''
+  slotSaveError.value = ''
   try {
     const slots = slotRows.value
       .filter(row => row.blueprintId)
@@ -672,6 +669,9 @@ const saveSlots = async () => {
       }))
     await api.put(`/sirius/appearances/${appearance.id}/slots`, { slots })
     await Promise.all([loadAppearances(appearance.id), loadHistory()])
+    slotSaveMessage.value = t('sirius.dropsSaved', { count: slots.length })
+  } catch (error) {
+    slotSaveError.value = error instanceof Error ? error.message : t('sirius.dropsSaveFailed')
   } finally {
     saveSlotsBusy.value = false
   }
@@ -863,6 +863,7 @@ watch(
             <label v-if="row.slotGroup === 'SLOT_2'">
               {{ t('sirius.enemy') }}
               <select :id="`sirius-slot-${index}-enemy`" v-model="row.enemyType" :name="`siriusSlot${index}Enemy`">
+                <option :value="null">{{ t('sirius.enemyUnknown') }}</option>
                 <option v-for="option in enemyOptions" :key="option" :value="option">{{ enumLabel('enemy', option) }}</option>
               </select>
             </label>
@@ -881,6 +882,8 @@ watch(
             </button>
           </div>
           <button class="primary-button" :disabled="saveSlotsBusy" @click="saveSlots"><Save :size="16" /> {{ t('sirius.saveDrops') }}</button>
+          <p v-if="slotSaveMessage" class="success-text">{{ slotSaveMessage }}</p>
+          <p v-if="slotSaveError" class="error-text">{{ slotSaveError }}</p>
         </div>
       </section>
     </div>
@@ -1232,7 +1235,7 @@ watch(
                     @expired="scheduleTimerRefresh"
                   />
                 </td>
-                <td>{{ slotLabel(slot.slotGroup, slot.blueprint?.partsRequired, slot.blueprint?.rarity) }}</td>
+                <td>{{ slotLabel(slot.slotGroup, slot.blueprint?.partsRequired) }}</td>
                 <td>{{ enemyLabel(slot) }}</td>
                 <td>
                   <span :class="{ 'sirius-bp-name': isSiriusBlueprint(slot.blueprint?.canonicalName ?? slot.rawBlueprintName) }">
@@ -1266,7 +1269,7 @@ watch(
           <div class="mobile-slot-list">
             <div v-for="slot in appearance.slots" :key="slot.id" class="mobile-slot-row">
               <div class="mobile-slot-meta">
-                <span class="data-chip">{{ slotLabel(slot.slotGroup, slot.blueprint?.partsRequired, slot.blueprint?.rarity) }}</span>
+                <span class="data-chip">{{ slotLabel(slot.slotGroup, slot.blueprint?.partsRequired) }}</span>
                 <span class="data-chip">{{ enemyLabel(slot) }}</span>
               </div>
               <strong :class="{ 'sirius-bp-name': isSiriusBlueprint(slot.blueprint?.canonicalName ?? slot.rawBlueprintName) }">
@@ -1314,7 +1317,7 @@ watch(
               </td>
               <td>{{ row.blueprint.systemName ?? '-' }}</td>
               <td>
-                {{ slotLabel(row.lastSlotGroup ?? row.blueprint.slotGroup, row.lastPartsRequired ?? row.blueprint.partsRequired, row.blueprint.rarity) }}
+                {{ slotLabel(row.lastSlotGroup ?? row.blueprint.slotGroup, row.lastPartsRequired ?? row.blueprint.partsRequired) }}
               </td>
               <td>
                 <span v-if="row.lastPlanet">
@@ -1349,7 +1352,7 @@ watch(
               </h3>
               <p class="mobile-card-subtitle">
                 {{ row.blueprint.systemName ?? '-' }} ·
-                {{ slotLabel(row.lastSlotGroup ?? row.blueprint.slotGroup, row.lastPartsRequired ?? row.blueprint.partsRequired, row.blueprint.rarity) }}
+                {{ slotLabel(row.lastSlotGroup ?? row.blueprint.slotGroup, row.lastPartsRequired ?? row.blueprint.partsRequired) }}
               </p>
             </div>
             <span class="status-chip" :class="{ 'status-chip-active': row.active }">

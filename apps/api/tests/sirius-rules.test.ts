@@ -19,6 +19,7 @@ describe('Sirius ring rules', () => {
 
   it('accepts valid resource and 2-slot shapes', () => {
     expect(() => validateSiriusSlotShape(4, { slotGroup: 'RESOURCE' })).not.toThrow()
+    expect(() => validateSiriusSlotShape(5, { slotGroup: 'SLOT_2' })).not.toThrow()
     expect(() => validateSiriusSlotShape(5, { slotGroup: 'SLOT_2', enemyType: 'SORIS' })).not.toThrow()
   })
 
@@ -28,10 +29,7 @@ describe('Sirius ring rules', () => {
     )
   })
 
-  it('requires enemies only for 2-slot drops', () => {
-    expect(() => validateSiriusSlotShape(5, { slotGroup: 'SLOT_2' })).toThrow(
-      'Soris, Amarna or Giza is required for 2-slot drops.'
-    )
+  it('only accepts enemy metadata for 2-slot drops', () => {
     expect(() => validateSiriusSlotShape(5, { slotGroup: 'SLOT_5', enemyType: 'GIZA' })).toThrow(
       'Enemy type is only valid for 2-slot drops.'
     )
