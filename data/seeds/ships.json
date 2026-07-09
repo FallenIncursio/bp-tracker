@@ -1,0 +1,177 @@
+[
+  {
+    "name": "Ancient Ghost",
+    "system": "Sirius",
+    "className": "Ancient",
+    "requirements": ["Ancient Ghost"]
+  },
+  {
+    "name": "Ancient Legionary",
+    "system": "Sirius",
+    "className": "Ancient",
+    "requirements": ["Ancient Legionary"]
+  },
+  {
+    "name": "Ancient Myst",
+    "system": "Sirius",
+    "className": "Ancient",
+    "requirements": ["Ancient Myst"]
+  },
+  {
+    "name": "Ancient Punisher",
+    "system": "Sirius",
+    "className": "Ancient",
+    "requirements": ["Ancient Punisher"]
+  },
+  {
+    "name": "Ancient Raider",
+    "system": "Sirius",
+    "className": "Ancient",
+    "requirements": ["Ancient Raider"]
+  },
+  {
+    "name": "Ancient Raven",
+    "system": "Sirius",
+    "className": "Ancient",
+    "requirements": ["Ancient Raven"]
+  },
+  {
+    "name": "Ne0n-1 Humpback",
+    "system": "Tau Ceti",
+    "className": "Raider",
+    "requirements": ["Ancient Raven", "Ancient Punisher"]
+  },
+  {
+    "name": "Ne0n-2 Panther",
+    "system": "Tau Ceti",
+    "className": "Storm",
+    "requirements": [
+      "Sirius Nachbrenner",
+      "Sirius Schild",
+      "Sirius Perforator",
+      "Sirius Aggrobombe",
+      "Sirius Materialisierer",
+      "Sirius Sniperblaster",
+      "Sirius Angriffsfeldturm",
+      "Ancient Raider",
+      "Ancient Myst"
+    ]
+  },
+  {
+    "name": "Ne0n-3 Bobcat",
+    "system": "Tau Ceti",
+    "className": "Engineer",
+    "requirements": [
+      "Sirius Zielreparatur",
+      "Sirius Thermoblast",
+      "Sirius Stundome",
+      "Sirius Angriffsladung",
+      "Sirius Haftbombe",
+      "Ancient Ghost",
+      "Ancient Legionary"
+    ]
+  },
+  {
+    "name": "Ne0n-4 Kodiak",
+    "system": "Tau Ceti",
+    "className": "Tank",
+    "requirements": [
+      "Sirius Schild",
+      "Sirius Schutz",
+      "Sirius Aggrobombe",
+      "Sirius Angriffsdroide",
+      "Sirius Sniperblaster",
+      "Sirius Mine",
+      "Ancient Raven",
+      "Ancient Myst"
+    ]
+  },
+  {
+    "name": "Ne0n-5 Thunderbird",
+    "system": "Tau Ceti",
+    "className": "Storm",
+    "requirements": [
+      "Sirius Blaster",
+      "Sirius Speed",
+      "Sirius Raketen",
+      "Sirius Zielcomputer",
+      "Sirius Aggrobombe",
+      "Sirius Sniperblaster",
+      "Sirius Haftbombe",
+      "Ancient Punisher",
+      "Ancient Legionary"
+    ]
+  },
+  {
+    "name": "Ne0n-6 Bullfrog",
+    "system": "Tau Ceti",
+    "className": "Shock",
+    "requirements": [
+      "Sirius Taunt",
+      "Sirius Zielscrambler",
+      "Sirius Stundome",
+      "Sirius Sniperblaster",
+      "Sirius Angriffsdroide",
+      "Sirius Reparaturfeldturm",
+      "Ancient Raven",
+      "Ancient Myst"
+    ]
+  },
+  {
+    "name": "Ne0n-7 Hawkmoth",
+    "system": "Tau Ceti",
+    "className": "Sniper",
+    "requirements": [
+      "Sirius Stun",
+      "Sirius Reparaturfeld",
+      "Sirius Thermoblast",
+      "Sirius Zielscrambler",
+      "Sirius Angriffsdroide",
+      "Sirius Orbitalschlag",
+      "Sirius Mine",
+      "Ancient Ghost",
+      "Ancient Raider"
+    ]
+  },
+  {
+    "name": "Ne0n-8 Wolfhound",
+    "system": "Tau Ceti",
+    "className": "Defender",
+    "requirements": [
+      "Sirius Schild",
+      "Sirius Schutz",
+      "Sirius Materialisierer",
+      "Sirius Aggrobeacon",
+      "Sirius Angriffsladung",
+      "Sirius Reparaturfeldturm",
+      "Sirius Angriffsfeldturm",
+      "Ancient Raven",
+      "Ancient Legionary"
+    ]
+  },
+  {
+    "name": "Ne0n-9 Flying Fox",
+    "system": "Tau Ceti",
+    "className": "Hybrid",
+    "requirements": [
+      "Ancient Ghost",
+      "Ancient Raider",
+      "Sirius Reparaturdroide",
+      "Sirius Nachbrenner",
+      "Sirius Zielreparatur",
+      "Sirius Schutz",
+      "Sirius Thermoblast",
+      "Sirius Aggrobombe",
+      "Sirius Materialisierer",
+      "Sirius Stundome",
+      "Sirius Sniperblaster",
+      "Sirius Angriffsdroide",
+      "Sirius Orbitalschlag",
+      "Sirius Angriffsladung",
+      "Sirius Reparaturfeldturm",
+      "Sirius Angriffsfeldturm",
+      "Sirius Haftbombe",
+      "Sirius Mine"
+    ]
+  }
+]

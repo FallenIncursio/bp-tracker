@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+dist
+**/dist
+.git
+.env
+coverage
+**/coverage
+work
+outputs
+output
+data/imports
+data/source-snapshots
+apps/api/src/generated/prisma

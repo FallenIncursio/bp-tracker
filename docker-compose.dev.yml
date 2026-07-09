@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bp_tracker}
+      POSTGRES_USER: ${POSTGRES_USER:-bp_tracker}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bp_tracker}
+    ports:
+      - "5433:5432"
+    volumes:
+      - bp_tracker_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bp_tracker} -d ${POSTGRES_DB:-bp_tracker}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile.dev
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-bp_tracker}:${POSTGRES_PASSWORD:-bp_tracker}@postgres:5432/${POSTGRES_DB:-bp_tracker}
+      DIRECT_DATABASE_URL: postgresql://${POSTGRES_USER:-bp_tracker}:${POSTGRES_PASSWORD:-bp_tracker}@postgres:5432/${POSTGRES_DB:-bp_tracker}
+      CORS_ORIGIN: http://localhost:5173
+    ports:
+      - "3000:3000"
+    command: sh -c "npm run prisma:push -- --accept-data-loss && npm run seed && npm run dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.dev
+    environment:
+      VITE_API_PROXY_TARGET: http://api:3000
+      VITE_GITHUB_URL: ${VITE_GITHUB_URL:-https://github.com/FallenIncursio/bp-tracker}
+      VITE_PROJECT_HOMEPAGE_URL: ${VITE_PROJECT_HOMEPAGE_URL:-https://bp-tracker.arcenciel.io}
+      VITE_APP_VERSION: ${VITE_APP_VERSION:-0.1.0}
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+volumes:
+  bp_tracker_postgres:

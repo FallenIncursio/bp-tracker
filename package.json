@@ -1,0 +1,42 @@
+{
+  "name": "bp-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open-source multi-clan Pirate Galaxy blueprint tracker.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12 <27",
+    "npm": ">=11"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build -w @bp-tracker/contracts && concurrently \"npm run dev -w @bp-tracker/api\" \"npm run dev -w @bp-tracker/web\"",
+    "build": "npm run build -w @bp-tracker/contracts && npm run build -w @bp-tracker/api && npm run build -w @bp-tracker/web",
+    "typecheck": "npm run typecheck -w @bp-tracker/contracts && npm run build -w @bp-tracker/contracts && npm run typecheck -w @bp-tracker/api && npm run typecheck -w @bp-tracker/web && npm run typecheck:scripts",
+    "typecheck:scripts": "tsc -p tsconfig.scripts.json",
+    "lint": "npm run typecheck",
+    "test": "npm run test -w @bp-tracker/contracts && npm run test -w @bp-tracker/api && npm run test -w @bp-tracker/web",
+    "test:coverage": "npm run test:coverage -w @bp-tracker/contracts && npm run test:coverage -w @bp-tracker/api && npm run test:coverage -w @bp-tracker/web",
+    "e2e:full": "tsx scripts/e2e-full.mts",
+    "audit:web": "node scripts/audit-web.mjs",
+    "legacy:audit": "node scripts/legacy-blueprint-audit.mjs",
+    "prisma:generate": "npm run prisma:generate -w @bp-tracker/api",
+    "prisma:migrate": "npm run prisma:migrate -w @bp-tracker/api",
+    "prisma:push": "npm run prisma:push -w @bp-tracker/api",
+    "seed": "npm run seed -w @bp-tracker/api"
+  },
+  "devDependencies": {
+    "axe-core": "^4.12.1",
+    "concurrently": "^10.0.3",
+    "playwright": "^1.61.1",
+    "prettier": "^3.8.4",
+    "typescript": "6.0.3"
+  },
+  "overrides": {
+    "typescript": "6.0.3",
+    "@hono/node-server": "1.19.13"
+  }
+}

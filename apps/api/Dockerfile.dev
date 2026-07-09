@@ -1,0 +1,19 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+COPY packages/contracts/package.json packages/contracts/package.json
+COPY apps/api/package.json apps/api/package.json
+RUN npm install
+
+COPY packages/contracts packages/contracts
+COPY apps/api apps/api
+COPY data data
+
+RUN npm run build -w @bp-tracker/contracts
+WORKDIR /app/apps/api
+RUN npm run prisma:generate
+
+EXPOSE 3000
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,3917 @@
+[
+  {
+    "canonicalName": "6070-ER",
+    "system": null,
+    "itemType": "6070-ER",
+    "variant": "PATTERN",
+    "slotGroup": "CUSTOM",
+    "rarity": "COSMETIC",
+    "sourceNotes": "Public cosmetic pattern seed data."
+  },
+  {
+    "canonicalName": "Antares Sammler",
+    "system": "Antares",
+    "itemType": "Sammler",
+    "variant": null,
+    "slotGroup": "SLOT_18",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antik",
+    "system": null,
+    "itemType": "Antik",
+    "variant": "PATTERN",
+    "slotGroup": "CUSTOM",
+    "rarity": "COSMETIC",
+    "sourceNotes": "Public cosmetic pattern seed data."
+  },
+  {
+    "canonicalName": "Chaos",
+    "system": null,
+    "itemType": "Chaos",
+    "variant": "PATTERN",
+    "slotGroup": "CUSTOM",
+    "rarity": "COSMETIC",
+    "sourceNotes": "Public cosmetic pattern seed data."
+  },
+  {
+    "canonicalName": "Draconis Sammler",
+    "system": "Draconis",
+    "itemType": "Sammler",
+    "variant": null,
+    "slotGroup": "SLOT_18",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Sammler",
+    "system": "Gemini",
+    "itemType": "Sammler",
+    "variant": null,
+    "slotGroup": "SLOT_18",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Sammler",
+    "system": "Mizar",
+    "itemType": "Sammler",
+    "variant": null,
+    "slotGroup": "SLOT_18",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Organische Streifen",
+    "system": null,
+    "itemType": "Organische Streifen",
+    "variant": "PATTERN",
+    "slotGroup": "CUSTOM",
+    "rarity": "COSMETIC",
+    "sourceNotes": "Public cosmetic pattern seed data."
+  },
+  {
+    "canonicalName": "Sirius Bruderschaft",
+    "system": "Sirius",
+    "itemType": "Bruderschaft",
+    "variant": "PATTERN",
+    "slotGroup": "CUSTOM",
+    "rarity": "COSMETIC",
+    "sourceNotes": "Public cosmetic pattern seed data."
+  },
+  {
+    "canonicalName": "Sirius Sammler",
+    "system": "Sirius",
+    "itemType": "Sammler",
+    "variant": null,
+    "slotGroup": "SLOT_18",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Sammler",
+    "system": "Sol",
+    "itemType": "Sammler",
+    "variant": null,
+    "slotGroup": "SLOT_18",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Sammler",
+    "system": "Vega",
+    "itemType": "Sammler",
+    "variant": null,
+    "slotGroup": "SLOT_18",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Nachbrenner",
+    "system": "Antares",
+    "itemType": "Nachbrenner",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Reparaturdroide",
+    "system": "Antares",
+    "itemType": "Reparaturdroide",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Nachbrenner",
+    "system": "Antares",
+    "itemType": "Nachbrenner",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Reparaturdroide",
+    "system": "Antares",
+    "itemType": "Reparaturdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Nachbrenner",
+    "system": "Antares",
+    "itemType": "Nachbrenner",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Reparaturdroide",
+    "system": "Antares",
+    "itemType": "Reparaturdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Nachbrenner",
+    "system": "Draconis",
+    "itemType": "Nachbrenner",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Reparaturdroide",
+    "system": "Draconis",
+    "itemType": "Reparaturdroide",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Nachbrenner",
+    "system": "Draconis",
+    "itemType": "Nachbrenner",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Reparaturdroide",
+    "system": "Draconis",
+    "itemType": "Reparaturdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Nachbrenner",
+    "system": "Draconis",
+    "itemType": "Nachbrenner",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Reparaturdroide",
+    "system": "Draconis",
+    "itemType": "Reparaturdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Nachbrenner",
+    "system": "Gemini",
+    "itemType": "Nachbrenner",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Reparaturdroide",
+    "system": "Gemini",
+    "itemType": "Reparaturdroide",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Nachbrenner",
+    "system": "Gemini",
+    "itemType": "Nachbrenner",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Reparaturdroide",
+    "system": "Gemini",
+    "itemType": "Reparaturdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Nachbrenner",
+    "system": "Gemini",
+    "itemType": "Nachbrenner",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Reparaturdroide",
+    "system": "Gemini",
+    "itemType": "Reparaturdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Nachbrenner",
+    "system": "Mizar",
+    "itemType": "Nachbrenner",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Reparaturdroide",
+    "system": "Mizar",
+    "itemType": "Reparaturdroide",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Nachbrenner",
+    "system": "Mizar",
+    "itemType": "Nachbrenner",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Reparaturdroide",
+    "system": "Mizar",
+    "itemType": "Reparaturdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Nachbrenner",
+    "system": "Mizar",
+    "itemType": "Nachbrenner",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Reparaturdroide",
+    "system": "Mizar",
+    "itemType": "Reparaturdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Nachbrenner",
+    "system": "Sirius",
+    "itemType": "Nachbrenner",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Reparaturdroide",
+    "system": "Sirius",
+    "itemType": "Reparaturdroide",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Nachbrenner",
+    "system": "Sirius",
+    "itemType": "Nachbrenner",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Reparaturdroide",
+    "system": "Sirius",
+    "itemType": "Reparaturdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Nachbrenner",
+    "system": "Sirius",
+    "itemType": "Nachbrenner",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Reparaturdroide",
+    "system": "Sirius",
+    "itemType": "Reparaturdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Nachbrenner",
+    "system": "Sol",
+    "itemType": "Nachbrenner",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Reparaturdroide",
+    "system": "Sol",
+    "itemType": "Reparaturdroide",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Nachbrenner",
+    "system": "Sol",
+    "itemType": "Nachbrenner",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Reparaturdroide",
+    "system": "Sol",
+    "itemType": "Reparaturdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Nachbrenner",
+    "system": "Sol",
+    "itemType": "Nachbrenner",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Reparaturdroide",
+    "system": "Sol",
+    "itemType": "Reparaturdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Nachbrenner",
+    "system": "Vega",
+    "itemType": "Nachbrenner",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Reparaturdroide",
+    "system": "Vega",
+    "itemType": "Reparaturdroide",
+    "variant": null,
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Nachbrenner",
+    "system": "Vega",
+    "itemType": "Nachbrenner",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Reparaturdroide",
+    "system": "Vega",
+    "itemType": "Reparaturdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starker Nachbrenner",
+    "system": "Vega",
+    "itemType": "Nachbrenner",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starker Reparaturdroide",
+    "system": "Vega",
+    "itemType": "Reparaturdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_14",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Aggrobeacon",
+    "system": "Antares",
+    "itemType": "Aggrobeacon",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Blaster",
+    "system": "Antares",
+    "itemType": "Blaster",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Taunt",
+    "system": "Antares",
+    "itemType": "Taunt",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Zielreparatur",
+    "system": "Antares",
+    "itemType": "Zielreparatur",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares lange Zielreparatur",
+    "system": "Antares",
+    "itemType": "Zielreparatur",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Aggrobeacon",
+    "system": "Antares",
+    "itemType": "Aggrobeacon",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Taunt",
+    "system": "Antares",
+    "itemType": "Taunt",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares schneller Blaster",
+    "system": "Antares",
+    "itemType": "Blaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starke Zielreparatur",
+    "system": "Antares",
+    "itemType": "Zielreparatur",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Aggrobeacon",
+    "system": "Antares",
+    "itemType": "Aggrobeacon",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Blaster",
+    "system": "Antares",
+    "itemType": "Blaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Taunt",
+    "system": "Antares",
+    "itemType": "Taunt",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Aggrobeacon",
+    "system": "Draconis",
+    "itemType": "Aggrobeacon",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Blaster",
+    "system": "Draconis",
+    "itemType": "Blaster",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Taunt",
+    "system": "Draconis",
+    "itemType": "Taunt",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Zielreparatur",
+    "system": "Draconis",
+    "itemType": "Zielreparatur",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis lange Zielreparatur",
+    "system": "Draconis",
+    "itemType": "Zielreparatur",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Aggrobeacon",
+    "system": "Draconis",
+    "itemType": "Aggrobeacon",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Taunt",
+    "system": "Draconis",
+    "itemType": "Taunt",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schneller Blaster",
+    "system": "Draconis",
+    "itemType": "Blaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starke Zielreparatur",
+    "system": "Draconis",
+    "itemType": "Zielreparatur",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Aggrobeacon",
+    "system": "Draconis",
+    "itemType": "Aggrobeacon",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Blaster",
+    "system": "Draconis",
+    "itemType": "Blaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Taunt",
+    "system": "Draconis",
+    "itemType": "Taunt",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Aggrobeacon",
+    "system": "Gemini",
+    "itemType": "Aggrobeacon",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Blaster",
+    "system": "Gemini",
+    "itemType": "Blaster",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Taunt",
+    "system": "Gemini",
+    "itemType": "Taunt",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Zielreparatur",
+    "system": "Gemini",
+    "itemType": "Zielreparatur",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini lange Zielreparatur",
+    "system": "Gemini",
+    "itemType": "Zielreparatur",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Aggrobeacon",
+    "system": "Gemini",
+    "itemType": "Aggrobeacon",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Taunt",
+    "system": "Gemini",
+    "itemType": "Taunt",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini schneller Blaster",
+    "system": "Gemini",
+    "itemType": "Blaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starke Zielreparatur",
+    "system": "Gemini",
+    "itemType": "Zielreparatur",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Aggrobeacon",
+    "system": "Gemini",
+    "itemType": "Aggrobeacon",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Blaster",
+    "system": "Gemini",
+    "itemType": "Blaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Taunt",
+    "system": "Gemini",
+    "itemType": "Taunt",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Aggrobeacon",
+    "system": "Mizar",
+    "itemType": "Aggrobeacon",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Blaster",
+    "system": "Mizar",
+    "itemType": "Blaster",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Taunt",
+    "system": "Mizar",
+    "itemType": "Taunt",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Zielreparatur",
+    "system": "Mizar",
+    "itemType": "Zielreparatur",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar lange Zielreparatur",
+    "system": "Mizar",
+    "itemType": "Zielreparatur",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Aggrobeacon",
+    "system": "Mizar",
+    "itemType": "Aggrobeacon",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Taunt",
+    "system": "Mizar",
+    "itemType": "Taunt",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar schneller Blaster",
+    "system": "Mizar",
+    "itemType": "Blaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starke Zielreparatur",
+    "system": "Mizar",
+    "itemType": "Zielreparatur",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Aggrobeacon",
+    "system": "Mizar",
+    "itemType": "Aggrobeacon",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Blaster",
+    "system": "Mizar",
+    "itemType": "Blaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Taunt",
+    "system": "Mizar",
+    "itemType": "Taunt",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Aggrobeacon",
+    "system": "Sirius",
+    "itemType": "Aggrobeacon",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Blaster",
+    "system": "Sirius",
+    "itemType": "Blaster",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Taunt",
+    "system": "Sirius",
+    "itemType": "Taunt",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Zielreparatur",
+    "system": "Sirius",
+    "itemType": "Zielreparatur",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius lange Zielreparatur",
+    "system": "Sirius",
+    "itemType": "Zielreparatur",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Aggrobeacon",
+    "system": "Sirius",
+    "itemType": "Aggrobeacon",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Taunt",
+    "system": "Sirius",
+    "itemType": "Taunt",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schneller Blaster",
+    "system": "Sirius",
+    "itemType": "Blaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starke Zielreparatur",
+    "system": "Sirius",
+    "itemType": "Zielreparatur",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Aggrobeacon",
+    "system": "Sirius",
+    "itemType": "Aggrobeacon",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Blaster",
+    "system": "Sirius",
+    "itemType": "Blaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Taunt",
+    "system": "Sirius",
+    "itemType": "Taunt",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Aggrobeacon",
+    "system": "Sol",
+    "itemType": "Aggrobeacon",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Blaster",
+    "system": "Sol",
+    "itemType": "Blaster",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Taunt",
+    "system": "Sol",
+    "itemType": "Taunt",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Zielreparatur",
+    "system": "Sol",
+    "itemType": "Zielreparatur",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol lange Zielreparatur",
+    "system": "Sol",
+    "itemType": "Zielreparatur",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Aggrobeacon",
+    "system": "Sol",
+    "itemType": "Aggrobeacon",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Taunt",
+    "system": "Sol",
+    "itemType": "Taunt",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol schneller Blaster",
+    "system": "Sol",
+    "itemType": "Blaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starke Zielreparatur",
+    "system": "Sol",
+    "itemType": "Zielreparatur",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Aggrobeacon",
+    "system": "Sol",
+    "itemType": "Aggrobeacon",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Blaster",
+    "system": "Sol",
+    "itemType": "Blaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Taunt",
+    "system": "Sol",
+    "itemType": "Taunt",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Blaster",
+    "system": "Vega",
+    "itemType": "Blaster",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Taunt",
+    "system": "Vega",
+    "itemType": "Taunt",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Zielreparatur",
+    "system": "Vega",
+    "itemType": "Zielreparatur",
+    "variant": null,
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega lange Zielreparatur",
+    "system": "Vega",
+    "itemType": "Zielreparatur",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Taunt",
+    "system": "Vega",
+    "itemType": "Taunt",
+    "variant": "Lang",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega schneller Blaster",
+    "system": "Vega",
+    "itemType": "Blaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starke Zielreparatur",
+    "system": "Vega",
+    "itemType": "Zielreparatur",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starker Blaster",
+    "system": "Vega",
+    "itemType": "Blaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starker Taunt",
+    "system": "Vega",
+    "itemType": "Taunt",
+    "variant": "Stark",
+    "slotGroup": "SLOT_12",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Perforator",
+    "system": "Antares",
+    "itemType": "Perforator",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Schutz",
+    "system": "Antares",
+    "itemType": "Protektor",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Speed",
+    "system": "Antares",
+    "itemType": "Speed",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Zielscrambler",
+    "system": "Antares",
+    "itemType": "Zielscrambler",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Perforator",
+    "system": "Antares",
+    "itemType": "Perforator",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Schutz",
+    "system": "Antares",
+    "itemType": "Protektor",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Speed",
+    "system": "Antares",
+    "itemType": "Speed",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Zielscrambler",
+    "system": "Antares",
+    "itemType": "Zielscrambler",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares schneller Schutz",
+    "system": "Antares",
+    "itemType": "Protektor",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Speed",
+    "system": "Antares",
+    "itemType": "Speed",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Zielscrambler",
+    "system": "Antares",
+    "itemType": "Zielscrambler",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Angriffsfeldturm",
+    "system": "Draconis",
+    "itemType": "Angriffsturm",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Angriffsladung",
+    "system": "Draconis",
+    "itemType": "Angriffsladung",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Perforator",
+    "system": "Draconis",
+    "itemType": "Perforator",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Reparaturfeldturm",
+    "system": "Draconis",
+    "itemType": "Reparaturturm",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Schutz",
+    "system": "Draconis",
+    "itemType": "Protektor",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Speed",
+    "system": "Draconis",
+    "itemType": "Speed",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Zielscrambler",
+    "system": "Draconis",
+    "itemType": "Zielscrambler",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis lange Angriffsladung",
+    "system": "Draconis",
+    "itemType": "Angriffsladung",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Angriffsfeldturm",
+    "system": "Draconis",
+    "itemType": "Angriffsturm",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Perforator",
+    "system": "Draconis",
+    "itemType": "Perforator",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Reparaturfeldturm",
+    "system": "Draconis",
+    "itemType": "Reparaturturm",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Schutz",
+    "system": "Draconis",
+    "itemType": "Protektor",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Speed",
+    "system": "Draconis",
+    "itemType": "Speed",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Zielscrambler",
+    "system": "Draconis",
+    "itemType": "Zielscrambler",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schneller Schutz",
+    "system": "Draconis",
+    "itemType": "Protektor",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starke Angriffsladung",
+    "system": "Draconis",
+    "itemType": "Angriffsladung",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Angriffsfeldturm",
+    "system": "Draconis",
+    "itemType": "Angriffsturm",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Reparaturfeldturm",
+    "system": "Draconis",
+    "itemType": "Reparaturturm",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Speed",
+    "system": "Draconis",
+    "itemType": "Speed",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Zielscrambler",
+    "system": "Draconis",
+    "itemType": "Zielscrambler",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Perforator",
+    "system": "Gemini",
+    "itemType": "Perforator",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Schutz",
+    "system": "Gemini",
+    "itemType": "Protektor",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Speed",
+    "system": "Gemini",
+    "itemType": "Speed",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Zielscrambler",
+    "system": "Gemini",
+    "itemType": "Zielscrambler",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Perforator",
+    "system": "Gemini",
+    "itemType": "Perforator",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Schutz",
+    "system": "Gemini",
+    "itemType": "Protektor",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Speed",
+    "system": "Gemini",
+    "itemType": "Speed",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Zielscrambler",
+    "system": "Gemini",
+    "itemType": "Zielscrambler",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini schneller Schutz",
+    "system": "Gemini",
+    "itemType": "Protektor",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Speed",
+    "system": "Gemini",
+    "itemType": "Speed",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Zielscrambler",
+    "system": "Gemini",
+    "itemType": "Zielscrambler",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Perforator",
+    "system": "Mizar",
+    "itemType": "Perforator",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Schutz",
+    "system": "Mizar",
+    "itemType": "Protektor",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Speed",
+    "system": "Mizar",
+    "itemType": "Speed",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Zielscrambler",
+    "system": "Mizar",
+    "itemType": "Zielscrambler",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Perforator",
+    "system": "Mizar",
+    "itemType": "Perforator",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Schutz",
+    "system": "Mizar",
+    "itemType": "Protektor",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Speed",
+    "system": "Mizar",
+    "itemType": "Speed",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Zielscrambler",
+    "system": "Mizar",
+    "itemType": "Zielscrambler",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar schneller Schutz",
+    "system": "Mizar",
+    "itemType": "Protektor",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Speed",
+    "system": "Mizar",
+    "itemType": "Speed",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Zielscrambler",
+    "system": "Mizar",
+    "itemType": "Zielscrambler",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Angriffsfeldturm",
+    "system": "Sirius",
+    "itemType": "Angriffsturm",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Angriffsladung",
+    "system": "Sirius",
+    "itemType": "Angriffsladung",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Perforator",
+    "system": "Sirius",
+    "itemType": "Perforator",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Reparaturfeldturm",
+    "system": "Sirius",
+    "itemType": "Reparaturturm",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Schutz",
+    "system": "Sirius",
+    "itemType": "Protektor",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Speed",
+    "system": "Sirius",
+    "itemType": "Speed",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Zielscrambler",
+    "system": "Sirius",
+    "itemType": "Zielscrambler",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius lange Angriffsladung",
+    "system": "Sirius",
+    "itemType": "Angriffsladung",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Angriffsfeldturm",
+    "system": "Sirius",
+    "itemType": "Angriffsturm",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Perforator",
+    "system": "Sirius",
+    "itemType": "Perforator",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Reparaturfeldturm",
+    "system": "Sirius",
+    "itemType": "Reparaturturm",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Schutz",
+    "system": "Sirius",
+    "itemType": "Protektor",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Speed",
+    "system": "Sirius",
+    "itemType": "Speed",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Zielscrambler",
+    "system": "Sirius",
+    "itemType": "Zielscrambler",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schneller Schutz",
+    "system": "Sirius",
+    "itemType": "Protektor",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starke Angriffsladung",
+    "system": "Sirius",
+    "itemType": "Angriffsladung",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Angriffsfeldturm",
+    "system": "Sirius",
+    "itemType": "Angriffsturm",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Reparaturfeldturm",
+    "system": "Sirius",
+    "itemType": "Reparaturturm",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Speed",
+    "system": "Sirius",
+    "itemType": "Speed",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Zielscrambler",
+    "system": "Sirius",
+    "itemType": "Zielscrambler",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Angriffsladung",
+    "system": "Sol",
+    "itemType": "Angriffsladung",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Perforator",
+    "system": "Sol",
+    "itemType": "Perforator",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Schutz",
+    "system": "Sol",
+    "itemType": "Protektor",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Speed",
+    "system": "Sol",
+    "itemType": "Speed",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Zielscrambler",
+    "system": "Sol",
+    "itemType": "Zielscrambler",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol lange Angriffsladung",
+    "system": "Sol",
+    "itemType": "Angriffsladung",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Perforator",
+    "system": "Sol",
+    "itemType": "Perforator",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Schutz",
+    "system": "Sol",
+    "itemType": "Protektor",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Speed",
+    "system": "Sol",
+    "itemType": "Speed",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Zielscrambler",
+    "system": "Sol",
+    "itemType": "Zielscrambler",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol schneller Schutz",
+    "system": "Sol",
+    "itemType": "Protektor",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starke Angriffsladung",
+    "system": "Sol",
+    "itemType": "Angriffsladung",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Speed",
+    "system": "Sol",
+    "itemType": "Speed",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Zielscrambler",
+    "system": "Sol",
+    "itemType": "Zielscrambler",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Schutz",
+    "system": "Vega",
+    "itemType": "Protektor",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Speed",
+    "system": "Vega",
+    "itemType": "Speed",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Schutz",
+    "system": "Vega",
+    "itemType": "Protektor",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Speed",
+    "system": "Vega",
+    "itemType": "Speed",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega schneller Schutz",
+    "system": "Vega",
+    "itemType": "Protektor",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starker Speed",
+    "system": "Vega",
+    "itemType": "Speed",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Ancient Ghost",
+    "system": "Sirius",
+    "itemType": "Ghost",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "ANCIENT",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Ancient Legionary",
+    "system": "Sirius",
+    "itemType": "Legionary",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "ANCIENT",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Ancient Myst",
+    "system": "Sirius",
+    "itemType": "Myst",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "ANCIENT",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Ancient Punisher",
+    "system": "Sirius",
+    "itemType": "Punisher",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "ANCIENT",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Ancient Raider",
+    "system": "Sirius",
+    "itemType": "Raider",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "ANCIENT",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Ancient Raven",
+    "system": "Sirius",
+    "itemType": "Raven",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "ANCIENT",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Raketen",
+    "system": "Antares",
+    "itemType": "Raketen",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Reparaturfeld",
+    "system": "Antares",
+    "itemType": "Reparaturfeld",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Schild",
+    "system": "Antares",
+    "itemType": "Schild",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Stun",
+    "system": "Antares",
+    "itemType": "Stun",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares Zielcomputer",
+    "system": "Antares",
+    "itemType": "Zielcomputer",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Schild",
+    "system": "Antares",
+    "itemType": "Schild",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Stun",
+    "system": "Antares",
+    "itemType": "Stun",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langer Zielcomputer",
+    "system": "Antares",
+    "itemType": "Zielcomputer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares langes Reparaturfeld",
+    "system": "Antares",
+    "itemType": "Reparaturfeld",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares schnelle Raketen",
+    "system": "Antares",
+    "itemType": "Raketen",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares schneller Schild",
+    "system": "Antares",
+    "itemType": "Schild",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starke Raketen",
+    "system": "Antares",
+    "itemType": "Raketen",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Stun",
+    "system": "Antares",
+    "itemType": "Stun",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starker Zielcomputer",
+    "system": "Antares",
+    "itemType": "Zielcomputer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Antares starkes Reparaturfeld",
+    "system": "Antares",
+    "itemType": "Reparaturfeld",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Aggrobombe",
+    "system": "Draconis",
+    "itemType": "Aggrobombe",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Angriffsdroide",
+    "system": "Draconis",
+    "itemType": "Angriffsdroide",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Haftbombe",
+    "system": "Draconis",
+    "itemType": "Haftbombe",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Materialisierer",
+    "system": "Draconis",
+    "itemType": "Materialisierer",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Mine",
+    "system": "Draconis",
+    "itemType": "Minenleger",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Orbitalschlag",
+    "system": "Draconis",
+    "itemType": "Orbitalschlag",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Raketen",
+    "system": "Draconis",
+    "itemType": "Raketen",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Reparaturfeld",
+    "system": "Draconis",
+    "itemType": "Reparaturfeld",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Schild",
+    "system": "Draconis",
+    "itemType": "Schild",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Sniperblaster",
+    "system": "Draconis",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Stun",
+    "system": "Draconis",
+    "itemType": "Stun",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Stundome",
+    "system": "Draconis",
+    "itemType": "Stundome",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Thermoblast",
+    "system": "Draconis",
+    "itemType": "Thermoblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis Zielcomputer",
+    "system": "Draconis",
+    "itemType": "Zielcomputer",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis lange Mine",
+    "system": "Draconis",
+    "itemType": "Minenleger",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Angriffsdroide",
+    "system": "Draconis",
+    "itemType": "Angriffsdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Materialisierer",
+    "system": "Draconis",
+    "itemType": "Materialisierer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Schild",
+    "system": "Draconis",
+    "itemType": "Schild",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Stun",
+    "system": "Draconis",
+    "itemType": "Stun",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Stundome",
+    "system": "Draconis",
+    "itemType": "Stundome",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Thermoblast",
+    "system": "Draconis",
+    "itemType": "Thermoblaster",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langer Zielcomputer",
+    "system": "Draconis",
+    "itemType": "Zielcomputer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis langes Reparaturfeld",
+    "system": "Draconis",
+    "itemType": "Reparaturfeld",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schnelle Aggrobombe",
+    "system": "Draconis",
+    "itemType": "Aggrobombe",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schnelle Haftbombe",
+    "system": "Draconis",
+    "itemType": "Haftbombe",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schnelle Mine",
+    "system": "Draconis",
+    "itemType": "Minenleger",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schnelle Raketen",
+    "system": "Draconis",
+    "itemType": "Raketen",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schneller Orbitalschlag",
+    "system": "Draconis",
+    "itemType": "Orbitalschlag",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schneller Schild",
+    "system": "Draconis",
+    "itemType": "Schild",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis schneller Sniperblaster",
+    "system": "Draconis",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starke Aggrobombe",
+    "system": "Draconis",
+    "itemType": "Aggrobombe",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starke Haftbombe",
+    "system": "Draconis",
+    "itemType": "Haftbombe",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starke Raketen",
+    "system": "Draconis",
+    "itemType": "Raketen",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Angriffsdroide",
+    "system": "Draconis",
+    "itemType": "Angriffsdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Materialisierer",
+    "system": "Draconis",
+    "itemType": "Materialisierer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Orbitalschlag",
+    "system": "Draconis",
+    "itemType": "Orbitalschlag",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Sniperblaster",
+    "system": "Draconis",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Stun",
+    "system": "Draconis",
+    "itemType": "Stun",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Stundome",
+    "system": "Draconis",
+    "itemType": "Stundome",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Thermoblast",
+    "system": "Draconis",
+    "itemType": "Thermoblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starker Zielcomputer",
+    "system": "Draconis",
+    "itemType": "Zielcomputer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Draconis starkes Reparaturfeld",
+    "system": "Draconis",
+    "itemType": "Reparaturfeld",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Aggrobombe",
+    "system": "Gemini",
+    "itemType": "Aggrobombe",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Materialisierer",
+    "system": "Gemini",
+    "itemType": "Materialisierer",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Raketen",
+    "system": "Gemini",
+    "itemType": "Raketen",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Reparaturfeld",
+    "system": "Gemini",
+    "itemType": "Reparaturfeld",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Schild",
+    "system": "Gemini",
+    "itemType": "Schild",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Stun",
+    "system": "Gemini",
+    "itemType": "Stun",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Stundome",
+    "system": "Gemini",
+    "itemType": "Stundome",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Thermoblast",
+    "system": "Gemini",
+    "itemType": "Thermoblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini Zielcomputer",
+    "system": "Gemini",
+    "itemType": "Zielcomputer",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Materialisierer",
+    "system": "Gemini",
+    "itemType": "Materialisierer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Schild",
+    "system": "Gemini",
+    "itemType": "Schild",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Stun",
+    "system": "Gemini",
+    "itemType": "Stun",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Stundome",
+    "system": "Gemini",
+    "itemType": "Stundome",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Thermoblast",
+    "system": "Gemini",
+    "itemType": "Thermoblaster",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langer Zielcomputer",
+    "system": "Gemini",
+    "itemType": "Zielcomputer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini langes Reparaturfeld",
+    "system": "Gemini",
+    "itemType": "Reparaturfeld",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini schnelle Aggrobombe",
+    "system": "Gemini",
+    "itemType": "Aggrobombe",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini schnelle Raketen",
+    "system": "Gemini",
+    "itemType": "Raketen",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini schneller Schild",
+    "system": "Gemini",
+    "itemType": "Schild",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starke Aggrobombe",
+    "system": "Gemini",
+    "itemType": "Aggrobombe",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starke Raketen",
+    "system": "Gemini",
+    "itemType": "Raketen",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Materialisierer",
+    "system": "Gemini",
+    "itemType": "Materialisierer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Stun",
+    "system": "Gemini",
+    "itemType": "Stun",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Stundome",
+    "system": "Gemini",
+    "itemType": "Stundome",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Thermoblast",
+    "system": "Gemini",
+    "itemType": "Thermoblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starker Zielcomputer",
+    "system": "Gemini",
+    "itemType": "Zielcomputer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Gemini starkes Reparaturfeld",
+    "system": "Gemini",
+    "itemType": "Reparaturfeld",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Aggrobombe",
+    "system": "Mizar",
+    "itemType": "Aggrobombe",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Materialisierer",
+    "system": "Mizar",
+    "itemType": "Materialisierer",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Raketen",
+    "system": "Mizar",
+    "itemType": "Raketen",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Reparaturfeld",
+    "system": "Mizar",
+    "itemType": "Reparaturfeld",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Schild",
+    "system": "Mizar",
+    "itemType": "Schild",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Stun",
+    "system": "Mizar",
+    "itemType": "Stun",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Stundome",
+    "system": "Mizar",
+    "itemType": "Stundome",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Thermoblast",
+    "system": "Mizar",
+    "itemType": "Thermoblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar Zielcomputer",
+    "system": "Mizar",
+    "itemType": "Zielcomputer",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Materialisierer",
+    "system": "Mizar",
+    "itemType": "Materialisierer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Schild",
+    "system": "Mizar",
+    "itemType": "Schild",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Stun",
+    "system": "Mizar",
+    "itemType": "Stun",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Stundome",
+    "system": "Mizar",
+    "itemType": "Stundome",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Thermoblast",
+    "system": "Mizar",
+    "itemType": "Thermoblaster",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langer Zielcomputer",
+    "system": "Mizar",
+    "itemType": "Zielcomputer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar langes Reparaturfeld",
+    "system": "Mizar",
+    "itemType": "Reparaturfeld",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar schnelle Aggrobombe",
+    "system": "Mizar",
+    "itemType": "Aggrobombe",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar schnelle Raketen",
+    "system": "Mizar",
+    "itemType": "Raketen",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar schneller Schild",
+    "system": "Mizar",
+    "itemType": "Schild",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starke Aggrobombe",
+    "system": "Mizar",
+    "itemType": "Aggrobombe",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starke Raketen",
+    "system": "Mizar",
+    "itemType": "Raketen",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Materialisierer",
+    "system": "Mizar",
+    "itemType": "Materialisierer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Stun",
+    "system": "Mizar",
+    "itemType": "Stun",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Stundome",
+    "system": "Mizar",
+    "itemType": "Stundome",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Thermoblast",
+    "system": "Mizar",
+    "itemType": "Thermoblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starker Zielcomputer",
+    "system": "Mizar",
+    "itemType": "Zielcomputer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Mizar starkes Reparaturfeld",
+    "system": "Mizar",
+    "itemType": "Reparaturfeld",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Aggrobombe",
+    "system": "Sirius",
+    "itemType": "Aggrobombe",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Angriffsdroide",
+    "system": "Sirius",
+    "itemType": "Angriffsdroide",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Haftbombe",
+    "system": "Sirius",
+    "itemType": "Haftbombe",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Materialisierer",
+    "system": "Sirius",
+    "itemType": "Materialisierer",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Mine",
+    "system": "Sirius",
+    "itemType": "Minenleger",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Orbitalschlag",
+    "system": "Sirius",
+    "itemType": "Orbitalschlag",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Raketen",
+    "system": "Sirius",
+    "itemType": "Raketen",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Reparaturfeld",
+    "system": "Sirius",
+    "itemType": "Reparaturfeld",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Schild",
+    "system": "Sirius",
+    "itemType": "Schild",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Sniperblaster",
+    "system": "Sirius",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Stun",
+    "system": "Sirius",
+    "itemType": "Stun",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Stundome",
+    "system": "Sirius",
+    "itemType": "Stundome",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Thermoblast",
+    "system": "Sirius",
+    "itemType": "Thermoblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius Zielcomputer",
+    "system": "Sirius",
+    "itemType": "Zielcomputer",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius lange Mine",
+    "system": "Sirius",
+    "itemType": "Minenleger",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Angriffsdroide",
+    "system": "Sirius",
+    "itemType": "Angriffsdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Materialisierer",
+    "system": "Sirius",
+    "itemType": "Materialisierer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Schild",
+    "system": "Sirius",
+    "itemType": "Schild",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Stun",
+    "system": "Sirius",
+    "itemType": "Stun",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Stundome",
+    "system": "Sirius",
+    "itemType": "Stundome",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Thermoblast",
+    "system": "Sirius",
+    "itemType": "Thermoblaster",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langer Zielcomputer",
+    "system": "Sirius",
+    "itemType": "Zielcomputer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius langes Reparaturfeld",
+    "system": "Sirius",
+    "itemType": "Reparaturfeld",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schnelle Aggrobombe",
+    "system": "Sirius",
+    "itemType": "Aggrobombe",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schnelle Haftbombe",
+    "system": "Sirius",
+    "itemType": "Haftbombe",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schnelle Mine",
+    "system": "Sirius",
+    "itemType": "Minenleger",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schnelle Raketen",
+    "system": "Sirius",
+    "itemType": "Raketen",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schneller Orbitalschlag",
+    "system": "Sirius",
+    "itemType": "Orbitalschlag",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schneller Schild",
+    "system": "Sirius",
+    "itemType": "Schild",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius schneller Sniperblaster",
+    "system": "Sirius",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starke Aggrobombe",
+    "system": "Sirius",
+    "itemType": "Aggrobombe",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starke Haftbombe",
+    "system": "Sirius",
+    "itemType": "Haftbombe",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starke Raketen",
+    "system": "Sirius",
+    "itemType": "Raketen",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Angriffsdroide",
+    "system": "Sirius",
+    "itemType": "Angriffsdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Materialisierer",
+    "system": "Sirius",
+    "itemType": "Materialisierer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Orbitalschlag",
+    "system": "Sirius",
+    "itemType": "Orbitalschlag",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Sniperblaster",
+    "system": "Sirius",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Stun",
+    "system": "Sirius",
+    "itemType": "Stun",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Stundome",
+    "system": "Sirius",
+    "itemType": "Stundome",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Thermoblast",
+    "system": "Sirius",
+    "itemType": "Thermoblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starker Zielcomputer",
+    "system": "Sirius",
+    "itemType": "Zielcomputer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sirius starkes Reparaturfeld",
+    "system": "Sirius",
+    "itemType": "Reparaturfeld",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Aggrobombe",
+    "system": "Sol",
+    "itemType": "Aggrobombe",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Angriffsdroide",
+    "system": "Sol",
+    "itemType": "Angriffsdroide",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Materialisierer",
+    "system": "Sol",
+    "itemType": "Materialisierer",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Orbitalschlag",
+    "system": "Sol",
+    "itemType": "Orbitalschlag",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Raketen",
+    "system": "Sol",
+    "itemType": "Raketen",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Reparaturfeld",
+    "system": "Sol",
+    "itemType": "Reparaturfeld",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Schild",
+    "system": "Sol",
+    "itemType": "Schild",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Sniperblaster",
+    "system": "Sol",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Stun",
+    "system": "Sol",
+    "itemType": "Stun",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Stundome",
+    "system": "Sol",
+    "itemType": "Stundome",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Thermoblast",
+    "system": "Sol",
+    "itemType": "Thermoblaster",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol Zielcomputer",
+    "system": "Sol",
+    "itemType": "Zielcomputer",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Angriffsdroide",
+    "system": "Sol",
+    "itemType": "Angriffsdroide",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Materialisierer",
+    "system": "Sol",
+    "itemType": "Materialisierer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Schild",
+    "system": "Sol",
+    "itemType": "Schild",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Stun",
+    "system": "Sol",
+    "itemType": "Stun",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Stundome",
+    "system": "Sol",
+    "itemType": "Stundome",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Thermoblast",
+    "system": "Sol",
+    "itemType": "Thermoblaster",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langer Zielcomputer",
+    "system": "Sol",
+    "itemType": "Zielcomputer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol langes Reparaturfeld",
+    "system": "Sol",
+    "itemType": "Reparaturfeld",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol schnelle Aggrobombe",
+    "system": "Sol",
+    "itemType": "Aggrobombe",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol schnelle Raketen",
+    "system": "Sol",
+    "itemType": "Raketen",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol schneller Orbitalschlag",
+    "system": "Sol",
+    "itemType": "Orbitalschlag",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol schneller Schild",
+    "system": "Sol",
+    "itemType": "Schild",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol schneller Sniperblaster",
+    "system": "Sol",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starke Aggrobombe",
+    "system": "Sol",
+    "itemType": "Aggrobombe",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starke Raketen",
+    "system": "Sol",
+    "itemType": "Raketen",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Angriffsdroide",
+    "system": "Sol",
+    "itemType": "Angriffsdroide",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Materialisierer",
+    "system": "Sol",
+    "itemType": "Materialisierer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Orbitalschlag",
+    "system": "Sol",
+    "itemType": "Orbitalschlag",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Sniperblaster",
+    "system": "Sol",
+    "itemType": "Scharfschuetzenblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Stun",
+    "system": "Sol",
+    "itemType": "Stun",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Stundome",
+    "system": "Sol",
+    "itemType": "Stundome",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Thermoblast",
+    "system": "Sol",
+    "itemType": "Thermoblaster",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starker Zielcomputer",
+    "system": "Sol",
+    "itemType": "Zielcomputer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Sol starkes Reparaturfeld",
+    "system": "Sol",
+    "itemType": "Reparaturfeld",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Raketen",
+    "system": "Vega",
+    "itemType": "Raketen",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Schild",
+    "system": "Vega",
+    "itemType": "Schild",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Stun",
+    "system": "Vega",
+    "itemType": "Stun",
+    "variant": null,
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega Zielcomputer",
+    "system": "Vega",
+    "itemType": "Zielcomputer",
+    "variant": null,
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Schild",
+    "system": "Vega",
+    "itemType": "Schild",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Stun",
+    "system": "Vega",
+    "itemType": "Stun",
+    "variant": "Lang",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega langer Zielcomputer",
+    "system": "Vega",
+    "itemType": "Zielcomputer",
+    "variant": "Lang",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega schnelle Raketen",
+    "system": "Vega",
+    "itemType": "Raketen",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega schneller Schild",
+    "system": "Vega",
+    "itemType": "Schild",
+    "variant": "Schnell",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starke Raketen",
+    "system": "Vega",
+    "itemType": "Raketen",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starker Stun",
+    "system": "Vega",
+    "itemType": "Stun",
+    "variant": "Stark",
+    "slotGroup": "SLOT_2",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  },
+  {
+    "canonicalName": "Vega starker Zielcomputer",
+    "system": "Vega",
+    "itemType": "Zielcomputer",
+    "variant": "Stark",
+    "slotGroup": "SLOT_5",
+    "rarity": "STANDARD",
+    "sourceNotes": "Public blueprint seed data."
+  }
+]

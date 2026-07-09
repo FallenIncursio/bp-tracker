@@ -1,0 +1,17 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+COPY packages/contracts/package.json packages/contracts/package.json
+COPY apps/web/package.json apps/web/package.json
+RUN npm install
+
+COPY packages/contracts packages/contracts
+COPY apps/web apps/web
+
+RUN npm run build -w @bp-tracker/contracts
+WORKDIR /app/apps/web
+
+EXPOSE 5173
+CMD ["npm", "run", "dev"]

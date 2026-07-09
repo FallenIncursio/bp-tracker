@@ -1,0 +1,646 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum GlobalRole {
+  USER
+  ADMIN
+}
+
+enum ClanRole {
+  MEMBER
+  COMMANDER
+  ADMIRAL
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  LEFT
+}
+
+enum BlueprintStatus {
+  UNKNOWN
+  MISSING
+  OWNED
+  WANTED
+}
+
+enum BlueprintSlotGroup {
+  SLOT_18
+  SLOT_14
+  SLOT_12
+  SLOT_5
+  SLOT_2
+  RESOURCE
+  CUSTOM
+}
+
+enum BlueprintRarity {
+  STANDARD
+  RARE
+  ANCIENT
+  EVENT
+  CONQUEST
+  SPECIAL
+  COSMETIC
+}
+
+enum SiriusSlotPhase {
+  CURRENT
+  NEXT
+}
+
+enum SiriusEnemyType {
+  SORIS
+  AMARNA
+  GIZA
+}
+
+enum SiriusTechTier {
+  OOLYTE
+  DOLOMYTE
+  CLAY
+  KENYTE
+  ANCIENT
+}
+
+enum SiriusAppearanceStatus {
+  ACTIVE
+  UPCOMING
+  EXPIRED
+}
+
+enum SiriusSpawnWindowStatus {
+  PENDING
+  RESOLVED
+  CANCELLED
+}
+
+enum ClanJourneyStopStatus {
+  PLANNED
+  CURRENT
+  COMPLETED
+  SKIPPED
+  CANCELLED
+}
+
+enum ClanJourneyStopCertainty {
+  CONFIRMED
+  TENTATIVE
+}
+
+enum NotificationType {
+  BLUEPRINT_WANTED_ACTIVE
+  BLUEPRINT_MISSING_ACTIVE
+  PLANET_EXPIRING
+  MEMBERSHIP_APPROVED
+  SYSTEM
+}
+
+enum ImportSourceType {
+  SEED
+  EXTERNAL_SNAPSHOT
+  MANUAL_JSON
+}
+
+enum ImportRunStatus {
+  PENDING
+  APPLIED
+  FAILED
+}
+
+model User {
+  id                String     @id @default(uuid())
+  username          String     @unique
+  displayName       String
+  email             String?    @unique
+  passwordHash      String?
+  globalRole        GlobalRole @default(USER)
+  isActive          Boolean    @default(true)
+  discordUserId     String?    @unique
+  discordUsername   String?
+  discordGlobalName String?
+  discordAvatarHash String?
+  discordLinkedAt   DateTime?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  sessions          Session[]
+  memberships       ClanMembership[]
+  blueprintStatuses UserBlueprintStatus[]
+  notifications     Notification[]
+  notificationPrefs NotificationPreference?
+
+  @@index([globalRole])
+}
+
+model Session {
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Clan {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships     ClanMembership[]
+  appearances     SiriusPlanetAppearance[]
+  dropEvents      SiriusDropEvent[]
+  spawnWindows    SiriusSpawnWindow[]
+  journeyStops    ClanJourneyStop[]
+  discordSettings ClanDiscordSettings?
+
+  @@index([isPublic])
+}
+
+model ClanDiscordSettings {
+  id                       String    @id @default(uuid())
+  clanId                   String    @unique
+  guildId                  String?
+  notificationChannelId    String?
+  notificationChannelName  String?
+  enabled                  Boolean   @default(false)
+  statusEnabled            Boolean   @default(false)
+  statusChannelId          String?
+  statusChannelName        String?
+  statusRoadmapMessageId   String?
+  statusPlanetsMessageId   String?
+  statusPinMessages        Boolean   @default(true)
+  statusLastPublishedAt    DateTime?
+  statusLastError          String?   @db.Text
+  updatedById              String?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  clan Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
+}
+
+model ClanMembership {
+  id                     String           @id @default(uuid())
+  clanId                 String
+  userId                 String
+  role                   ClanRole         @default(MEMBER)
+  status                 MembershipStatus @default(PENDING)
+  trackingExcluded       Boolean          @default(false)
+  trackingExcludedAt     DateTime?
+  trackingExcludedById   String?
+  trackingExcludedReason String?          @db.Text
+  approvedById           String?
+  approvedAt             DateTime?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  clan Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([clanId, userId])
+  @@index([clanId, status])
+  @@index([clanId, trackingExcluded])
+  @@index([userId, status])
+}
+
+model GameSystem {
+  id        String @id @default(uuid())
+  code      String @unique
+  name      String
+  sortOrder Int    @default(0)
+
+  blueprints Blueprint[]
+  ships      Ship[]
+}
+
+model BlueprintItemType {
+  id        String  @id @default(uuid())
+  code      String  @unique
+  nameDe    String
+  nameEn    String?
+  sortOrder Int     @default(0)
+
+  blueprints    Blueprint[]
+  translations BlueprintItemTypeTranslation[]
+}
+
+model Blueprint {
+  id             String              @id @default(uuid())
+  canonicalName  String              @unique
+  nameDe         String
+  nameEn         String?
+  systemId       String?
+  itemTypeId     String?
+  variant        String?
+  siriusRing     Int?
+  siriusTechTier SiriusTechTier?
+  slotGroup      BlueprintSlotGroup?
+  partsRequired  Int?
+  level          Int?
+  price          Int?
+  rarity         BlueprintRarity     @default(STANDARD)
+  sourceNotes    String?             @db.Text
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  system           GameSystem?                 @relation(fields: [systemId], references: [id], onDelete: SetNull)
+  itemType         BlueprintItemType?          @relation(fields: [itemTypeId], references: [id], onDelete: SetNull)
+  aliases          BlueprintAlias[]
+  translations     BlueprintTranslation[]
+  userStatuses     UserBlueprintStatus[]
+  slots            SiriusPlanetBlueprintSlot[]
+  siriusDropRules  SiriusBlueprintDropRule[]
+  siriusDropEvents SiriusDropEvent[]
+  shipRequirements ShipRequiredBlueprint[]
+
+  @@index([systemId])
+  @@index([itemTypeId])
+  @@index([slotGroup])
+  @@index([siriusRing])
+  @@index([siriusTechTier])
+  @@index([rarity])
+}
+
+model BlueprintTranslation {
+  id          String   @id @default(uuid())
+  blueprintId String
+  locale      String
+  name        String
+  source      String?
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  blueprint Blueprint @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+
+  @@unique([blueprintId, locale])
+  @@index([locale])
+  @@index([name])
+}
+
+model BlueprintItemTypeTranslation {
+  id         String   @id @default(uuid())
+  itemTypeId String
+  locale     String
+  name       String
+  source     String?
+  verified   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  itemType BlueprintItemType @relation(fields: [itemTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([itemTypeId, locale])
+  @@index([locale])
+  @@index([name])
+}
+
+model BlueprintAlias {
+  id          String  @id @default(uuid())
+  blueprintId String
+  alias       String
+  language    String?
+  source      String?
+
+  blueprint Blueprint @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+
+  @@unique([blueprintId, alias])
+  @@index([alias])
+}
+
+model UserBlueprintStatus {
+  id          String          @id @default(uuid())
+  userId      String
+  blueprintId String
+  status      BlueprintStatus @default(UNKNOWN)
+  source      String          @default("MANUAL")
+  updatedById String?
+  updatedAt   DateTime        @updatedAt
+  createdAt   DateTime        @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blueprint Blueprint @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, blueprintId])
+  @@index([blueprintId, status])
+}
+
+model SiriusPlanet {
+  id        String  @id @default(uuid())
+  name      String  @unique
+  ring      Int?
+  isKnown   Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  appearances SiriusPlanetAppearance[]
+  dropEvents  SiriusDropEvent[]
+  journeyStops ClanJourneyStop[]
+}
+
+model SiriusPlanetAppearance {
+  id          String                 @id @default(uuid())
+  clanId      String
+  planetId    String
+  ring        Int                    @default(5)
+  techTier    SiriusTechTier?
+  observedAt  DateTime               @default(now())
+  expiresAt   DateTime
+  nextSpawnAt DateTime?
+  status      SiriusAppearanceStatus @default(ACTIVE)
+  notes       String?                @db.Text
+  createdById String?
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+
+  clan       Clan                        @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  planet     SiriusPlanet                @relation(fields: [planetId], references: [id], onDelete: Cascade)
+  slots      SiriusPlanetBlueprintSlot[]
+  dropEvents SiriusDropEvent[]
+  journeyStops ClanJourneyStop[]
+  spawnWindowSource   SiriusSpawnWindow? @relation("SpawnWindowSource")
+  spawnWindowResolved SiriusSpawnWindow? @relation("SpawnWindowResolved")
+
+  @@index([clanId, status])
+  @@index([ring])
+  @@index([planetId])
+  @@index([expiresAt])
+}
+
+model SiriusSpawnWindow {
+  id                   String                  @id @default(uuid())
+  clanId               String
+  sourceAppearanceId   String                  @unique
+  resolvedAppearanceId String?                 @unique
+  expectedAt           DateTime
+  status               SiriusSpawnWindowStatus @default(PENDING)
+  notes                String?                 @db.Text
+  createdById          String?
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+
+  clan               Clan                    @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  sourceAppearance   SiriusPlanetAppearance @relation("SpawnWindowSource", fields: [sourceAppearanceId], references: [id], onDelete: Cascade)
+  resolvedAppearance SiriusPlanetAppearance? @relation("SpawnWindowResolved", fields: [resolvedAppearanceId], references: [id], onDelete: SetNull)
+
+  @@index([clanId, status, expectedAt])
+  @@index([sourceAppearanceId])
+  @@index([resolvedAppearanceId])
+  @@index([expectedAt])
+}
+
+model ClanJourneyStop {
+  id           String                    @id @default(uuid())
+  clanId       String
+  appearanceId String?
+  planetId     String?
+  planetName   String?
+  ring         Int                       @default(5)
+  arriveAt     DateTime?
+  departAt     DateTime?
+  status       ClanJourneyStopStatus     @default(PLANNED)
+  certainty    ClanJourneyStopCertainty  @default(CONFIRMED)
+  sortOrder    Int                       @default(0)
+  notes        String?                   @db.Text
+  createdById  String?
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+
+  clan       Clan                    @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  appearance SiriusPlanetAppearance? @relation(fields: [appearanceId], references: [id], onDelete: SetNull)
+  planet     SiriusPlanet?           @relation(fields: [planetId], references: [id], onDelete: SetNull)
+
+  @@index([clanId, status, sortOrder])
+  @@index([clanId, arriveAt])
+  @@index([appearanceId])
+  @@index([planetId])
+}
+
+model SiriusPlanetBlueprintSlot {
+  id               String             @id @default(uuid())
+  appearanceId     String
+  phase            SiriusSlotPhase
+  slotGroup        BlueprintSlotGroup
+  enemyType        SiriusEnemyType?
+  locationName     String?
+  blueprintId      String?
+  rawBlueprintName String?
+  confidence       Float              @default(1)
+  createdById      String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  appearance SiriusPlanetAppearance @relation(fields: [appearanceId], references: [id], onDelete: Cascade)
+  blueprint  Blueprint?             @relation(fields: [blueprintId], references: [id], onDelete: SetNull)
+
+  @@index([appearanceId, phase])
+  @@index([appearanceId, slotGroup])
+  @@index([enemyType])
+  @@index([blueprintId])
+}
+
+model SiriusBlueprintDropRule {
+  id          String             @id @default(uuid())
+  ruleKey     String             @unique
+  blueprintId String
+  ring        Int
+  techTier    SiriusTechTier?
+  slotGroup   BlueprintSlotGroup
+  enemyType   SiriusEnemyType?
+  source      String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  blueprint Blueprint @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+
+  @@index([ring, slotGroup])
+  @@index([techTier])
+  @@index([enemyType])
+  @@index([blueprintId])
+}
+
+model SiriusDropEvent {
+  id               String             @id @default(uuid())
+  eventKey         String             @unique
+  clanId           String
+  planetId         String?
+  appearanceId     String?
+  blueprintId      String?
+  ring             Int
+  techTier         SiriusTechTier?
+  dropAt           DateTime
+  observedAt       DateTime?
+  expiresAt        DateTime?
+  nextSpawnAt      DateTime?
+  slotGroup        BlueprintSlotGroup
+  enemyType        SiriusEnemyType?
+  partsRequired    Int?
+  rawPlanetName    String?
+  rawBlueprintName String?
+  sourceType       ImportSourceType
+  sourceRef        String?
+  confidence       Float              @default(1)
+  firstSeenAt      DateTime?
+  lastSeenAt       DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  clan       Clan                    @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  planet     SiriusPlanet?           @relation(fields: [planetId], references: [id], onDelete: SetNull)
+  appearance SiriusPlanetAppearance? @relation(fields: [appearanceId], references: [id], onDelete: SetNull)
+  blueprint  Blueprint?              @relation(fields: [blueprintId], references: [id], onDelete: SetNull)
+  evidences  SiriusDropEvidence[]
+
+  @@index([clanId, dropAt])
+  @@index([clanId, blueprintId])
+  @@index([planetId])
+  @@index([appearanceId])
+  @@index([blueprintId])
+  @@index([ring, slotGroup])
+  @@index([enemyType])
+  @@index([sourceType])
+}
+
+model SiriusDropEvidence {
+  id                 String           @id @default(uuid())
+  evidenceKey        String           @unique
+  dropEventId        String
+  importRunId        String?
+  sourceType         ImportSourceType
+  sourceRef          String?
+  revisionId         String?
+  revisionModifiedAt DateTime?
+  snapshotFile       String?
+  sourceSection      String?
+  rowIndex           Int?
+  columnIndex        Int?
+  seenAt             DateTime?
+  rawJson            Json?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  dropEvent SiriusDropEvent @relation(fields: [dropEventId], references: [id], onDelete: Cascade)
+  importRun ImportRun?      @relation(fields: [importRunId], references: [id], onDelete: SetNull)
+
+  @@index([dropEventId])
+  @@index([importRunId])
+  @@index([sourceType])
+  @@index([revisionId])
+  @@index([seenAt])
+}
+
+model Ship {
+  id        String  @id @default(uuid())
+  name      String  @unique
+  systemId  String?
+  className String?
+  source    String?
+
+  system       GameSystem?             @relation(fields: [systemId], references: [id], onDelete: SetNull)
+  requirements ShipRequiredBlueprint[]
+}
+
+model ShipRequiredBlueprint {
+  id            String  @id @default(uuid())
+  shipId        String
+  blueprintId   String
+  requiredParts Int?
+  notes         String?
+
+  ship      Ship      @relation(fields: [shipId], references: [id], onDelete: Cascade)
+  blueprint Blueprint @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+
+  @@unique([shipId, blueprintId])
+}
+
+model Notification {
+  id          String           @id @default(uuid())
+  userId      String
+  type        NotificationType
+  title       String
+  body        String
+  payloadJson Json?
+  readAt      DateTime?
+  createdAt   DateTime         @default(now())
+
+  user       User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries NotificationDelivery[]
+
+  @@index([userId, readAt])
+}
+
+model NotificationDelivery {
+  id             String    @id @default(uuid())
+  notificationId String
+  channel        String
+  status         String
+  target         String?
+  error          String?
+  sentAt         DateTime?
+  createdAt      DateTime  @default(now())
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@index([notificationId])
+  @@index([channel, status])
+}
+
+model NotificationPreference {
+  id                 String  @id @default(uuid())
+  userId             String  @unique
+  inAppEnabled       Boolean @default(true)
+  discordEnabled     Boolean @default(false)
+  missingBpAlerts    Boolean @default(true)
+  wantedBpAlerts     Boolean @default(true)
+  planetExpiryAlerts Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ImportRun {
+  id          String           @id @default(uuid())
+  sourceType  ImportSourceType
+  sourceUrl   String?
+  status      ImportRunStatus  @default(PENDING)
+  summaryJson Json?
+  startedById String?
+  startedAt   DateTime         @default(now())
+  finishedAt  DateTime?
+
+  siriusDropEvidences SiriusDropEvidence[]
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actorUserId String?
+  clanId      String?
+  action      String
+  entityType  String
+  entityId    String?
+  summary     String?  @db.VarChar(512)
+  beforeJson  Json?
+  afterJson   Json?
+  createdAt   DateTime @default(now())
+
+  @@index([actorUserId])
+  @@index([clanId, createdAt])
+  @@index([action])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+

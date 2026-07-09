@@ -1,0 +1,13 @@
+[
+  { "name": "Xeigos", "ring": 5, "sortOrder": 10 },
+  { "name": "Reynath", "ring": 5, "sortOrder": 20 },
+  { "name": "Nanphotra", "ring": 5, "sortOrder": 30 },
+  { "name": "Miequs", "ring": 5, "sortOrder": 40 },
+  { "name": "Habal", "ring": 5, "sortOrder": 50 },
+  { "name": "Toraryn", "ring": 5, "sortOrder": 60 },
+  { "name": "Phoussys", "ring": 5, "sortOrder": 70 },
+  { "name": "Baltra", "ring": 5, "sortOrder": 80 },
+  { "name": "Emrianid", "ring": 5, "sortOrder": 90 },
+  { "name": "Mouth of Dori", "ring": null, "sortOrder": 100 }
+]
+

@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bp_tracker}
+      POSTGRES_USER: ${POSTGRES_USER:-bp_tracker}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - bp_tracker_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bp_tracker} -d ${POSTGRES_DB:-bp_tracker}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile.prod
+    restart: always
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-bp_tracker}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bp_tracker}
+      DIRECT_DATABASE_URL: postgresql://${POSTGRES_USER:-bp_tracker}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bp_tracker}
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
+      COOKIE_NAME: bp_tracker_session
+      CORS_ORIGIN: https://bp-tracker.arcenciel.io
+      PUBLIC_BASE_URL: https://bp-tracker.arcenciel.io
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.prod
+      args:
+        VITE_GITHUB_URL: ${VITE_GITHUB_URL:-https://github.com/FallenIncursio/bp-tracker}
+        VITE_PROJECT_HOMEPAGE_URL: ${VITE_PROJECT_HOMEPAGE_URL:-https://bp-tracker.arcenciel.io}
+        VITE_APP_VERSION: ${VITE_APP_VERSION:-0.1.0}
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  bp_tracker_postgres:
