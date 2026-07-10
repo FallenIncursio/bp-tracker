@@ -2,6 +2,10 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.13 - 2026-07-10
+
+- Fixed ignored Sirius spawn windows being reopened by spawn-plan backfill and kept wanted BPs only in the roadmap Discord status.
+
 ## 0.2.12 - 2026-07-10
 
 - Deduplicated Discord wanted BP sections between roadmap and Sirius status, limited Sirius spawn windows to burst or overdue sources, and added a web action to ignore incorrect spawn windows.

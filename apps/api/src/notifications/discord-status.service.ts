@@ -116,13 +116,11 @@ const statusCopy: Record<
     wantedBlueprintsField: string
     activePlanetsField: string
     spawnWindowsField: string
-    wantedHitsField: string
     noCurrent: string
     noPlanned: string
     noRoadmapWanted: string
     noActivePlanets: string
     noSpawnWindows: string
-    noWantedHits: string
     roadmapFooter: string
     siriusFooter: string
     roadmapContentPrefix: string
@@ -147,19 +145,17 @@ const statusCopy: Record<
     roadmapTitleSuffix: 'Roadmap',
     siriusTitleSuffix: 'Sirius-Status',
     roadmapDescription: '📍 {current} aktuell · 🧭 {planned} geplant · 🎯 {wanted} Wunsch-BPs · aktualisiert {updated}.',
-    siriusDescription: '🪐 {active} aktiv · ⏳ {windows} Spawn-Fenster · 🎯 {wanted} Wunsch-Treffer · aktualisiert {updated}.',
+    siriusDescription: '🪐 {active} aktiv · ⏳ {windows} Spawn-Fenster · aktualisiert {updated}.',
     currentField: '📍 Aktuell',
     nextStationsField: '🧭 Nächste Stationen',
     wantedBlueprintsField: '🎯 Wunsch-BPs',
     activePlanetsField: '🪐 Aktive Planeten',
     spawnWindowsField: '⏳ Nächste Spawn-Fenster',
-    wantedHitsField: '⭐ Wunsch-Treffer',
     noCurrent: 'Keine aktuelle Station gesetzt.',
     noPlanned: 'Keine geplanten Stationen.',
     noRoadmapWanted: 'Keine Wunsch-BPs auf den nächsten Roadmap-Stationen.',
     noActivePlanets: 'Keine aktiven Sirius-Planeten.',
     noSpawnWindows: 'Keine offenen Spawn-Fenster.',
-    noWantedHits: 'Keine Wunsch-Treffer auf aktiven Planeten.',
     roadmapFooter: 'BP Tracker · Statuskanal ohne Pings',
     siriusFooter: 'BP Tracker · Zeiten nutzen Discord-Zeitstempel',
     roadmapContentPrefix: 'BP Tracker Status',
@@ -189,19 +185,17 @@ const statusCopy: Record<
     roadmapTitleSuffix: 'Roadmap',
     siriusTitleSuffix: 'Sirius status',
     roadmapDescription: '📍 {current} current · 🧭 {planned} planned · 🎯 {wanted} wanted BPs · updated {updated}.',
-    siriusDescription: '🪐 {active} active · ⏳ {windows} spawn windows · 🎯 {wanted} wanted hits · updated {updated}.',
+    siriusDescription: '🪐 {active} active · ⏳ {windows} spawn windows · updated {updated}.',
     currentField: '📍 Current',
     nextStationsField: '🧭 Next stations',
     wantedBlueprintsField: '🎯 Wanted BPs',
     activePlanetsField: '🪐 Active planets',
     spawnWindowsField: '⏳ Next spawn windows',
-    wantedHitsField: '⭐ Wanted hits',
     noCurrent: 'No current station set.',
     noPlanned: 'No planned stations.',
     noRoadmapWanted: 'No wanted BPs on the next roadmap stations.',
     noActivePlanets: 'No active Sirius planets.',
     noSpawnWindows: 'No open spawn windows.',
-    noWantedHits: 'No wanted hits on active planets.',
     roadmapFooter: 'BP Tracker · Status channel without pings',
     siriusFooter: 'BP Tracker · Times use Discord timestamps',
     roadmapContentPrefix: 'BP Tracker Status',
@@ -231,19 +225,17 @@ const statusCopy: Record<
     roadmapTitleSuffix: 'Ruta',
     siriusTitleSuffix: 'Estado Sirius',
     roadmapDescription: '📍 {current} actual · 🧭 {planned} planificadas · 🎯 {wanted} BPs deseados · actualizado {updated}.',
-    siriusDescription: '🪐 {active} activos · ⏳ {windows} ventanas · 🎯 {wanted} deseados · actualizado {updated}.',
+    siriusDescription: '🪐 {active} activos · ⏳ {windows} ventanas · actualizado {updated}.',
     currentField: '📍 Actual',
     nextStationsField: '🧭 Siguientes estaciones',
     wantedBlueprintsField: '🎯 BPs deseados',
     activePlanetsField: '🪐 Planetas activos',
     spawnWindowsField: '⏳ Próximas ventanas',
-    wantedHitsField: '⭐ Deseados activos',
     noCurrent: 'No hay estación actual.',
     noPlanned: 'No hay estaciones planificadas.',
     noRoadmapWanted: 'No hay BPs deseados en las siguientes estaciones.',
     noActivePlanets: 'No hay planetas Sirius activos.',
     noSpawnWindows: 'No hay ventanas de spawn abiertas.',
-    noWantedHits: 'No hay deseados en planetas activos.',
     roadmapFooter: 'BP Tracker · Canal de estado sin pings',
     siriusFooter: 'BP Tracker · Los tiempos usan marcas de tiempo de Discord',
     roadmapContentPrefix: 'Estado BP Tracker',
@@ -372,9 +364,6 @@ const appendMoreLine = (lines: string[], total: number, locale: DiscordStatusLoc
   return hidden > 0 ? [...lines, `+${hidden} ${copyFor(locale).more}`] : lines
 }
 
-const blueprintIdsForAppearances = (appearances: StatusAppearance[]) =>
-  new Set(appearances.flatMap(appearance => appearance.slots.map(slot => slot.blueprint?.id).filter((id): id is string => Boolean(id))))
-
 const relevantRoadmapAppearancesForSnapshot = (snapshot: ClanStatusSnapshot) => {
   const current = snapshot.journeyStops.find(stop => stop.status === 'CURRENT') ?? null
   const planned = snapshot.journeyStops.filter(stop => stop.status === 'PLANNED')
@@ -481,24 +470,16 @@ export const buildClanPlanetsStatusEmbed = (snapshot: ClanStatusSnapshot): Disco
     snapshot.activeAppearances.length,
     locale,
   )
-  const roadmapBlueprintIds = blueprintIdsForAppearances(relevantRoadmapAppearancesForSnapshot(snapshot))
-  const wantedLines = wantedLinesForAppearances(snapshot.activeAppearances, locale, 8, roadmapBlueprintIds)
-
   return {
     title: `${snapshot.clan.name} ${copy.siriusTitleSuffix}`,
     description: replaceTokens(copy.siriusDescription, {
       active: snapshot.activeAppearances.length,
       windows: openSpawnWindows.length,
-      wanted: wantedLines.length,
       updated: timestampFor(snapshot.generatedAt, locale, 'R'),
     }),
     color: openSpawnWindows.some(window => window.expectedAt < snapshot.generatedAt) ? colors.warning : colors.ok,
     timestamp: snapshot.generatedAt.toISOString(),
-    fields: [
-      field(copy.wantedHitsField, wantedLines, copy.noWantedHits),
-      field(copy.activePlanetsField, activeLines, copy.noActivePlanets),
-      field(copy.spawnWindowsField, spawnLines, copy.noSpawnWindows),
-    ],
+    fields: [field(copy.activePlanetsField, activeLines, copy.noActivePlanets), field(copy.spawnWindowsField, spawnLines, copy.noSpawnWindows)],
     footer: { text: copy.siriusFooter },
   }
 }

@@ -2,20 +2,14 @@ import type { Prisma, PrismaClient, SiriusAppearanceStatus, SiriusSpawnWindowSta
 
 type SpawnWindowDb = PrismaClient | Prisma.TransactionClient
 
-export type SiriusSpawnWindowDerivedStatus =
-  | 'ACTIVE_SOURCE'
-  | 'WAITING_FOR_SPAWN'
-  | 'OVERDUE'
-  | 'RESOLVED'
-  | 'CANCELLED'
+export type SiriusSpawnWindowDerivedStatus = 'ACTIVE_SOURCE' | 'WAITING_FOR_SPAWN' | 'OVERDUE' | 'RESOLVED' | 'CANCELLED'
 
 const oneDayMs = 24 * 60 * 60 * 1000
 
 export const defaultNextSpawnAt = (expiresAt: Date) => new Date(expiresAt.getTime() + oneDayMs)
 export const nextSpawnAtForRing = (ring: number, expiresAt: Date) => (ring === 5 ? defaultNextSpawnAt(expiresAt) : null)
 
-export const isValidNextSpawnAt = (expiresAt: Date, nextSpawnAt: Date | null | undefined) =>
-  !nextSpawnAt || nextSpawnAt.getTime() > expiresAt.getTime()
+export const isValidNextSpawnAt = (expiresAt: Date, nextSpawnAt: Date | null | undefined) => !nextSpawnAt || nextSpawnAt.getTime() > expiresAt.getTime()
 
 export const deriveSpawnWindowStatus = (input: {
   status: SiriusSpawnWindowStatus
@@ -78,17 +72,11 @@ export const syncSpawnWindowForAppearance = async (db: SpawnWindowDb, appearance
     return null
   }
 
-  const existing = await db.siriusSpawnWindow.findUnique({
-    where: { sourceAppearanceId: appearance.id },
-    select: { status: true },
-  })
-
   return db.siriusSpawnWindow.upsert({
     where: { sourceAppearanceId: appearance.id },
     update: {
       clanId: appearance.clanId,
       expectedAt: appearance.nextSpawnAt,
-      ...(existing?.status === 'CANCELLED' ? { status: 'PENDING' as const } : {}),
     },
     create: {
       clanId: appearance.clanId,

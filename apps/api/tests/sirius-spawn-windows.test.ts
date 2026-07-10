@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { defaultNextSpawnAt, deriveSpawnWindowStatus, isValidNextSpawnAt, nextSpawnAtForRing } from '../src/sirius/spawn-windows.js'
+import { describe, expect, it, vi } from 'vitest'
+import { defaultNextSpawnAt, deriveSpawnWindowStatus, isValidNextSpawnAt, nextSpawnAtForRing, syncSpawnWindowForAppearance } from '../src/sirius/spawn-windows.js'
 
 const now = new Date('2026-07-08T12:00:00.000Z')
 
@@ -32,7 +32,7 @@ describe('Sirius spawn windows', () => {
         sourceStatus: 'ACTIVE',
         sourceExpiresAt: new Date('2026-07-09T02:00:00.000Z'),
         now,
-      })
+      }),
     ).toBe('ACTIVE_SOURCE')
   })
 
@@ -44,7 +44,7 @@ describe('Sirius spawn windows', () => {
         sourceStatus: 'EXPIRED',
         sourceExpiresAt: new Date('2026-07-08T02:00:00.000Z'),
         now,
-      })
+      }),
     ).toBe('WAITING_FOR_SPAWN')
 
     expect(
@@ -54,7 +54,7 @@ describe('Sirius spawn windows', () => {
         sourceStatus: 'EXPIRED',
         sourceExpiresAt: new Date('2026-07-07T02:00:00.000Z'),
         now,
-      })
+      }),
     ).toBe('OVERDUE')
   })
 
@@ -66,7 +66,7 @@ describe('Sirius spawn windows', () => {
         sourceStatus: 'EXPIRED',
         sourceExpiresAt: new Date('2026-06-30T02:00:00.000Z'),
         now,
-      })
+      }),
     ).toBe('RESOLVED')
 
     expect(
@@ -76,7 +76,33 @@ describe('Sirius spawn windows', () => {
         sourceStatus: 'EXPIRED',
         sourceExpiresAt: new Date('2026-06-30T02:00:00.000Z'),
         now,
-      })
+      }),
     ).toBe('CANCELLED')
+  })
+
+  it('does not reopen cancelled windows during backfill sync', async () => {
+    const db = {
+      siriusPlanetAppearance: {
+        findUnique: vi.fn().mockResolvedValue({
+          id: 'appearance-1',
+          clanId: 'clan-1',
+          expiresAt: new Date('2026-07-10T02:00:00.000Z'),
+          nextSpawnAt: new Date('2026-07-11T02:00:00.000Z'),
+          createdById: 'user-1',
+        }),
+      },
+      siriusSpawnWindow: {
+        findUnique: vi.fn().mockResolvedValue({ status: 'CANCELLED' }),
+        upsert: vi.fn().mockResolvedValue({ id: 'spawn-1', status: 'CANCELLED' }),
+      },
+    }
+
+    await syncSpawnWindowForAppearance(db as never, 'appearance-1')
+
+    expect(db.siriusSpawnWindow.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        update: expect.not.objectContaining({ status: 'PENDING' }),
+      }),
+    )
   })
 })

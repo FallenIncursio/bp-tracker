@@ -200,15 +200,10 @@ describe('Discord status service', () => {
     })
     const siriusEmbed = discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0]
     const siriusFields = siriusEmbed.fields ?? []
-    const siriusWantedField = siriusFields.find(field => field.name.includes('Wunsch-Treffer'))
-    expect(siriusFields.map(field => field.name)).toEqual(['⭐ Wunsch-Treffer', '🪐 Aktive Planeten', '⏳ Nächste Spawn-Fenster'])
+    expect(siriusFields.map(field => field.name)).toEqual(['🪐 Aktive Planeten', '⏳ Nächste Spawn-Fenster'])
     expect(siriusEmbed).toMatchObject({
-      description: expect.stringContaining('🪐 2 aktiv · ⏳ 1 Spawn-Fenster · 🎯 1 Wunsch-Treffer'),
+      description: expect.stringContaining('🪐 2 aktiv · ⏳ 1 Spawn-Fenster'),
       fields: expect.arrayContaining([
-        expect.objectContaining({
-          name: expect.stringContaining('Wunsch-Treffer'),
-          value: expect.stringContaining('Orion Kanone'),
-        }),
         expect.objectContaining({
           name: expect.stringContaining('🪐'),
           value: expect.stringContaining('🟢 **Miequs 5R** · platzt'),
@@ -219,7 +214,7 @@ describe('Discord status service', () => {
         }),
       ]),
     })
-    expect(siriusWantedField?.value).not.toContain('Sirius Sammler')
+    expect(siriusFields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: expect.stringContaining('Wunsch') })]))
     expect(siriusFields.find(field => field.name.includes('🪐'))?.value).not.toContain('spawnt neu')
     expect(siriusFields.find(field => field.name.includes('⏳'))?.value).not.toContain('Habal')
     expect(siriusFields.find(field => field.name.includes('⏳'))?.value).not.toContain('Miequs')
@@ -260,14 +255,7 @@ describe('Discord status service', () => {
         }),
       ]),
     })
-    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: expect.stringContaining('Wanted hits'),
-          value: expect.stringContaining('Orion Cannon'),
-        }),
-      ]),
-    )
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: expect.stringContaining('Wanted') })]))
   })
 
   it('edits existing status messages and recreates deleted ones', async () => {
