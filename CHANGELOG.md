@@ -2,6 +2,12 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.9 - 2026-07-10
+
+- Removed low-value Discord status sections for recent edits and compact missing counts.
+- Added clan-level Discord status language settings for German, English, and Spanish output.
+- Improved Discord status truncation so long fields do not cut through timestamp markup.
+
 ## 0.2.8 - 2026-07-09
 
 - Moved the version details popover to the app overlay layer so it stays above Dashboard and Blueprint page content.

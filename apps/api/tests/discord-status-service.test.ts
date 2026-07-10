@@ -54,7 +54,7 @@ const appearance = {
       slotGroup: 'SLOT_18',
       enemyType: null,
       createdAt: now,
-      blueprint: { id: 'bp-1', nameDe: 'Sirius Sammler' },
+      blueprint: { id: 'bp-1', nameDe: 'Sirius Sammler', nameEn: 'Sirius Collector', translations: [] },
     },
   ],
 }
@@ -142,8 +142,13 @@ describe('Discord status service', () => {
     expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ name: 'Wunsch-Treffer', value: expect.stringContaining('<@111111111111111111>') }),
-        expect.objectContaining({ name: 'Fehlend kompakt', value: expect.stringContaining('1 fehlen') }),
       ])
+    )
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[0][1].embeds[0].fields).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'Zuletzt bearbeitet' })])
+    )
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'Fehlend kompakt' })])
     )
     expect(prismaMock.clanDiscordSettings.update).toHaveBeenCalledWith({
       where: { clanId: 'clan-1' },
@@ -153,6 +158,29 @@ describe('Discord status service', () => {
         statusLastError: null,
       }),
     })
+  })
+
+  it('uses the configured status language for status messages', async () => {
+    const { publishClanDiscordStatus } = await import('../src/notifications/discord-status.service.js')
+    configureSnapshotMocks({ statusLocale: 'en', statusRoadmapMessageId: null, statusPlanetsMessageId: null })
+    discordMock.sendDiscordChannelMessage
+      .mockResolvedValueOnce({ ok: true, messageId: 'roadmap-message' })
+      .mockResolvedValueOnce({ ok: true, messageId: 'planets-message' })
+    discordMock.pinDiscordChannelMessage.mockResolvedValue({ ok: true })
+
+    await publishClanDiscordStatus('clan-1')
+
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[0][1].embeds[0]).toMatchObject({
+      description: expect.stringContaining('Updated'),
+      fields: expect.arrayContaining([
+        expect.objectContaining({ name: 'Current' }),
+        expect.objectContaining({ name: 'Next stations' }),
+        expect.objectContaining({ name: 'Wanted BPs', value: expect.stringContaining('Sirius Collector') }),
+      ]),
+    })
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'Wanted hits', value: expect.stringContaining('Sirius Collector') })])
+    )
   })
 
   it('edits existing status messages and recreates deleted ones', async () => {

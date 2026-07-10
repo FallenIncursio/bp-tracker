@@ -8,6 +8,7 @@ import BrandDiscordIcon from '../components/BrandDiscordIcon.vue'
 import { api } from '../services/api'
 import { useAuth } from '../composables/useAuth'
 import { useClans } from '../composables/useClans'
+import { localeOptions } from '../i18n'
 import { formatDateTime } from '../utils/labels'
 
 type Member = {
@@ -34,6 +35,7 @@ type ClanDiscordSettings = {
   statusRoadmapMessageId: string
   statusPlanetsMessageId: string
   statusPinMessages: boolean
+  statusLocale: string
   statusLastPublishedAt: string | null
   statusLastError: string | null
 }
@@ -91,6 +93,7 @@ const discordSettings = ref<ClanDiscordSettings>({
   statusRoadmapMessageId: '',
   statusPlanetsMessageId: '',
   statusPinMessages: true,
+  statusLocale: 'de',
   statusLastPublishedAt: null,
   statusLastError: null,
 })
@@ -144,6 +147,7 @@ const normalizeDiscordSettings = (settings: {
   statusRoadmapMessageId: string | null
   statusPlanetsMessageId: string | null
   statusPinMessages: boolean
+  statusLocale?: string | null
   statusLastPublishedAt: string | null
   statusLastError: string | null
 }): ClanDiscordSettings => ({
@@ -158,6 +162,7 @@ const normalizeDiscordSettings = (settings: {
   statusRoadmapMessageId: settings.statusRoadmapMessageId ?? '',
   statusPlanetsMessageId: settings.statusPlanetsMessageId ?? '',
   statusPinMessages: settings.statusPinMessages,
+  statusLocale: settings.statusLocale ?? 'de',
   statusLastPublishedAt: settings.statusLastPublishedAt,
   statusLastError: settings.statusLastError,
 })
@@ -612,6 +617,14 @@ watch(
                 name="discordStatusChannelName"
                 :placeholder="t('admin.discordStatusChannelPlaceholder')"
               />
+            </label>
+            <label>
+              {{ t('admin.discordStatusLanguage') }}
+              <select id="discord-status-locale" v-model="discordSettings.statusLocale" name="discordStatusLocale">
+                <option v-for="option in localeOptions" :key="option.value" :value="option.value">
+                  {{ option.nativeName }}
+                </option>
+              </select>
             </label>
           </div>
           <label class="toggle-row discord-pin-toggle">

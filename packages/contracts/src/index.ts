@@ -12,6 +12,7 @@ export const siriusSpawnWindowStatuses = ['PENDING', 'RESOLVED', 'CANCELLED'] as
 export const clanJourneyStopStatuses = ['PLANNED', 'CURRENT', 'COMPLETED', 'SKIPPED', 'CANCELLED'] as const
 export const clanJourneyStopCertainties = ['CONFIRMED', 'TENTATIVE'] as const
 export const blueprintRarities = ['STANDARD', 'RARE', 'ANCIENT', 'EVENT', 'CONQUEST', 'SPECIAL', 'COSMETIC'] as const
+export const discordStatusLocales = ['de', 'en', 'es'] as const
 
 export type GlobalRole = (typeof globalRoles)[number]
 export type ClanRole = (typeof clanRoles)[number]
@@ -25,6 +26,7 @@ export type SiriusSpawnWindowStatus = (typeof siriusSpawnWindowStatuses)[number]
 export type ClanJourneyStopStatus = (typeof clanJourneyStopStatuses)[number]
 export type ClanJourneyStopCertainty = (typeof clanJourneyStopCertainties)[number]
 export type BlueprintRarity = (typeof blueprintRarities)[number]
+export type DiscordStatusLocale = (typeof discordStatusLocales)[number]
 
 export const loginSchema = z.object({
   username: z.string().min(2).max(80),
@@ -82,6 +84,7 @@ export const updateClanDiscordSettingsSchema = z.object({
   enabled: z.boolean(),
   statusEnabled: z.boolean().default(false),
   statusPinMessages: z.boolean().default(true),
+  statusLocale: z.enum(discordStatusLocales).default('de'),
   guildId: z
     .string()
     .trim()
@@ -229,6 +232,7 @@ export type ClanDiscordSettingsDto = {
   statusRoadmapMessageId: string | null
   statusPlanetsMessageId: string | null
   statusPinMessages: boolean
+  statusLocale: DiscordStatusLocale
   statusLastPublishedAt: string | null
   statusLastError: string | null
 }

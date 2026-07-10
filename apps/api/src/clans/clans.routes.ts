@@ -3,6 +3,7 @@ import { z } from 'zod'
 import {
   approveMembershipSchema,
   createClanSchema,
+  discordStatusLocales,
   publishClanDiscordStatusSchema,
   updateClanDiscordSettingsSchema,
   updateMembershipRoleSchema,
@@ -28,6 +29,9 @@ import { serializeClanMember } from './clan-member.dto.js'
 
 export const clansRouter = Router()
 
+const normalizeDiscordStatusLocale = (value: string | null | undefined): ClanDiscordSettingsDto['statusLocale'] =>
+  discordStatusLocales.includes(value as ClanDiscordSettingsDto['statusLocale']) ? (value as ClanDiscordSettingsDto['statusLocale']) : 'de'
+
 const serializeDiscordSettings = (
   clanId: string,
   settings?: {
@@ -41,6 +45,7 @@ const serializeDiscordSettings = (
     statusRoadmapMessageId: string | null
     statusPlanetsMessageId: string | null
     statusPinMessages: boolean
+    statusLocale: string | null
     statusLastPublishedAt: Date | string | null
     statusLastError: string | null
   } | null,
@@ -56,6 +61,7 @@ const serializeDiscordSettings = (
   statusRoadmapMessageId: settings?.statusRoadmapMessageId ?? null,
   statusPlanetsMessageId: settings?.statusPlanetsMessageId ?? null,
   statusPinMessages: settings?.statusPinMessages ?? true,
+  statusLocale: normalizeDiscordStatusLocale(settings?.statusLocale),
   statusLastPublishedAt: settings?.statusLastPublishedAt ? new Date(settings.statusLastPublishedAt).toISOString() : null,
   statusLastError: settings?.statusLastError ?? null,
 })
@@ -218,6 +224,7 @@ clansRouter.patch(
         statusChannelId: resolvedStatus.channelId,
         statusChannelName: resolvedStatus.channelName,
         statusPinMessages: input.statusPinMessages,
+        statusLocale: input.statusLocale,
         statusLastError: input.statusEnabled ? undefined : null,
         updatedById: req.auth!.user.id,
       },
@@ -231,6 +238,7 @@ clansRouter.patch(
         statusChannelId: resolvedStatus.channelId,
         statusChannelName: resolvedStatus.channelName,
         statusPinMessages: input.statusPinMessages,
+        statusLocale: input.statusLocale,
         updatedById: req.auth!.user.id,
       },
     })

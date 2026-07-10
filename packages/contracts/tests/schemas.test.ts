@@ -13,6 +13,7 @@ import {
   createClanSchema,
   createClanJourneyStopSchema,
   createSiriusAppearanceSchema,
+  discordStatusLocales,
   globalRoles,
   loginSchema,
   membershipStatuses,
@@ -53,6 +54,7 @@ describe('contract constants', () => {
     expect(clanJourneyStopCertainties).toEqual(['CONFIRMED', 'TENTATIVE'])
     expect(blueprintRarities).toContain('ANCIENT')
     expect(blueprintRarities).toContain('COSMETIC')
+    expect(discordStatusLocales).toEqual(['de', 'en', 'es'])
   })
 })
 
@@ -117,11 +119,19 @@ describe('clan and membership schemas', () => {
       notificationChannelName: '#bauplaene',
       statusChannelId: '323456789012345678',
       statusChannelName: '#bp-status',
+      statusLocale: 'de',
     })
     expect(updateClanDiscordSettingsSchema.parse({ enabled: false })).toEqual({
       enabled: false,
       statusEnabled: false,
       statusPinMessages: true,
+      statusLocale: 'de',
+    })
+    expect(updateClanDiscordSettingsSchema.parse({ enabled: false, statusLocale: 'en' })).toEqual({
+      enabled: false,
+      statusEnabled: false,
+      statusPinMessages: true,
+      statusLocale: 'en',
     })
     expect(publishClanDiscordStatusSchema.parse({})).toEqual({ recreateMessages: false })
     expect(publishClanDiscordStatusSchema.parse({ recreateMessages: true })).toEqual({ recreateMessages: true })

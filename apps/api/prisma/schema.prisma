@@ -188,6 +188,7 @@ model ClanDiscordSettings {
   statusRoadmapMessageId  String?
   statusPlanetsMessageId  String?
   statusPinMessages       Boolean   @default(true)
+  statusLocale            String    @default("de")
   statusLastPublishedAt   DateTime?
   statusLastError         String?   @db.Text
   updatedById             String?
