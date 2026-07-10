@@ -158,6 +158,7 @@ const appearanceIdParam = param('appearanceId', id, 'Sirius appearance ID.')
 const slotIdParam = param('slotId', id, 'Sirius slot ID.')
 const spawnWindowIdParam = param('spawnWindowId', id, 'Sirius spawn window ID.')
 const journeyStopIdParam = param('stopId', id, 'Clan journey stop ID.')
+const accountInviteTokenParam = param('token', stringSchema(), 'One-time account invite token.')
 const clanIdQuery = param('clanId', id, 'Clan ID.', 'query')
 const includeExcludedQuery = param('includeExcluded', { type: 'boolean' }, 'Include members excluded from tracking.', 'query', false)
 const siriusScopeQuery = param('siriusScope', enumSchema(['own', 'all-ring5']), 'Sirius checker scope. Only applies when the selected system is Sirius.', 'query', false)
@@ -207,6 +208,19 @@ const schemas: Record<string, JsonSchema> = {
   SetupAdminRequest: fromZod(setupAdminSchema),
   ChangePasswordRequest: fromZod(changePasswordSchema),
   SetPasswordRequest: fromZod(setPasswordSchema),
+  AccountInviteAcceptRequest: fromZod(setPasswordSchema),
+  AccountInvitePreview: objectSchema({
+    displayName: stringSchema(),
+    clanName: nullable(stringSchema()),
+    expiresAt: dateTime,
+  }),
+  AccountInviteCreated: objectSchema({
+    userId: id,
+    displayName: stringSchema(),
+    clanName: stringSchema(),
+    claimUrl: stringSchema(),
+    expiresAt: dateTime,
+  }),
   UpdateMyProfileRequest: fromZod(updateMyProfileSchema),
   CreateClanRequest: fromZod(createClanSchema),
   UpdateMembershipRoleRequest: fromZod(updateMembershipRoleSchema),
@@ -524,6 +538,31 @@ const paths: OpenApiSpec['paths'] = {
       },
     },
   },
+  '/api/auth/invites/{token}': {
+    get: {
+      tags: ['Auth'],
+      summary: 'Preview a one-time account invite',
+      operationId: 'getAccountInvite',
+      parameters: [accountInviteTokenParam],
+      responses: {
+        '200': ok(objectSchema({ invite: ref('AccountInvitePreview') })),
+        ...errorResponses,
+      },
+    },
+  },
+  '/api/auth/invites/{token}/accept': {
+    post: {
+      tags: ['Auth'],
+      summary: 'Accept a one-time account invite and set a password',
+      operationId: 'acceptAccountInvite',
+      parameters: [accountInviteTokenParam],
+      requestBody: jsonBody(ref('AccountInviteAcceptRequest')),
+      responses: {
+        '200': ok(objectSchema({ user: ref('AuthUser') })),
+        ...errorResponses,
+      },
+    },
+  },
   '/api/auth/discord': {
     get: {
       tags: ['Auth'],
@@ -756,6 +795,21 @@ const paths: OpenApiSpec['paths'] = {
         },
       },
       'Clan MEMBER',
+    ),
+  },
+  '/api/clans/{clanId}/members/{userId}/invite': {
+    post: secured(
+      {
+        tags: ['Clans'],
+        summary: 'Create a one-time account invite for an existing clan member',
+        operationId: 'createClanMemberAccountInvite',
+        parameters: [clanIdParam, userIdParam],
+        responses: {
+          '201': ok(objectSchema({ invite: ref('AccountInviteCreated') })),
+          ...errorResponses,
+        },
+      },
+      'Clan COMMANDER',
     ),
   },
   '/api/clans/{clanId}/blueprint-overview': {

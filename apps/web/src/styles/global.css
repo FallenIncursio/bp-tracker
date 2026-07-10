@@ -456,13 +456,6 @@ button:disabled {
   scroll-margin-top: 86px;
 }
 
-.drop-editor-highlight {
-  border-color: color-mix(in srgb, var(--primary) 64%, var(--border));
-  box-shadow:
-    0 0 0 3px var(--focus-ring),
-    var(--shadow);
-}
-
 .panel-title {
   display: flex;
   align-items: center;
@@ -1164,6 +1157,17 @@ textarea {
 .password-field input {
   width: 100%;
   padding-right: 42px;
+}
+
+.claim-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.claim-summary .panel-title {
+  margin-bottom: 4px;
 }
 
 .password-toggle-button {
@@ -2369,6 +2373,21 @@ td[rowspan] {
   width: 190px;
 }
 
+.invite-cell {
+  display: grid;
+  gap: 8px;
+  min-width: 220px;
+}
+
+.invite-cell .secondary-button {
+  justify-content: center;
+}
+
+.invite-link-field {
+  min-width: 220px;
+  font-size: 0.82rem;
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -3401,6 +3420,15 @@ td[rowspan] {
   }
 
   .inline-form input {
+    width: 100%;
+  }
+
+  .invite-cell {
+    min-width: 0;
+  }
+
+  .invite-link-field {
+    min-width: 0;
     width: 100%;
   }
 

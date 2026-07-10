@@ -134,6 +134,8 @@ model User {
   updatedAt         DateTime   @updatedAt
 
   sessions          Session[]
+  accountInvites    AccountInvite[]            @relation("AccountInviteUser")
+  createdInvites    AccountInvite[]            @relation("AccountInviteCreatedBy")
   memberships       ClanMembership[]
   blueprintStatuses UserBlueprintStatus[]
   notifications     Notification[]
@@ -167,6 +169,7 @@ model Clan {
 
   memberships      ClanMembership[]
   appearances      SiriusPlanetAppearance[]
+  accountInvites   AccountInvite[]
   dropEvents       SiriusDropEvent[]
   spawnWindows     SiriusSpawnWindow[]
   journeyStops     ClanJourneyStop[]
@@ -174,6 +177,28 @@ model Clan {
   notificationHits BlueprintNotificationHit[]
 
   @@index([isPublic])
+}
+
+model AccountInvite {
+  id          String    @id @default(uuid())
+  userId      String
+  clanId      String?
+  tokenHash   String    @unique
+  type        String    @default("ACCOUNT_CLAIM")
+  expiresAt   DateTime
+  usedAt      DateTime?
+  revokedAt   DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
+
+  user      User  @relation("AccountInviteUser", fields: [userId], references: [id], onDelete: Cascade)
+  clan      Clan? @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  createdBy User? @relation("AccountInviteCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([clanId])
+  @@index([expiresAt])
+  @@index([usedAt, revokedAt])
 }
 
 model ClanDiscordSettings {

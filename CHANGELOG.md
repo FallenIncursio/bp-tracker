@@ -2,6 +2,12 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.15 - 2026-07-10
+
+- Added one-time account invite links so existing imported clan members can claim their account without losing BP data.
+- Added a public claim page that sets the member password and signs the user in.
+- Removed the misleading visual highlight from the Dashboard-to-Sirius edit shortcut while keeping the direct jump.
+
 ## 0.2.14 - 2026-07-10
 
 - Added the Lieutenant clan role for Sirius planet, drop and roadmap editing without member-management access.

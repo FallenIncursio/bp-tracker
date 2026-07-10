@@ -6,6 +6,7 @@ import CheckerPage from '../pages/CheckerPage.vue'
 import OverviewPage from '../pages/OverviewPage.vue'
 import AdminPage from '../pages/AdminPage.vue'
 import AccountPage from '../pages/AccountPage.vue'
+import ClaimPage from '../pages/ClaimPage.vue'
 import HelpPage from '../pages/HelpPage.vue'
 import AboutPage from '../pages/AboutPage.vue'
 import AuthPage from '../pages/AuthPage.vue'
@@ -20,6 +21,7 @@ const router = createRouter({
     { path: '/overview', component: OverviewPage },
     { path: '/login', component: AuthPage, props: { initialMode: 'login' } },
     { path: '/register', component: AuthPage, props: { initialMode: 'register' } },
+    { path: '/claim/:token', component: ClaimPage },
     { path: '/admin', component: AdminPage },
     { path: '/account', component: AccountPage },
     { path: '/help', component: HelpPage },

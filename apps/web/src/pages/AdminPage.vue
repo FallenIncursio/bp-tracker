@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Ban, Check, History, Pin, Plus, RefreshCw, RotateCcw, Save, Search, Send, X } from '@lucide/vue'
+import { Ban, Check, Copy, History, Link2, Pin, Plus, RefreshCw, RotateCcw, Save, Search, Send, X } from '@lucide/vue'
 import AuthPanel from '../components/AuthPanel.vue'
 import AppTooltip from '../components/AppTooltip.vue'
 import BrandDiscordIcon from '../components/BrandDiscordIcon.vue'
@@ -77,10 +77,15 @@ const registrations = ref<
 >([])
 const clanForm = ref({ name: '', slug: '' })
 const passwordResets = ref<Record<string, string>>({})
+const accountInviteLinks = ref<Record<string, string>>({})
+const accountInviteExpires = ref<Record<string, string>>({})
+const accountInviteBusy = ref<Record<string, boolean>>({})
 const trackingReasons = ref<Record<string, string>>({})
 const trackingBusy = ref<Record<string, boolean>>({})
 const passwordResetMessage = ref('')
 const passwordResetError = ref('')
+const accountInviteMessage = ref('')
+const accountInviteError = ref('')
 const discordSettings = ref<ClanDiscordSettings>({
   clanId: '',
   guildId: '',
@@ -177,6 +182,8 @@ const resetDiscordChannels = () => {
   discordChannelsAvailable.value = false
   discordChannelsError.value = ''
 }
+
+const accountInviteExpiresLabel = (member: Member) => dateTime(accountInviteExpires.value[member.userId])
 
 const syncDiscordChannelNames = () => {
   if (selectedNotificationDiscordChannel.value) {
@@ -408,6 +415,41 @@ const resetPassword = async (member: Member) => {
     })
   } catch (err) {
     passwordResetError.value = err instanceof Error ? err.message : t('admin.passwordFailed')
+  }
+}
+
+const createAccountInvite = async (member: Member) => {
+  if (!selectedClanId.value) return
+  accountInviteMessage.value = ''
+  accountInviteError.value = ''
+  accountInviteBusy.value = { ...accountInviteBusy.value, [member.userId]: true }
+  try {
+    const response = await api.post<{
+      invite: {
+        claimUrl: string
+        expiresAt: string
+      }
+    }>(`/clans/${selectedClanId.value}/members/${member.userId}/invite`)
+    accountInviteLinks.value = { ...accountInviteLinks.value, [member.userId]: response.invite.claimUrl }
+    accountInviteExpires.value = { ...accountInviteExpires.value, [member.userId]: response.invite.expiresAt }
+    accountInviteMessage.value = t('admin.accountInviteCreated', { name: member.displayName })
+  } catch (err) {
+    accountInviteError.value = err instanceof Error ? err.message : t('admin.accountInviteFailed')
+  } finally {
+    accountInviteBusy.value = { ...accountInviteBusy.value, [member.userId]: false }
+  }
+}
+
+const copyAccountInvite = async (member: Member) => {
+  const link = accountInviteLinks.value[member.userId]
+  if (!link) return
+  accountInviteMessage.value = ''
+  accountInviteError.value = ''
+  try {
+    await navigator.clipboard.writeText(link)
+    accountInviteMessage.value = t('admin.accountInviteCopied', { name: member.displayName })
+  } catch {
+    accountInviteError.value = t('admin.accountInviteCopyFailed')
   }
 }
 
@@ -659,6 +701,12 @@ watch(
       <p v-if="passwordResetError" class="error-text">
         {{ passwordResetError }}
       </p>
+      <p v-if="accountInviteMessage" class="success-text">
+        {{ accountInviteMessage }}
+      </p>
+      <p v-if="accountInviteError" class="error-text">
+        {{ accountInviteError }}
+      </p>
       <div class="table-wrap" tabindex="0">
         <table>
           <thead>
@@ -668,6 +716,7 @@ watch(
               <th>{{ t('admin.status') }}</th>
               <th>{{ t('admin.role') }}</th>
               <th>{{ t('admin.tracking') }}</th>
+              <th v-if="canManageSelectedClan">{{ t('admin.accountInvite') }}</th>
               <th v-if="isAdmin">{{ t('admin.password') }}</th>
             </tr>
           </thead>
@@ -719,6 +768,27 @@ watch(
                       <Check :size="16" /> {{ t('admin.includeInTracking') }}
                     </button>
                   </div>
+                </div>
+              </td>
+              <td v-if="canManageSelectedClan">
+                <div class="invite-cell">
+                  <button type="button" class="secondary-button" :disabled="accountInviteBusy[member.userId]" @click="createAccountInvite(member)">
+                    <Link2 :size="16" /> {{ t('admin.createAccountInvite') }}
+                  </button>
+                  <template v-if="accountInviteLinks[member.userId]">
+                    <button type="button" class="secondary-button" @click="copyAccountInvite(member)">
+                      <Copy :size="16" /> {{ t('admin.copyAccountInvite') }}
+                    </button>
+                    <input
+                      :id="`member-invite-${member.userId}`"
+                      class="invite-link-field"
+                      :name="`memberInvite-${member.userId}`"
+                      :value="accountInviteLinks[member.userId]"
+                      readonly
+                      @focus="($event.target as HTMLInputElement).select()"
+                    />
+                    <span class="muted">{{ t('admin.accountInviteExpires', { date: accountInviteExpiresLabel(member) }) }}</span>
+                  </template>
                 </div>
               </td>
               <td v-if="isAdmin">

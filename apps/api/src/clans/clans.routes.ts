@@ -11,10 +11,12 @@ import {
   type ClanDiscordSettingsDto,
   type DiscordGuildChannelDto,
 } from '@bp-tracker/contracts'
-import type { BlueprintSlotGroup, BlueprintStatus, Prisma } from '../generated/prisma/client.js'
+import type { BlueprintSlotGroup, BlueprintStatus, ClanRole, Prisma } from '../generated/prisma/client.js'
 import { prisma } from '../utils/prisma.js'
 import { asyncHandler, HttpError, routeParam } from '../utils/http.js'
 import { canSetClanRole, getActiveClanRole, hasClanRole, requireAdmin, requireClanRole, requireUser } from '../auth/auth.middleware.js'
+import { roleRank } from '../auth/roles.js'
+import { createAccountInvite } from '../auth/account-invites.js'
 import { blueprintSummaryInclude, serializeBlueprintSummary } from '../blueprints/blueprint.dto.js'
 import { env } from '../utils/env.js'
 import { formatDiscordChannelName, getDiscordChannel, listDiscordGuildChannels, sendDiscordChannelMessage, type DiscordGuildChannel } from '../notifications/discord.js'
@@ -27,6 +29,12 @@ export const clansRouter = Router()
 
 const normalizeDiscordStatusLocale = (value: string | null | undefined): ClanDiscordSettingsDto['statusLocale'] =>
   discordStatusLocales.includes(value as ClanDiscordSettingsDto['statusLocale']) ? (value as ClanDiscordSettingsDto['statusLocale']) : 'de'
+
+const canInviteMemberAccount = (actorRole: ClanRole | 'ADMIN' | null, targetRole: ClanRole, targetGlobalRole: 'USER' | 'ADMIN') => {
+  if (actorRole === 'ADMIN') return true
+  if (!actorRole || targetGlobalRole === 'ADMIN') return false
+  return roleRank[actorRole] > roleRank[targetRole]
+}
 
 const serializeDiscordSettings = (
   clanId: string,
@@ -435,6 +443,67 @@ clansRouter.get(
 
     res.json({
       members: memberships.map(membership => serializeClanMember(membership, canManage)),
+    })
+  }),
+)
+
+clansRouter.post(
+  '/:clanId/members/:userId/invite',
+  requireClanRole('COMMANDER'),
+  asyncHandler(async (req, res) => {
+    const clanId = routeParam(req, 'clanId')
+    const userId = routeParam(req, 'userId')
+    const actorRole = getActiveClanRole(req, clanId)
+    const membership = await prisma.clanMembership.findUnique({
+      where: { clanId_userId: { clanId, userId } },
+      include: {
+        clan: { select: { id: true, name: true } },
+        user: { select: { id: true, displayName: true, username: true, globalRole: true, isActive: true } },
+      },
+    })
+
+    if (!membership) {
+      throw new HttpError(404, 'Clan membership not found.')
+    }
+    if (membership.status !== 'ACTIVE') {
+      throw new HttpError(409, 'Account invites can only be created for active clan members.')
+    }
+    if (!membership.user.isActive) {
+      throw new HttpError(409, 'Cannot invite an inactive user.')
+    }
+    if (!canInviteMemberAccount(actorRole, membership.role, membership.user.globalRole)) {
+      throw new HttpError(403, 'You cannot create an invite for this member.')
+    }
+
+    const invite = await createAccountInvite({
+      userId: membership.userId,
+      clanId: membership.clanId,
+      createdById: req.auth!.user.id,
+    })
+
+    await logAudit({
+      req,
+      clanId,
+      action: 'account_invite.created',
+      entityType: 'AccountInvite',
+      entityId: invite.id,
+      after: {
+        userId: membership.userId,
+        displayName: membership.user.displayName,
+        username: membership.user.username,
+        expiresAt: invite.expiresAt,
+      },
+      summary: `Account invite created for ${membership.user.displayName}.`,
+    })
+
+    res.status(201).json({
+      invite: {
+        userId: membership.userId,
+        displayName: membership.user.displayName,
+        clanName: membership.clan.name,
+        claimUrl: invite.claimUrl,
+        expiresAt: invite.expiresAt,
+      },
     })
   }),
 )

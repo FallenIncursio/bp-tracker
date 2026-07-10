@@ -30,6 +30,10 @@ import {
   type DiscordAuthMode,
   type DiscordUserProfile,
 } from "./discord.js";
+import {
+  hashAccountInviteToken,
+  isAccountInviteUsable,
+} from "./account-invites.js";
 
 export const authRouter = Router();
 
@@ -427,6 +431,109 @@ authRouter.post(
     const session = await createSession(user.id);
     setSessionCookie(res, session.token, session.expiresAt);
     res.json({ user: await serializeAuthUser(user.id) });
+  }),
+);
+
+authRouter.get(
+  "/invites/:token",
+  asyncHandler(async (req, res) => {
+    const token = queryString(req.params.token);
+    if (!token) {
+      throw new HttpError(404, "Account invite not found.");
+    }
+
+    const invite = await prisma.accountInvite.findUnique({
+      where: { tokenHash: hashAccountInviteToken(token) },
+      include: {
+        user: { select: { displayName: true, isActive: true } },
+        clan: { select: { name: true } },
+      },
+    });
+
+    if (!invite || !invite.user.isActive || !isAccountInviteUsable(invite)) {
+      throw new HttpError(404, "Account invite not found or expired.");
+    }
+
+    res.json({
+      invite: {
+        displayName: invite.user.displayName,
+        clanName: invite.clan?.name ?? null,
+        expiresAt: invite.expiresAt,
+      },
+    });
+  }),
+);
+
+authRouter.post(
+  "/invites/:token/accept",
+  asyncHandler(async (req, res) => {
+    const token = queryString(req.params.token);
+    if (!token) {
+      throw new HttpError(404, "Account invite not found.");
+    }
+
+    const input = setPasswordSchema.parse(req.body);
+    const tokenHash = hashAccountInviteToken(token);
+    const invite = await prisma.accountInvite.findUnique({
+      where: { tokenHash },
+      include: { user: true },
+    });
+
+    if (!invite || !invite.user.isActive || !isAccountInviteUsable(invite)) {
+      throw new HttpError(404, "Account invite not found or expired.");
+    }
+
+    const now = new Date();
+    const passwordHash = await bcrypt.hash(input.newPassword, 12);
+    const claimed = await prisma.$transaction(async (tx) => {
+      const updatedInvite = await tx.accountInvite.updateMany({
+        where: {
+          id: invite.id,
+          usedAt: null,
+          revokedAt: null,
+          expiresAt: { gt: now },
+        },
+        data: { usedAt: now },
+      });
+      if (updatedInvite.count !== 1) {
+        throw new HttpError(404, "Account invite not found or expired.");
+      }
+
+      const user = await tx.user.update({
+        where: { id: invite.userId },
+        data: {
+          passwordHash,
+          notificationPrefs: {
+            upsert: {
+              create: {},
+              update: {},
+            },
+          },
+        },
+      });
+
+      await tx.session.updateMany({
+        where: { userId: user.id, revokedAt: null },
+        data: { revokedAt: now },
+      });
+
+      await tx.auditLog.create({
+        data: {
+          actorUserId: user.id,
+          clanId: invite.clanId,
+          action: "account_invite.accepted",
+          entityType: "AccountInvite",
+          entityId: invite.id,
+          summary: "Account invite accepted.",
+        },
+      });
+
+      return user;
+    });
+
+    const session = await createSession(claimed.id);
+    setSessionCookie(res, session.token, session.expiresAt);
+    res.json({ user: await serializeAuthUser(claimed.id) });
   }),
 );
 

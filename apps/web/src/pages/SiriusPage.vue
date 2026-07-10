@@ -162,7 +162,6 @@ const loading = ref(false)
 const saveSlotsBusy = ref(false)
 const timerRefreshQueued = ref(false)
 const isMobileLayout = ref(false)
-const dropEditorHighlighted = ref(false)
 const ringOptions = [1, 2, 3, 4, 5] as const
 const enemyOptions = ['SORIS', 'AMARNA', 'GIZA'] as const
 const resourcePartTemplatesByRing: Record<number, number[]> = {
@@ -180,7 +179,6 @@ const partsRequiredBySlotGroup: Record<string, number | null> = {
   RESOURCE: null,
 }
 let mobileLayoutQuery: MediaQueryList | null = null
-let dropEditorHighlightTimer: number | null = null
 
 const selectedAppearance = computed(() => appearances.value.find(appearance => appearance.id === selectedAppearanceId.value) ?? null)
 const selectedRing = computed(() => selectedAppearance.value?.ring ?? appearanceForm.value.ring)
@@ -346,12 +344,6 @@ const scrollDropEditorIntoView = async () => {
   if (!canEditSelectedClan.value) return
   await nextTick()
   document.getElementById('sirius-drop-editor')?.scrollIntoView({ block: 'start', behavior: 'smooth' })
-  dropEditorHighlighted.value = true
-  if (dropEditorHighlightTimer) window.clearTimeout(dropEditorHighlightTimer)
-  dropEditorHighlightTimer = window.setTimeout(() => {
-    dropEditorHighlighted.value = false
-    dropEditorHighlightTimer = null
-  }, 1400)
 }
 
 const applyRouteDropFocus = async () => {
@@ -715,7 +707,6 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   document.removeEventListener('pointerdown', handleJourneyActionPointerDown)
   document.removeEventListener('keydown', handleJourneyActionKeydown)
-  if (dropEditorHighlightTimer) window.clearTimeout(dropEditorHighlightTimer)
   mobileLayoutQuery?.removeEventListener('change', updateMobileLayout)
   mobileLayoutQuery = null
 })
@@ -773,7 +764,7 @@ watch(
     </div>
 
     <div v-if="canEditSelectedClan" class="grid-2">
-      <section id="sirius-drop-editor" class="panel drop-editor-panel" :class="{ 'drop-editor-highlight': dropEditorHighlighted }">
+      <section id="sirius-drop-editor" class="panel drop-editor-panel">
         <h2 class="panel-title">{{ t('sirius.addPlanet') }}</h2>
         <div v-if="resolvingSpawnWindow" class="linked-notice">
           <div>
