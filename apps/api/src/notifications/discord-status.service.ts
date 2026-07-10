@@ -100,8 +100,10 @@ const statusCopy: Record<
     timeOpen: string
     tentative: string
     bursts: string
+    expired: string
     newSpawn: string
     expected: string
+    overdue: string
     capturedAs: string
     roadmapTitleSuffix: string
     siriusTitleSuffix: string
@@ -135,8 +137,10 @@ const statusCopy: Record<
     timeOpen: 'Zeit noch offen',
     tentative: 'unsicher',
     bursts: 'platzt',
-    newSpawn: 'neu',
+    expired: 'geplatzt',
+    newSpawn: 'spawnt neu',
     expected: 'erwartet',
+    overdue: 'überfällig',
     capturedAs: 'erfasst als',
     roadmapTitleSuffix: 'Roadmap',
     siriusTitleSuffix: 'Sirius-Status',
@@ -146,7 +150,7 @@ const statusCopy: Record<
     nextStationsField: '🧭 Nächste Stationen',
     wantedBlueprintsField: '🎯 Wunsch-BPs',
     activePlanetsField: '🪐 Aktive Planeten',
-    spawnWindowsField: '⏳ Spawn-Fenster',
+    spawnWindowsField: '⏳ Nächste Spawn-Fenster',
     wantedHitsField: '⭐ Wunsch-Treffer',
     noCurrent: 'Keine aktuelle Station gesetzt.',
     noPlanned: 'Keine geplanten Stationen.',
@@ -175,8 +179,10 @@ const statusCopy: Record<
     timeOpen: 'Time still open',
     tentative: 'tentative',
     bursts: 'expires',
-    newSpawn: 'new',
+    expired: 'expired',
+    newSpawn: 'respawns',
     expected: 'expected',
+    overdue: 'overdue',
     capturedAs: 'captured as',
     roadmapTitleSuffix: 'Roadmap',
     siriusTitleSuffix: 'Sirius status',
@@ -186,7 +192,7 @@ const statusCopy: Record<
     nextStationsField: '🧭 Next stations',
     wantedBlueprintsField: '🎯 Wanted BPs',
     activePlanetsField: '🪐 Active planets',
-    spawnWindowsField: '⏳ Spawn windows',
+    spawnWindowsField: '⏳ Next spawn windows',
     wantedHitsField: '⭐ Wanted hits',
     noCurrent: 'No current station set.',
     noPlanned: 'No planned stations.',
@@ -215,8 +221,10 @@ const statusCopy: Record<
     timeOpen: 'Hora aún abierta',
     tentative: 'tentativo',
     bursts: 'expira',
-    newSpawn: 'nuevo',
+    expired: 'expiró',
+    newSpawn: 'reaparece',
     expected: 'esperado',
+    overdue: 'vencida',
     capturedAs: 'registrado como',
     roadmapTitleSuffix: 'Ruta',
     siriusTitleSuffix: 'Estado Sirius',
@@ -226,7 +234,7 @@ const statusCopy: Record<
     nextStationsField: '🧭 Siguientes estaciones',
     wantedBlueprintsField: '🎯 BPs deseados',
     activePlanetsField: '🪐 Planetas activos',
-    spawnWindowsField: '⏳ Ventanas de spawn',
+    spawnWindowsField: '⏳ Próximas ventanas',
     wantedHitsField: '⭐ Deseados activos',
     noCurrent: 'No hay estación actual.',
     noPlanned: 'No hay estaciones planificadas.',
@@ -317,6 +325,8 @@ const formatPlanetTitle = (planetName: string | null, ring: number, locale: Disc
 
 const compactPlanetTitle = (appearance: StatusAppearance, locale: DiscordStatusLocale) => `${appearance.planetName ?? copyFor(locale).unknownPlanet} ${appearance.ring}. Ring`
 
+const shortPlanetTitle = (appearance: Pick<StatusAppearance, 'planetName' | 'ring'>, locale: DiscordStatusLocale) => `${appearance.planetName ?? copyFor(locale).unknownPlanet} ${appearance.ring}R`
+
 const expiryIconFor = (expiresAt: Date, generatedAt: Date) => {
   const hoursLeft = (expiresAt.getTime() - generatedAt.getTime()) / 3_600_000
   if (hoursLeft <= 0) return '🔴'
@@ -341,19 +351,23 @@ const formatStopLine = (stop: StatusJourneyStop, locale: DiscordStatusLocale) =>
   return `🪐 **${title}**\n${stopStatusIcon(stop)} ${copy.statuses[stop.status] ?? stop.status.toLowerCase()}${stop.certainty === 'TENTATIVE' ? ` · ${copy.tentative}` : ''}\n${suffix}`
 }
 
-const formatAppearanceLine = (appearance: StatusAppearance, locale: DiscordStatusLocale, generatedAt: Date) => {
+const formatCompactAppearanceLine = (appearance: StatusAppearance, locale: DiscordStatusLocale, generatedAt: Date) => {
   const copy = copyFor(locale)
-  const nextSpawn = appearance.nextSpawnAt ? `\n🔁 ${copy.newSpawn} ${timestampFor(appearance.nextSpawnAt, locale, 'f')} · ${timestampFor(appearance.nextSpawnAt, locale, 'R')}` : ''
-  return `🪐 **${formatPlanetTitle(appearance.planetName, appearance.ring, locale)}**\n${expiryIconFor(
-    appearance.expiresAt,
-    generatedAt,
-  )} ${copy.bursts} ${timestampFor(appearance.expiresAt, locale, 'f')} · ${timestampFor(appearance.expiresAt, locale, 'R')}${nextSpawn}`
+  const hasExpired = appearance.expiresAt <= generatedAt
+  const expiryLabel = hasExpired ? copy.expired : copy.bursts
+  const nextSpawn = hasExpired && appearance.nextSpawnAt ? ` · ${copy.newSpawn} ${timestampFor(appearance.nextSpawnAt, locale, 'R')}` : ''
+  return `${expiryIconFor(appearance.expiresAt, generatedAt)} **${shortPlanetTitle(appearance, locale)}** · ${expiryLabel} ${timestampFor(appearance.expiresAt, locale, 'R')}${nextSpawn}`
 }
 
 const compactUserList = (users: StatusUser[], locale: DiscordStatusLocale, limit = 8) => {
   const visible = users.slice(0, limit).map(mentionOrName)
   const rest = users.length - visible.length
   return rest > 0 ? `${visible.join(', ')} +${rest} ${copyFor(locale).more}` : visible.join(', ')
+}
+
+const appendMoreLine = (lines: string[], total: number, locale: DiscordStatusLocale) => {
+  const hidden = total - lines.length
+  return hidden > 0 ? [...lines, `+${hidden} ${copyFor(locale).more}`] : lines
 }
 
 const wantedLinesForAppearances = (appearances: StatusAppearance[], locale: DiscordStatusLocale, maxLines = 10) => {
@@ -422,32 +436,45 @@ export const buildClanRoadmapStatusEmbed = (snapshot: ClanStatusSnapshot): Disco
 export const buildClanPlanetsStatusEmbed = (snapshot: ClanStatusSnapshot): DiscordEmbedPayload => {
   const locale = snapshot.statusLocale
   const copy = copyFor(locale)
-  const spawnLines = snapshot.spawnWindows.slice(0, 8).map(window => {
-    const icon = window.resolvedPlanetName ? '✅' : window.expectedAt < snapshot.generatedAt ? '🔴' : '⏳'
-    const resolved = window.resolvedPlanetName ? `\n✅ ${copy.capturedAs} **${window.resolvedPlanetName}**` : ''
-    return `⏳ **${window.sourcePlanetName}**\n${icon} ${copy.expected} ${timestampFor(window.expectedAt, locale, 'f')} · ${timestampFor(window.expectedAt, locale, 'R')}${resolved}`
-  })
+  const openSpawnWindows = snapshot.spawnWindows
+    .filter(window => window.status === 'PENDING' && !window.resolvedPlanetName)
+    .sort((left, right) => {
+      const leftOverdue = left.expectedAt < snapshot.generatedAt ? 0 : 1
+      const rightOverdue = right.expectedAt < snapshot.generatedAt ? 0 : 1
+      return leftOverdue - rightOverdue || left.expectedAt.getTime() - right.expectedAt.getTime()
+    })
+  const spawnLines = appendMoreLine(
+    openSpawnWindows.slice(0, 5).map(window => {
+      const isOverdue = window.expectedAt < snapshot.generatedAt
+      const icon = isOverdue ? '🔴' : '⏳'
+      const label = isOverdue ? copy.overdue : copy.expected
+      return `${icon} **${window.sourcePlanetName}** · ${label} ${timestampFor(window.expectedAt, locale, 'R')}`
+    }),
+    openSpawnWindows.length,
+    locale,
+  )
 
+  const activeLines = appendMoreLine(
+    snapshot.activeAppearances.slice(0, 8).map(appearance => formatCompactAppearanceLine(appearance, locale, snapshot.generatedAt)),
+    snapshot.activeAppearances.length,
+    locale,
+  )
   const wantedLines = wantedLinesForAppearances(snapshot.activeAppearances, locale, 8)
 
   return {
     title: `${snapshot.clan.name} ${copy.siriusTitleSuffix}`,
     description: replaceTokens(copy.siriusDescription, {
       active: snapshot.activeAppearances.length,
-      windows: snapshot.spawnWindows.length,
+      windows: openSpawnWindows.length,
       wanted: wantedLines.length,
       updated: timestampFor(snapshot.generatedAt, locale, 'R'),
     }),
-    color: snapshot.spawnWindows.some(window => window.expectedAt < snapshot.generatedAt && !window.resolvedPlanetName) ? colors.warning : colors.ok,
+    color: openSpawnWindows.some(window => window.expectedAt < snapshot.generatedAt) ? colors.warning : colors.ok,
     timestamp: snapshot.generatedAt.toISOString(),
     fields: [
-      field(
-        copy.activePlanetsField,
-        snapshot.activeAppearances.slice(0, 10).map(appearance => formatAppearanceLine(appearance, locale, snapshot.generatedAt)),
-        copy.noActivePlanets,
-      ),
-      field(copy.spawnWindowsField, spawnLines, copy.noSpawnWindows),
       field(copy.wantedHitsField, wantedLines, copy.noWantedHits),
+      field(copy.activePlanetsField, activeLines, copy.noActivePlanets),
+      field(copy.spawnWindowsField, spawnLines, copy.noSpawnWindows),
     ],
     footer: { text: copy.siriusFooter },
   }
@@ -570,7 +597,7 @@ export const collectClanDiscordStatusSnapshot = async (clanId: string): Promise<
       take: 16,
     }),
     prisma.siriusSpawnWindow.findMany({
-      where: { clanId, status: { not: 'CANCELLED' } },
+      where: { clanId, status: 'PENDING' },
       include: {
         sourceAppearance: { include: { planet: true } },
         resolvedAppearance: { include: { planet: true } },

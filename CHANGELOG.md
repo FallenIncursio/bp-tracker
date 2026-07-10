@@ -2,6 +2,10 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.11 - 2026-07-10
+
+- Compact Sirius Discord status output with wanted hits first, shorter active planet rows, filtered open spawn windows, and delayed respawn text until a planet has burst.
+
 ## 0.2.10 - 2026-07-10
 
 - Improved Discord status readability with icon section titles, summary counts, structured planet lines, and wanted-hit planet context.

@@ -91,6 +91,13 @@ const configureSnapshotMocks = (settings: Record<string, unknown>) => {
   prismaMock.siriusPlanetAppearance.findMany.mockResolvedValue([appearance])
   prismaMock.siriusSpawnWindow.findMany.mockResolvedValue([
     {
+      id: 'spawn-resolved',
+      expectedAt: new Date('2026-07-07T02:00:00.000Z'),
+      status: 'RESOLVED',
+      sourceAppearance: { planet: { name: 'Habal' }, expiresAt },
+      resolvedAppearance: { planet: { name: 'Osbal' } },
+    },
+    {
       id: 'spawn-1',
       expectedAt: nextSpawnAt,
       status: 'PENDING',
@@ -157,31 +164,28 @@ describe('Discord status service', () => {
       content: 'BP Tracker Status: Aurora Fleet Roadmap',
       allowed_mentions: { parse: [] },
     })
-    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).toEqual(
-      expect.arrayContaining([
+    const siriusEmbed = discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0]
+    const siriusFields = siriusEmbed.fields ?? []
+    expect(siriusFields.map(field => field.name)).toEqual(['⭐ Wunsch-Treffer', '🪐 Aktive Planeten', '⏳ Nächste Spawn-Fenster'])
+    expect(siriusEmbed).toMatchObject({
+      description: expect.stringContaining('🪐 1 aktiv · ⏳ 1 Spawn-Fenster · 🎯 1 Wunsch-Treffer'),
+      fields: expect.arrayContaining([
         expect.objectContaining({
           name: expect.stringContaining('Wunsch-Treffer'),
           value: expect.stringContaining('<@111111111111111111>'),
         }),
-      ]),
-    )
-    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0]).toMatchObject({
-      description: expect.stringContaining('🪐 1 aktiv'),
-      fields: expect.arrayContaining([
         expect.objectContaining({
           name: expect.stringContaining('🪐'),
-          value: expect.stringContaining('🟢 platzt'),
+          value: expect.stringContaining('🟢 **Miequs 5R** · platzt'),
         }),
         expect.objectContaining({
           name: expect.stringContaining('⏳'),
-          value: expect.stringContaining('⏳ **Miequs**'),
-        }),
-        expect.objectContaining({
-          name: expect.stringContaining('⭐'),
-          value: expect.stringContaining('Miequs 5. Ring'),
+          value: expect.stringContaining('⏳ **Miequs** · erwartet'),
         }),
       ]),
     })
+    expect(siriusFields.find(field => field.name.includes('🪐'))?.value).not.toContain('spawnt neu')
+    expect(siriusFields.find(field => field.name.includes('⏳'))?.value).not.toContain('Habal')
     expect(discordMock.sendDiscordChannelMessage.mock.calls[0][1].embeds[0].fields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Zuletzt bearbeitet' })]))
     expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Fehlend kompakt' })]))
     expect(prismaMock.clanDiscordSettings.update).toHaveBeenCalledWith({
