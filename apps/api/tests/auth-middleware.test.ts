@@ -96,7 +96,13 @@ describe('auth middleware', () => {
 
     expect(getActiveClanRole(req, 'clan-1')).toBe('COMMANDER')
     expect(hasClanRole(req, 'clan-1', 'MEMBER')).toBe(true)
+    expect(hasClanRole(req, 'clan-1', 'LIEUTENANT')).toBe(true)
     expect(hasClanRole(req, 'clan-1', 'ADMIRAL')).toBe(false)
+    const lieutenantReq = makeReq({
+      auth: { user: { ...activeUser, memberships: [{ clanId: 'clan-1', role: 'LIEUTENANT', status: 'ACTIVE' }] } },
+    })
+    expect(hasClanRole(lieutenantReq, 'clan-1', 'MEMBER')).toBe(true)
+    expect(hasClanRole(lieutenantReq, 'clan-1', 'COMMANDER')).toBe(false)
     const adminReq = makeReq({ auth: { user: { ...activeUser, globalRole: 'ADMIN' } } })
     expect(getActiveClanRole(adminReq, 'clan-2')).toBe('ADMIN')
     expect(hasClanRole(adminReq, 'clan-2', 'ADMIRAL')).toBe(true)

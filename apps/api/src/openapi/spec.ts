@@ -143,13 +143,7 @@ const errorResponses = {
 
 const cookieAuth = [{ cookieAuth: [] }]
 
-const param = (
-  name: string,
-  schema: JsonSchema,
-  description: string,
-  location: 'path' | 'query' = 'path',
-  required = location === 'path',
-) => ({
+const param = (name: string, schema: JsonSchema, description: string, location: 'path' | 'query' = 'path', required = location === 'path') => ({
   name,
   in: location,
   required,
@@ -166,13 +160,7 @@ const spawnWindowIdParam = param('spawnWindowId', id, 'Sirius spawn window ID.')
 const journeyStopIdParam = param('stopId', id, 'Clan journey stop ID.')
 const clanIdQuery = param('clanId', id, 'Clan ID.', 'query')
 const includeExcludedQuery = param('includeExcluded', { type: 'boolean' }, 'Include members excluded from tracking.', 'query', false)
-const siriusScopeQuery = param(
-  'siriusScope',
-  enumSchema(['own', 'all-ring5']),
-  'Sirius checker scope. Only applies when the selected system is Sirius.',
-  'query',
-  false,
-)
+const siriusScopeQuery = param('siriusScope', enumSchema(['own', 'all-ring5']), 'Sirius checker scope. Only applies when the selected system is Sirius.', 'query', false)
 const includeSiriusResourcesQuery = param(
   'includeSiriusResources',
   { type: 'boolean' },
@@ -587,10 +575,7 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Auth'],
       summary: 'Discord OAuth callback',
       operationId: 'discordCallback',
-      parameters: [
-        param('code', stringSchema(), 'Discord OAuth authorization code.', 'query', false),
-        param('state', stringSchema(), 'Signed OAuth state.', 'query', false),
-      ],
+      parameters: [param('code', stringSchema(), 'Discord OAuth authorization code.', 'query', false), param('state', stringSchema(), 'Signed OAuth state.', 'query', false)],
       responses: {
         '302': { description: 'Redirects back to the web app.' },
         ...errorResponses,
@@ -698,10 +683,7 @@ const paths: OpenApiSpec['paths'] = {
         tags: ['Clans'],
         summary: 'List bot-visible Discord channels for a clan server',
         operationId: 'listClanDiscordChannels',
-        parameters: [
-          clanIdParam,
-          param('guildId', stringSchema(), 'Discord server ID. Falls back to stored clan settings when omitted.', 'query', false),
-        ],
+        parameters: [clanIdParam, param('guildId', stringSchema(), 'Discord server ID. Falls back to stored clan settings when omitted.', 'query', false)],
         responses: {
           '200': ok(
             objectSchema(
@@ -770,6 +752,35 @@ const paths: OpenApiSpec['paths'] = {
         parameters: [clanIdParam],
         responses: {
           '200': ok(objectSchema({ members: arrayOf(ref('ClanMember')) })),
+          ...errorResponses,
+        },
+      },
+      'Clan MEMBER',
+    ),
+  },
+  '/api/clans/{clanId}/blueprint-overview': {
+    get: secured(
+      {
+        tags: ['Clans'],
+        summary: 'List a clan-wide blueprint status overview',
+        operationId: 'listClanBlueprintOverview',
+        parameters: [
+          clanIdParam,
+          param('scope', enumSchema(['all', 'sirius-own', 'sirius-all-ring5']), 'Blueprint scope to include.', 'query', false),
+          includeExcludedQuery,
+          includeSiriusResourcesQuery,
+        ],
+        responses: {
+          '200': ok(
+            objectSchema({
+              scope: stringSchema(),
+              includeExcluded: { type: 'boolean' },
+              includeSiriusResources: { type: 'boolean' },
+              totals: looseObject('Overview totals.'),
+              blueprints: arrayOf(ref('Blueprint')),
+              rows: arrayOf(looseObject('Member blueprint overview row.')),
+            }),
+          ),
           ...errorResponses,
         },
       },
@@ -1029,10 +1040,7 @@ const paths: OpenApiSpec['paths'] = {
       tags: ['Sirius'],
       summary: 'List allowed Sirius drops for a ring and optional slot',
       operationId: 'listSiriusDropRules',
-      parameters: [
-        param('ring', { type: 'integer', minimum: 1, maximum: 5 }, 'Sirius ring.', 'query'),
-        param('slotGroup', ref('BlueprintSlotGroup'), 'Slot group filter.', 'query', false),
-      ],
+      parameters: [param('ring', { type: 'integer', minimum: 1, maximum: 5 }, 'Sirius ring.', 'query'), param('slotGroup', ref('BlueprintSlotGroup'), 'Slot group filter.', 'query', false)],
       responses: {
         '200': ok(
           objectSchema({
@@ -1079,7 +1087,7 @@ const paths: OpenApiSpec['paths'] = {
         parameters: [spawnWindowIdParam],
         responses: { '204': empty(), ...errorResponses },
       },
-      'Clan COMMANDER for the spawn window clan',
+      'Clan LIEUTENANT for the spawn window clan',
     ),
   },
   '/api/sirius/clans/{clanId}/journey': {
@@ -1108,7 +1116,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER',
+      'Clan LIEUTENANT',
     ),
   },
   '/api/sirius/clans/{clanId}/journey/reorder': {
@@ -1124,7 +1132,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER',
+      'Clan LIEUTENANT',
     ),
   },
   '/api/sirius/clans/{clanId}/history': {
@@ -1160,7 +1168,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER',
+      'Clan LIEUTENANT',
     ),
   },
   '/api/sirius/appearances/{appearanceId}': {
@@ -1180,7 +1188,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER for the appearance clan',
+      'Clan LIEUTENANT for the appearance clan',
     ),
   },
   '/api/sirius/appearances/{appearanceId}/slots': {
@@ -1196,7 +1204,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER for the appearance clan',
+      'Clan LIEUTENANT for the appearance clan',
     ),
     put: secured(
       {
@@ -1210,7 +1218,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER for the appearance clan',
+      'Clan LIEUTENANT for the appearance clan',
     ),
   },
   '/api/sirius/slots/{slotId}': {
@@ -1226,7 +1234,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER for the slot clan',
+      'Clan LIEUTENANT for the slot clan',
     ),
     delete: secured(
       {
@@ -1236,7 +1244,7 @@ const paths: OpenApiSpec['paths'] = {
         parameters: [slotIdParam],
         responses: { '204': empty(), ...errorResponses },
       },
-      'Clan COMMANDER for the slot clan',
+      'Clan LIEUTENANT for the slot clan',
     ),
   },
   '/api/sirius/journey/{stopId}': {
@@ -1252,7 +1260,7 @@ const paths: OpenApiSpec['paths'] = {
           ...errorResponses,
         },
       },
-      'Clan COMMANDER for the stop clan',
+      'Clan LIEUTENANT for the stop clan',
     ),
     delete: secured(
       {
@@ -1262,7 +1270,7 @@ const paths: OpenApiSpec['paths'] = {
         parameters: [journeyStopIdParam],
         responses: { '204': empty(), ...errorResponses },
       },
-      'Clan COMMANDER for the stop clan',
+      'Clan LIEUTENANT for the stop clan',
     ),
   },
   '/api/checker/ships': {

@@ -11,17 +11,13 @@ import {
   type ClanDiscordSettingsDto,
   type DiscordGuildChannelDto,
 } from '@bp-tracker/contracts'
+import type { BlueprintSlotGroup, BlueprintStatus, Prisma } from '../generated/prisma/client.js'
 import { prisma } from '../utils/prisma.js'
 import { asyncHandler, HttpError, routeParam } from '../utils/http.js'
 import { canSetClanRole, getActiveClanRole, hasClanRole, requireAdmin, requireClanRole, requireUser } from '../auth/auth.middleware.js'
+import { blueprintSummaryInclude, serializeBlueprintSummary } from '../blueprints/blueprint.dto.js'
 import { env } from '../utils/env.js'
-import {
-  formatDiscordChannelName,
-  getDiscordChannel,
-  listDiscordGuildChannels,
-  sendDiscordChannelMessage,
-  type DiscordGuildChannel,
-} from '../notifications/discord.js'
+import { formatDiscordChannelName, getDiscordChannel, listDiscordGuildChannels, sendDiscordChannelMessage, type DiscordGuildChannel } from '../notifications/discord.js'
 import { createNotification } from '../notifications/notification.service.js'
 import { publishClanDiscordStatus } from '../notifications/discord-status.service.js'
 import { logAudit } from '../utils/audit.js'
@@ -89,6 +85,50 @@ const discordChannelsQuerySchema = z.object({
     .optional()
     .or(z.literal('')),
 })
+
+type BlueprintOverviewScope = 'all' | 'sirius-own' | 'sirius-all-ring5'
+
+const overviewScopes = ['all', 'sirius-own', 'sirius-all-ring5'] as const
+const overviewSiriusRingFiveSystems = ['Vega', 'Antares', 'Gemini', 'Mizar', 'Sol', 'Draconis', 'Sirius'] as const
+const overviewSiriusRingFiveSlotGroups = ['SLOT_18', 'SLOT_14', 'SLOT_12', 'SLOT_5', 'SLOT_2'] satisfies BlueprintSlotGroup[]
+const overviewSiriusResourceTechTiers = ['OOLYTE', 'DOLOMYTE', 'CLAY', 'KENYTE'] as const
+
+const booleanQuery = (value: unknown) => value === 'true' || value === '1'
+const overviewScopeFromQuery = (value: unknown): BlueprintOverviewScope =>
+  typeof value === 'string' && overviewScopes.includes(value as BlueprintOverviewScope) ? (value as BlueprintOverviewScope) : 'all'
+const normalizeOverviewStatus = (status: BlueprintStatus | null | undefined) => (status === 'OWNED' || status === 'WANTED' ? status : 'MISSING')
+
+const blueprintOverviewWhere = (scope: BlueprintOverviewScope, includeSiriusResources: boolean): Prisma.BlueprintWhereInput => {
+  const base = { rarity: { not: 'COSMETIC' } } satisfies Prisma.BlueprintWhereInput
+  if (scope === 'all') return base
+
+  const ringFiveWhere =
+    scope === 'sirius-all-ring5'
+      ? ({
+          ...base,
+          system: { name: { in: [...overviewSiriusRingFiveSystems] } },
+          slotGroup: { in: [...overviewSiriusRingFiveSlotGroups] },
+        } satisfies Prisma.BlueprintWhereInput)
+      : ({
+          ...base,
+          system: { name: 'Sirius' },
+          slotGroup: { in: [...overviewSiriusRingFiveSlotGroups] },
+        } satisfies Prisma.BlueprintWhereInput)
+
+  if (!includeSiriusResources) return ringFiveWhere
+
+  return {
+    OR: [
+      ringFiveWhere,
+      {
+        ...base,
+        system: { name: 'Sirius' },
+        slotGroup: 'RESOURCE',
+        siriusTechTier: { in: [...overviewSiriusResourceTechTiers] },
+      },
+    ],
+  }
+}
 
 const resolveDiscordChannel = async (input: { guildId: string | null; channelId: string | null; channelName: string | null }) => {
   if (!input.channelId || !env.discordBotToken) {
@@ -395,6 +435,86 @@ clansRouter.get(
 
     res.json({
       members: memberships.map(membership => serializeClanMember(membership, canManage)),
+    })
+  }),
+)
+
+clansRouter.get(
+  '/:clanId/blueprint-overview',
+  requireClanRole('MEMBER'),
+  asyncHandler(async (req, res) => {
+    const clanId = routeParam(req, 'clanId')
+    const scope = overviewScopeFromQuery(req.query.scope)
+    const includeExcluded = booleanQuery(req.query.includeExcluded)
+    const includeSiriusResources = booleanQuery(req.query.includeSiriusResources)
+    const blueprintWhere = blueprintOverviewWhere(scope, includeSiriusResources)
+
+    const [memberships, blueprints] = await Promise.all([
+      prisma.clanMembership.findMany({
+        where: {
+          clanId,
+          status: 'ACTIVE',
+          ...(includeExcluded ? {} : { trackingExcluded: false }),
+        },
+        include: { user: true },
+        orderBy: { user: { displayName: 'asc' } },
+      }),
+      prisma.blueprint.findMany({
+        where: blueprintWhere,
+        include: blueprintSummaryInclude,
+        orderBy: [{ system: { sortOrder: 'asc' } }, { slotGroup: 'asc' }, { canonicalName: 'asc' }],
+      }),
+    ])
+
+    const blueprintIds = blueprints.map(blueprint => blueprint.id)
+    const userIds = memberships.map(membership => membership.userId)
+    const statuses = await prisma.userBlueprintStatus.findMany({
+      where: {
+        userId: { in: userIds },
+        blueprintId: { in: blueprintIds },
+      },
+      select: {
+        userId: true,
+        blueprintId: true,
+        status: true,
+      },
+    })
+    const statusByUserAndBlueprint = new Map(statuses.map(status => [`${status.userId}:${status.blueprintId}`, status.status]))
+    const serializedBlueprints = blueprints.map(serializeBlueprintSummary)
+
+    const rows = memberships.map(membership => {
+      const rowBlueprints = serializedBlueprints.map(blueprint => ({
+        ...blueprint,
+        blueprintId: blueprint.id,
+        status: normalizeOverviewStatus(statusByUserAndBlueprint.get(`${membership.userId}:${blueprint.id}`)),
+      }))
+
+      return {
+        userId: membership.userId,
+        displayName: membership.user.displayName,
+        role: membership.role,
+        trackingExcluded: membership.trackingExcluded,
+        trackingExcludedReason: membership.trackingExcludedReason,
+        owned: rowBlueprints.filter(blueprint => blueprint.status === 'OWNED').length,
+        missing: rowBlueprints.filter(blueprint => blueprint.status === 'MISSING').length,
+        wanted: rowBlueprints.filter(blueprint => blueprint.status === 'WANTED').length,
+        blueprints: rowBlueprints,
+      }
+    })
+
+    res.json({
+      scope,
+      includeExcluded,
+      includeSiriusResources,
+      totals: {
+        members: rows.length,
+        blueprints: serializedBlueprints.length,
+        owned: rows.reduce((sum, row) => sum + row.owned, 0),
+        missing: rows.reduce((sum, row) => sum + row.missing, 0),
+        wanted: rows.reduce((sum, row) => sum + row.wanted, 0),
+      },
+      blueprints: serializedBlueprints,
+      rows,
     })
   }),
 )

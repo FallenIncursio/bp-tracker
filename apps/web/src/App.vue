@@ -17,6 +17,7 @@ import {
   ScrollText,
   Shield,
   Sun,
+  TableProperties,
   UserCircle,
   UserPlus,
   Users,
@@ -78,6 +79,12 @@ const navLinks = computed(() =>
       visible: true,
     },
     {
+      to: '/overview',
+      label: t('nav.overview'),
+      icon: markRaw(TableProperties),
+      visible: Boolean(user.value),
+    },
+    {
       to: '/account',
       label: t('nav.account'),
       icon: markRaw(UserCircle),
@@ -96,7 +103,7 @@ const navLinks = computed(() =>
       visible: true,
     },
     { to: '/about', label: t('nav.about'), icon: markRaw(Info), visible: true },
-  ].filter((link) => link.visible),
+  ].filter(link => link.visible),
 )
 
 const updateLocale = (value: string) => {
@@ -129,13 +136,7 @@ watch(() => route.fullPath, closeMobileNav)
         <div class="mobile-header-actions">
           <label class="locale-select mobile-locale-select" :title="t('app.language')">
             <Languages :size="16" />
-            <select
-              id="app-language-mobile"
-              name="app-language-mobile"
-              :value="locale"
-              :aria-label="t('app.language')"
-              @change="updateLocale(($event.target as HTMLSelectElement).value)"
-            >
+            <select id="app-language-mobile" name="app-language-mobile" :value="locale" :aria-label="t('app.language')" @change="updateLocale(($event.target as HTMLSelectElement).value)">
               <option v-for="option in localeOptions" :key="option.value" :value="option.value">
                 {{ option.label }}
               </option>
@@ -150,13 +151,7 @@ watch(() => route.fullPath, closeMobileNav)
             <Sun v-if="isDark" :size="17" />
             <Moon v-else :size="17" />
           </button>
-          <button
-            v-if="user"
-            class="icon-button mobile-header-button"
-            :title="t('app.logout')"
-            :aria-label="t('app.logout')"
-            @click="logout"
-          >
+          <button v-if="user" class="icon-button mobile-header-button" :title="t('app.logout')" :aria-label="t('app.logout')" @click="logout">
             <LogOut :size="17" />
           </button>
           <button
@@ -174,58 +169,30 @@ watch(() => route.fullPath, closeMobileNav)
         </div>
       </div>
       <nav class="nav" :aria-label="t('app.navigation')">
-        <RouterLink v-for="link in navLinks" :key="link.to" :to="link.to">
-          <component :is="link.icon" :size="18" /> {{ link.label }}
-        </RouterLink>
+        <RouterLink v-for="link in navLinks" :key="link.to" :to="link.to"> <component :is="link.icon" :size="18" /> {{ link.label }} </RouterLink>
       </nav>
       <footer class="sidebar-footer">
-        <a :href="githubUrl" target="_blank" rel="noreferrer" :aria-label="t('app.github')">
-          <BrandGithubIcon :size="16" /> {{ t('app.github') }}
-        </a>
-        <a :href="apiDocsUrl" target="_blank" rel="noreferrer" :aria-label="t('app.apiDocs')">
-          <ScrollText :size="16" /> {{ t('app.apiDocs') }}
-        </a>
-        <a :href="kofiUrl" target="_blank" rel="noreferrer" :aria-label="t('app.kofi')">
-          <BrandKofiIcon :size="16" /> {{ t('app.kofi') }}
-        </a>
+        <a :href="githubUrl" target="_blank" rel="noreferrer" :aria-label="t('app.github')"> <BrandGithubIcon :size="16" /> {{ t('app.github') }} </a>
+        <a :href="apiDocsUrl" target="_blank" rel="noreferrer" :aria-label="t('app.apiDocs')"> <ScrollText :size="16" /> {{ t('app.apiDocs') }} </a>
+        <a :href="kofiUrl" target="_blank" rel="noreferrer" :aria-label="t('app.kofi')"> <BrandKofiIcon :size="16" /> {{ t('app.kofi') }} </a>
         <AppVersionInfo />
       </footer>
-      <button
-        v-if="mobileNavOpen"
-        class="mobile-nav-overlay"
-        type="button"
-        :aria-label="t('app.closeNavigation')"
-        @click="closeMobileNav"
-      ></button>
+      <button v-if="mobileNavOpen" class="mobile-nav-overlay" type="button" :aria-label="t('app.closeNavigation')" @click="closeMobileNav"></button>
       <Transition name="mobile-drawer">
         <div v-if="mobileNavOpen" id="mobile-nav-drawer" class="mobile-nav-drawer">
           <div v-if="!user" class="mobile-nav-auth">
-            <RouterLink class="topbar-auth-link" :to="{ path: '/login', query: authRedirectQuery }" @click="closeMobileNav">
-              <LogIn :size="16" /> {{ t('auth.login') }}
-            </RouterLink>
-            <RouterLink
-              class="topbar-auth-link topbar-auth-primary"
-              :to="{ path: '/register', query: authRedirectQuery }"
-              @click="closeMobileNav"
-            >
+            <RouterLink class="topbar-auth-link" :to="{ path: '/login', query: authRedirectQuery }" @click="closeMobileNav"> <LogIn :size="16" /> {{ t('auth.login') }} </RouterLink>
+            <RouterLink class="topbar-auth-link topbar-auth-primary" :to="{ path: '/register', query: authRedirectQuery }" @click="closeMobileNav">
               <UserPlus :size="16" /> {{ t('auth.register') }}
             </RouterLink>
           </div>
           <nav class="mobile-nav-links" :aria-label="t('app.navigation')">
-            <RouterLink v-for="link in navLinks" :key="`mobile-${link.to}`" :to="link.to" @click="closeMobileNav">
-              <component :is="link.icon" :size="18" /> {{ link.label }}
-            </RouterLink>
+            <RouterLink v-for="link in navLinks" :key="`mobile-${link.to}`" :to="link.to" @click="closeMobileNav"> <component :is="link.icon" :size="18" /> {{ link.label }} </RouterLink>
           </nav>
           <div class="mobile-nav-footer">
-            <a :href="githubUrl" target="_blank" rel="noreferrer" :aria-label="t('app.github')">
-              <BrandGithubIcon :size="16" /> {{ t('app.github') }}
-            </a>
-            <a :href="apiDocsUrl" target="_blank" rel="noreferrer" :aria-label="t('app.apiDocs')">
-              <ScrollText :size="16" /> {{ t('app.apiDocs') }}
-            </a>
-            <a :href="kofiUrl" target="_blank" rel="noreferrer" :aria-label="t('app.kofi')">
-              <BrandKofiIcon :size="16" /> {{ t('app.kofi') }}
-            </a>
+            <a :href="githubUrl" target="_blank" rel="noreferrer" :aria-label="t('app.github')"> <BrandGithubIcon :size="16" /> {{ t('app.github') }} </a>
+            <a :href="apiDocsUrl" target="_blank" rel="noreferrer" :aria-label="t('app.apiDocs')"> <ScrollText :size="16" /> {{ t('app.apiDocs') }} </a>
+            <a :href="kofiUrl" target="_blank" rel="noreferrer" :aria-label="t('app.kofi')"> <BrandKofiIcon :size="16" /> {{ t('app.kofi') }} </a>
             <AppVersionInfo />
           </div>
         </div>
@@ -237,24 +204,13 @@ watch(() => route.fullPath, closeMobileNav)
         <div class="topbar-actions">
           <label class="locale-select" :title="t('app.language')">
             <Languages :size="16" />
-            <select
-              id="app-language"
-              name="app-language"
-              :value="locale"
-              :aria-label="t('app.language')"
-              @change="updateLocale(($event.target as HTMLSelectElement).value)"
-            >
+            <select id="app-language" name="app-language" :value="locale" :aria-label="t('app.language')" @change="updateLocale(($event.target as HTMLSelectElement).value)">
               <option v-for="option in localeOptions" :key="option.value" :value="option.value">
                 {{ option.label }}
               </option>
             </select>
           </label>
-          <button
-            class="icon-button"
-            :title="isDark ? t('app.themeLight') : t('app.themeDark')"
-            :aria-label="isDark ? t('app.themeLight') : t('app.themeDark')"
-            @click="toggleTheme"
-          >
+          <button class="icon-button" :title="isDark ? t('app.themeLight') : t('app.themeDark')" :aria-label="isDark ? t('app.themeLight') : t('app.themeDark')" @click="toggleTheme">
             <Sun v-if="isDark" :size="17" />
             <Moon v-else :size="17" />
           </button>
@@ -264,12 +220,8 @@ watch(() => route.fullPath, closeMobileNav)
             <span>{{ user.displayName }}</span>
           </template>
           <template v-else>
-            <RouterLink class="topbar-auth-link" :to="{ path: '/login', query: authRedirectQuery }">
-              <LogIn :size="16" /> {{ t('auth.login') }}
-            </RouterLink>
-            <RouterLink class="topbar-auth-link topbar-auth-primary" :to="{ path: '/register', query: authRedirectQuery }">
-              <UserPlus :size="16" /> {{ t('auth.register') }}
-            </RouterLink>
+            <RouterLink class="topbar-auth-link" :to="{ path: '/login', query: authRedirectQuery }"> <LogIn :size="16" /> {{ t('auth.login') }} </RouterLink>
+            <RouterLink class="topbar-auth-link topbar-auth-primary" :to="{ path: '/register', query: authRedirectQuery }"> <UserPlus :size="16" /> {{ t('auth.register') }} </RouterLink>
           </template>
           <button v-if="user" class="icon-button" :title="t('app.logout')" :aria-label="t('app.logout')" @click="logout">
             <LogOut :size="17" />

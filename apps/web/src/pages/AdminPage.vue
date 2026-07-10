@@ -118,11 +118,11 @@ const auditBusy = ref(false)
 
 const canManageDiscordSettings = computed(() => {
   if (isAdmin.value) return true
-  return (
-    user.value?.memberships.some(
-      membership => membership.clanId === selectedClanId.value && membership.status === 'ACTIVE' && membership.role === 'ADMIRAL',
-    ) ?? false
-  )
+  return user.value?.memberships.some(membership => membership.clanId === selectedClanId.value && membership.status === 'ACTIVE' && membership.role === 'ADMIRAL') ?? false
+})
+const canAssignClanRoles = computed(() => {
+  if (isAdmin.value) return true
+  return user.value?.memberships.some(membership => membership.clanId === selectedClanId.value && membership.status === 'ACTIVE' && membership.role === 'ADMIRAL') ?? false
 })
 const pageTitle = computed(() => {
   if (isAdmin.value) return t('admin.title')
@@ -169,12 +169,8 @@ const normalizeDiscordSettings = (settings: {
 
 const discordGuildIdPattern = /^\d{17,20}$/
 const canLoadDiscordChannels = computed(() => discordGuildIdPattern.test(discordSettings.value.guildId.trim()))
-const selectedNotificationDiscordChannel = computed(() =>
-  discordChannels.value.find(channel => channel.id === discordSettings.value.notificationChannelId.trim()),
-)
-const selectedStatusDiscordChannel = computed(() =>
-  discordChannels.value.find(channel => channel.id === discordSettings.value.statusChannelId.trim()),
-)
+const selectedNotificationDiscordChannel = computed(() => discordChannels.value.find(channel => channel.id === discordSettings.value.notificationChannelId.trim()))
+const selectedStatusDiscordChannel = computed(() => discordChannels.value.find(channel => channel.id === discordSettings.value.statusChannelId.trim()))
 
 const resetDiscordChannels = () => {
   discordChannels.value = []
@@ -469,9 +465,7 @@ watch(
           {{ t('admin.slug') }}
           <input id="admin-clan-slug" v-model="clanForm.slug" name="clanSlug" :placeholder="t('admin.slugPlaceholder')" />
         </label>
-        <button class="primary-button" :disabled="!clanForm.name || !clanForm.slug">
-          <Plus :size="16" /> {{ t('app.actions.create') }}
-        </button>
+        <button class="primary-button" :disabled="!clanForm.name || !clanForm.slug"><Plus :size="16" /> {{ t('app.actions.create') }}</button>
       </form>
     </section>
 
@@ -487,22 +481,11 @@ watch(
         <div class="discord-settings-grid">
           <label>
             {{ t('admin.discordGuildId') }}
-            <input
-              id="discord-guild-id"
-              v-model="discordSettings.guildId"
-              name="discordGuildId"
-              inputmode="numeric"
-              placeholder="123456789012345678"
-            />
+            <input id="discord-guild-id" v-model="discordSettings.guildId" name="discordGuildId" inputmode="numeric" placeholder="123456789012345678" />
           </label>
           <div class="field-action">
             <span>{{ t('admin.discordChannels') }}</span>
-            <button
-              type="button"
-              class="secondary-button"
-              :disabled="discordChannelsBusy || !canLoadDiscordChannels"
-              @click="loadDiscordChannels"
-            >
+            <button type="button" class="secondary-button" :disabled="discordChannelsBusy || !canLoadDiscordChannels" @click="loadDiscordChannels">
               <RefreshCw :size="16" /> {{ t('admin.discordLoadChannels') }}
             </button>
           </div>
@@ -528,12 +511,7 @@ watch(
           <div class="discord-settings-grid">
             <label v-if="discordChannels.length > 0" class="discord-wide-field">
               {{ t('admin.discordNotificationChannel') }}
-              <select
-                id="discord-notification-channel-select"
-                v-model="discordSettings.notificationChannelId"
-                name="discordNotificationChannelSelect"
-                @change="onDiscordChannelSelect"
-              >
+              <select id="discord-notification-channel-select" v-model="discordSettings.notificationChannelId" name="discordNotificationChannelSelect" @change="onDiscordChannelSelect">
                 <option value="">{{ t('admin.discordSelectChannel') }}</option>
                 <option v-for="channel in discordChannels" :key="channel.id" :value="channel.id">
                   {{ channel.displayName }}
@@ -542,13 +520,7 @@ watch(
             </label>
             <label>
               {{ t('admin.discordChannelId') }}
-              <input
-                id="discord-notification-channel-id"
-                v-model="discordSettings.notificationChannelId"
-                name="discordNotificationChannelId"
-                inputmode="numeric"
-                placeholder="123456789012345678"
-              />
+              <input id="discord-notification-channel-id" v-model="discordSettings.notificationChannelId" name="discordNotificationChannelId" inputmode="numeric" placeholder="123456789012345678" />
             </label>
             <label>
               {{ t('admin.discordChannelName') }}
@@ -562,12 +534,7 @@ watch(
           </div>
           <p class="form-hint">{{ t('admin.discordChannelHelp') }}</p>
           <div class="form-actions-row">
-            <button
-              type="button"
-              class="secondary-button"
-              :disabled="discordTestBusy || !discordSettings.enabled || !discordSettings.notificationChannelId"
-              @click="testDiscordSettings"
-            >
+            <button type="button" class="secondary-button" :disabled="discordTestBusy || !discordSettings.enabled || !discordSettings.notificationChannelId" @click="testDiscordSettings">
               <Send :size="16" /> {{ t('admin.discordTest') }}
             </button>
           </div>
@@ -587,12 +554,7 @@ watch(
           <div class="discord-settings-grid">
             <label v-if="discordChannels.length > 0" class="discord-wide-field">
               {{ t('admin.discordStatusChannel') }}
-              <select
-                id="discord-status-channel-select"
-                v-model="discordSettings.statusChannelId"
-                name="discordStatusChannelSelect"
-                @change="onDiscordChannelSelect"
-              >
+              <select id="discord-status-channel-select" v-model="discordSettings.statusChannelId" name="discordStatusChannelSelect" @change="onDiscordChannelSelect">
                 <option value="">{{ t('admin.discordSelectChannel') }}</option>
                 <option v-for="channel in discordChannels" :key="`status-${channel.id}`" :value="channel.id">
                   {{ channel.displayName }}
@@ -601,22 +563,11 @@ watch(
             </label>
             <label>
               {{ t('admin.discordStatusChannelId') }}
-              <input
-                id="discord-status-channel-id"
-                v-model="discordSettings.statusChannelId"
-                name="discordStatusChannelId"
-                inputmode="numeric"
-                placeholder="123456789012345678"
-              />
+              <input id="discord-status-channel-id" v-model="discordSettings.statusChannelId" name="discordStatusChannelId" inputmode="numeric" placeholder="123456789012345678" />
             </label>
             <label>
               {{ t('admin.discordStatusChannelName') }}
-              <input
-                id="discord-status-channel-name"
-                v-model="discordSettings.statusChannelName"
-                name="discordStatusChannelName"
-                :placeholder="t('admin.discordStatusChannelPlaceholder')"
-              />
+              <input id="discord-status-channel-name" v-model="discordSettings.statusChannelName" name="discordStatusChannelName" :placeholder="t('admin.discordStatusChannelPlaceholder')" />
             </label>
             <label>
               {{ t('admin.discordStatusLanguage') }}
@@ -641,12 +592,7 @@ watch(
             {{ discordSettings.statusLastError }}
           </p>
           <div class="form-actions-row">
-            <button
-              type="button"
-              class="secondary-button"
-              :disabled="discordStatusBusy || !discordSettings.statusEnabled || !discordSettings.statusChannelId"
-              @click="publishDiscordStatus(false)"
-            >
+            <button type="button" class="secondary-button" :disabled="discordStatusBusy || !discordSettings.statusEnabled || !discordSettings.statusChannelId" @click="publishDiscordStatus(false)">
               <Send :size="16" /> {{ t('admin.discordStatusPublish') }}
             </button>
             <button
@@ -663,11 +609,7 @@ watch(
         <div class="form-actions-row">
           <button
             class="primary-button"
-            :disabled="
-              discordBusy ||
-              (discordSettings.enabled && !discordSettings.notificationChannelId) ||
-              (discordSettings.statusEnabled && !discordSettings.statusChannelId)
-            "
+            :disabled="discordBusy || (discordSettings.enabled && !discordSettings.notificationChannelId) || (discordSettings.statusEnabled && !discordSettings.statusChannelId)"
           >
             <Save :size="16" /> {{ t('app.actions.save') }}
           </button>
@@ -695,12 +637,8 @@ watch(
               <td>{{ registration.username }}</td>
               <td>{{ registration.email ?? '-' }}</td>
               <td class="filters">
-                <button class="secondary-button" @click="approve(registration.userId, 'MEMBER')">
-                  <Check :size="16" /> {{ enumLabel('role', 'MEMBER') }}
-                </button>
-                <button class="secondary-button" @click="reject(registration.userId)">
-                  <X :size="16" /> {{ t('app.actions.reject') }}
-                </button>
+                <button class="secondary-button" @click="approve(registration.userId, 'MEMBER')"><Check :size="16" /> {{ enumLabel('role', 'MEMBER') }}</button>
+                <button class="secondary-button" @click="reject(registration.userId)"><X :size="16" /> {{ t('app.actions.reject') }}</button>
               </td>
             </tr>
             <tr v-if="registrations.length === 0">
@@ -740,7 +678,7 @@ watch(
               <td>{{ enumLabel('status', member.status) }}</td>
               <td>
                 <select
-                  v-if="canManageSelectedClan"
+                  v-if="canAssignClanRoles"
                   :id="`member-role-${member.userId}`"
                   :name="`memberRole-${member.userId}`"
                   :value="member.role"
@@ -748,6 +686,9 @@ watch(
                 >
                   <option value="MEMBER">
                     {{ enumLabel('role', 'MEMBER') }}
+                  </option>
+                  <option value="LIEUTENANT">
+                    {{ enumLabel('role', 'LIEUTENANT') }}
                   </option>
                   <option value="COMMANDER">
                     {{ enumLabel('role', 'COMMANDER') }}
@@ -763,9 +704,7 @@ watch(
                   <span class="status-chip" :class="member.trackingExcluded ? 'status-chip-muted' : 'status-chip-active'">
                     {{ member.trackingExcluded ? t('admin.trackingExcluded') : t('admin.trackingIncluded') }}
                   </span>
-                  <span v-if="showMemberAdminFields && member.trackingExcludedReason" class="muted">{{
-                    member.trackingExcludedReason
-                  }}</span>
+                  <span v-if="showMemberAdminFields && member.trackingExcludedReason" class="muted">{{ member.trackingExcludedReason }}</span>
                   <div v-if="canManageSelectedClan" class="tracking-control">
                     <input
                       :id="`member-tracking-reason-${member.userId}`"
@@ -773,22 +712,10 @@ watch(
                       :name="`memberTrackingReason-${member.userId}`"
                       :placeholder="t('admin.trackingReason')"
                     />
-                    <button
-                      v-if="!member.trackingExcluded"
-                      type="button"
-                      class="secondary-button"
-                      :disabled="trackingBusy[member.userId]"
-                      @click="setTrackingExcluded(member, true)"
-                    >
+                    <button v-if="!member.trackingExcluded" type="button" class="secondary-button" :disabled="trackingBusy[member.userId]" @click="setTrackingExcluded(member, true)">
                       <Ban :size="16" /> {{ t('admin.excludeFromTracking') }}
                     </button>
-                    <button
-                      v-else
-                      type="button"
-                      class="secondary-button"
-                      :disabled="trackingBusy[member.userId]"
-                      @click="setTrackingExcluded(member, false)"
-                    >
+                    <button v-else type="button" class="secondary-button" :disabled="trackingBusy[member.userId]" @click="setTrackingExcluded(member, false)">
                       <Check :size="16" /> {{ t('admin.includeInTracking') }}
                     </button>
                   </div>
@@ -847,9 +774,7 @@ watch(
           <input id="audit-entity-type" v-model="auditEntityType" name="auditEntityType" placeholder="ClanMembership" />
         </label>
         <button class="primary-button" :disabled="auditBusy"><Search :size="16" /> {{ t('app.actions.search') }}</button>
-        <button type="button" class="secondary-button" :disabled="auditBusy" @click="resetAuditFilters">
-          <RotateCcw :size="16" /> {{ t('app.actions.reset') }}
-        </button>
+        <button type="button" class="secondary-button" :disabled="auditBusy" @click="resetAuditFilters"><RotateCcw :size="16" /> {{ t('app.actions.reset') }}</button>
       </form>
       <div class="table-wrap" tabindex="0">
         <table>

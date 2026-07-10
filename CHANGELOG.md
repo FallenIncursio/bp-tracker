@@ -2,6 +2,12 @@
 
 All notable changes to BP Tracker are documented here.
 
+## 0.2.14 - 2026-07-10
+
+- Added the Lieutenant clan role for Sirius planet, drop and roadmap editing without member-management access.
+- Added dashboard edit shortcuts that open the Sirius blueprint editor for the selected planet.
+- Added a clan-wide blueprint overview page with filters and CSV export.
+
 ## 0.2.13 - 2026-07-10
 
 - Fixed ignored Sirius spawn windows being reopened by spawn-plan backfill and kept wanted BPs only in the roadmap Discord status.

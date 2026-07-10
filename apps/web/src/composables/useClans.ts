@@ -24,12 +24,10 @@ export const useClans = () => {
   const { user } = useAuth()
 
   const selectedClan = computed(() => clans.value.find(clan => clan.id === selectedClanId.value) ?? null)
-  const selectedMembership = computed(() =>
-    user.value?.memberships.find(membership => membership.clanId === selectedClanId.value) ?? null
-  )
+  const selectedMembership = computed(() => user.value?.memberships.find(membership => membership.clanId === selectedClanId.value) ?? null)
   const canEditSelectedClan = computed(() => {
     if (user.value?.globalRole === 'ADMIN') return true
-    return ['COMMANDER', 'ADMIRAL'].includes(selectedMembership.value?.role ?? '') && selectedMembership.value?.status === 'ACTIVE'
+    return ['LIEUTENANT', 'COMMANDER', 'ADMIRAL'].includes(selectedMembership.value?.role ?? '') && selectedMembership.value?.status === 'ACTIVE'
   })
   const canManageSelectedClan = computed(() => {
     if (user.value?.globalRole === 'ADMIN') return true

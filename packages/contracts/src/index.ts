@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const globalRoles = ['USER', 'ADMIN'] as const
-export const clanRoles = ['MEMBER', 'COMMANDER', 'ADMIRAL'] as const
+export const clanRoles = ['MEMBER', 'LIEUTENANT', 'COMMANDER', 'ADMIRAL'] as const
 export const membershipStatuses = ['PENDING', 'ACTIVE', 'REJECTED', 'LEFT'] as const
 export const blueprintStatuses = ['MISSING', 'OWNED', 'WANTED'] as const
 export const blueprintSlotGroups = ['SLOT_18', 'SLOT_14', 'SLOT_12', 'SLOT_5', 'SLOT_2', 'RESOURCE', 'CUSTOM'] as const

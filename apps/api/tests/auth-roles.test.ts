@@ -5,11 +5,13 @@ describe('canSetClanRole', () => {
   it('allows global admins to assign any clan role', () => {
     expect(canSetClanRole('ADMIN', 'ADMIRAL')).toBe(true)
     expect(canSetClanRole('ADMIN', 'COMMANDER')).toBe(true)
+    expect(canSetClanRole('ADMIN', 'LIEUTENANT')).toBe(true)
     expect(canSetClanRole('ADMIN', 'MEMBER')).toBe(true)
   })
 
-  it('allows admirals to assign commander and member but not admiral', () => {
+  it('allows admirals to assign commander, lieutenant and member but not admiral', () => {
     expect(canSetClanRole('ADMIRAL', 'COMMANDER')).toBe(true)
+    expect(canSetClanRole('ADMIRAL', 'LIEUTENANT')).toBe(true)
     expect(canSetClanRole('ADMIRAL', 'MEMBER')).toBe(true)
     expect(canSetClanRole('ADMIRAL', 'ADMIRAL')).toBe(false)
   })

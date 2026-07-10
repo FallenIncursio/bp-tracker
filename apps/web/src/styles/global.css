@@ -452,6 +452,17 @@ button:disabled {
   margin: 0;
 }
 
+.drop-editor-panel {
+  scroll-margin-top: 86px;
+}
+
+.drop-editor-highlight {
+  border-color: color-mix(in srgb, var(--primary) 64%, var(--border));
+  box-shadow:
+    0 0 0 3px var(--focus-ring),
+    var(--shadow);
+}
+
 .panel-title {
   display: flex;
   align-items: center;
@@ -2932,6 +2943,71 @@ td[rowspan] {
 
 .check-metrics .pill-wanted {
   color: var(--warning);
+}
+
+.overview-results {
+  display: grid;
+  gap: 12px;
+}
+
+.overview-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.overview-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-soft);
+}
+
+.overview-card-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.overview-card-header strong {
+  white-space: nowrap;
+}
+
+.overview-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+}
+
+.overview-progress {
+  height: 5px;
+  background: var(--missing-bg);
+}
+
+.overview-progress span {
+  display: block;
+  height: 100%;
+  background: var(--success);
+}
+
+.overview-chip-list {
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+.overview-chip-list .data-chip {
+  gap: 6px;
+}
+
+.overview-expand-button {
+  margin: 0 14px 14px;
 }
 
 .check-detail-grid {

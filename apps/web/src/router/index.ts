@@ -3,6 +3,7 @@ import DashboardPage from '../pages/DashboardPage.vue'
 import BlueprintsPage from '../pages/BlueprintsPage.vue'
 import SiriusPage from '../pages/SiriusPage.vue'
 import CheckerPage from '../pages/CheckerPage.vue'
+import OverviewPage from '../pages/OverviewPage.vue'
 import AdminPage from '../pages/AdminPage.vue'
 import AccountPage from '../pages/AccountPage.vue'
 import HelpPage from '../pages/HelpPage.vue'
@@ -16,6 +17,7 @@ const router = createRouter({
     { path: '/blueprints', component: BlueprintsPage },
     { path: '/sirius', component: SiriusPage },
     { path: '/checker', component: CheckerPage },
+    { path: '/overview', component: OverviewPage },
     { path: '/login', component: AuthPage, props: { initialMode: 'login' } },
     { path: '/register', component: AuthPage, props: { initialMode: 'register' } },
     { path: '/admin', component: AdminPage },

@@ -7,11 +7,7 @@ const storageKey = 'bp-tracker:locale'
 
 const browserLocale = typeof navigator === 'undefined' ? null : navigator.language.slice(0, 2)
 const storedLocale = localStorage.getItem(storageKey)
-const initialLocale: SupportedLocale = isSupportedLocale(storedLocale)
-  ? storedLocale
-  : isSupportedLocale(browserLocale)
-    ? browserLocale
-    : 'de'
+const initialLocale: SupportedLocale = isSupportedLocale(storedLocale) ? storedLocale : isSupportedLocale(browserLocale) ? browserLocale : 'de'
 
 const baseMessages = {
   de: {
@@ -57,6 +53,7 @@ const baseMessages = {
       blueprints: 'Baupläne',
       sirius: 'Sirius',
       checker: 'Checker',
+      overview: 'Gesamtübersicht',
       account: 'Account',
       admin: 'Admin',
       clanManagement: 'Clanverwaltung',
@@ -127,6 +124,8 @@ const baseMessages = {
       compactHint: 'Nach Planet gruppiert, damit aktive Drops schneller erfassbar sind.',
       nextSpawnTitle: 'Nächster Spawn',
       nextSpawnSubtitle: 'Offene oder überfällige neue Sirius-Planeten.',
+      editSiriusDrops: 'Baupläne bearbeiten',
+      editSiriusDropsFor: 'Baupläne für {planet} bearbeiten',
       openSpawnPlanner: 'Spawn-Planer öffnen',
       spawnExpectedAt: 'Erwartet am {date}',
       noSpawnPlan: 'Keine offenen Spawn-Fenster für diesen Clan.',
@@ -135,8 +134,7 @@ const baseMessages = {
       openJourneyPlanner: 'Roadmap öffnen',
       noJourney: 'Noch keine Clan-Route geplant.',
       guestTitle: 'Du liest im Gastmodus',
-      guestSubtitle:
-        'Öffentliche Drop-Daten bleiben sichtbar. Login zeigt dir eigene Statuspflege, Benachrichtigungen und claninterne Roadmap.',
+      guestSubtitle: 'Öffentliche Drop-Daten bleiben sichtbar. Login zeigt dir eigene Statuspflege, Benachrichtigungen und claninterne Roadmap.',
     },
     blueprints: {
       title: 'Baupläne',
@@ -352,6 +350,33 @@ const baseMessages = {
       excludedFromTracking: 'Ausgeschlossen',
       noResults: 'Noch keine Checker-Ergebnisse.',
     },
+    overview: {
+      title: 'Gesamtübersicht',
+      exportCsv: 'CSV exportieren',
+      members: 'Mitglieder',
+      membersCaption: 'von {total} geladen',
+      blueprints: 'Baupläne',
+      blueprintsCaption: 'von {total} Treffern sichtbar',
+      openWork: 'Offen',
+      openWorkCaption: '{missing} fehlen · {wanted} Wunsch',
+      scope: 'Umfang',
+      scopes: {
+        all: 'Alle Baupläne',
+        siriusOwn: 'Sirius Ancient',
+        siriusAllRing5: 'Alle Ancient',
+      },
+      status: 'Status',
+      allStatuses: 'Alle Status',
+      search: 'Suche',
+      searchPlaceholder: 'Mitglied oder Bauplan',
+      includeResources: 'Sirius Ressourcen einbeziehen',
+      results: 'Mitgliederübersicht',
+      resultsSubtitle: '{members} Mitglieder · {blueprints} Einträge',
+      progress: '{percent}% voll',
+      showAll: 'Alle {count} anzeigen',
+      showLess: 'Weniger anzeigen',
+      noResults: 'Keine passenden Einträge.',
+    },
     account: {
       title: 'Account',
       notLoggedIn: 'Nicht eingeloggt',
@@ -465,8 +490,7 @@ const baseMessages = {
       discordChannelId: 'Benachrichtigungskanal-ID',
       discordChannelName: 'Anzeigename',
       discordChannelPlaceholder: '#bauplaene',
-      discordChannelHelp:
-        'Gesendet wird an die Kanal-ID. Der Anzeigename ist nur zur Orientierung und wird bei ausgewählten Bot-Kanälen automatisch übernommen.',
+      discordChannelHelp: 'Gesendet wird an die Kanal-ID. Der Anzeigename ist nur zur Orientierung und wird bei ausgewählten Bot-Kanälen automatisch übernommen.',
       discordServerIdRequired: 'Gib zuerst eine gültige Discord-Server-ID ein.',
       discordChannelsUnavailable: 'Discord-Kanäle konnten nicht geladen werden. Manuelle Kanal-ID bleibt möglich.',
       discordChannelsLoaded: '{count} Discord-Kanäle geladen.',
@@ -488,8 +512,7 @@ const baseMessages = {
       discordStatusRoadmapMessage: 'Roadmap-Nachricht',
       discordStatusPlanetsMessage: 'Sirius-Nachricht',
       discordStatusLastPublished: 'Zuletzt veröffentlicht',
-      discordStatusHelp:
-        'Der Bot aktualisiert bestehende Statusnachrichten automatisch nach Roadmap-, Sirius- und Bauplan-Änderungen. Erwähnungen werden angezeigt, lösen aber keine Pings aus.',
+      discordStatusHelp: 'Der Bot aktualisiert bestehende Statusnachrichten automatisch nach Roadmap-, Sirius- und Bauplan-Änderungen. Erwähnungen werden angezeigt, lösen aber keine Pings aus.',
       discordStatusPublish: 'Status veröffentlichen',
       discordStatusRecreate: 'Nachrichten neu erstellen',
       discordStatusPublished: 'Discord-Status wurde veröffentlicht.',
@@ -515,13 +538,11 @@ const baseMessages = {
       systemActor: 'System',
     },
     tooltips: {
-      dashboard:
-        'Zeigt aktive Sirius-Planeten im ausgewählten Clan und zählt, welche aktiven Baupläne Mitgliedern fehlen oder auf Wunsch stehen.',
-      blueprints:
-        'Hier pflegst du deinen persönlichen Bauplan-Status. Markiere mehrere Einträge und setze sie gemeinsam auf Voll, Fehlt oder Wunsch.',
+      dashboard: 'Zeigt aktive Sirius-Planeten im ausgewählten Clan und zählt, welche aktiven Baupläne Mitgliedern fehlen oder auf Wunsch stehen.',
+      blueprints: 'Hier pflegst du deinen persönlichen Bauplan-Status. Markiere mehrere Einträge und setze sie gemeinsam auf Voll, Fehlt oder Wunsch.',
       sirius: 'Trage Sirius-Planetenläufe ein und wähle nur Baupläne aus, die im jeweiligen Ring und Slot tatsächlich fallen können.',
-      checker:
-        'Vergleicht Schiffe, Systeme oder Spezialgruppen mit dem Clan-Bestand und zeigt pro Mitglied fehlende oder gewünschte Baupläne.',
+      checker: 'Vergleicht Schiffe, Systeme oder Spezialgruppen mit dem Clan-Bestand und zeigt pro Mitglied fehlende oder gewünschte Baupläne.',
+      overview: 'Zeigt alle Mitglieder mit vollen, fehlenden und gewünschten Bauplänen in einer exportierbaren Übersicht.',
       admin: 'Verwalte Clan-Mitglieder, Registrierungen, Rollen, Passwort-Resets und Discord-Kanäle.',
       clanMembers: 'Zeigt Mitglieder des ausgewählten Clans und ihren Tracking-Status ohne Verwaltungsfelder.',
       bulkSelection: 'Setzt den gewählten Status für alle aktuell ausgewählten sichtbaren Baupläne.',
@@ -550,10 +571,7 @@ const baseMessages = {
         },
         sirius: {
           title: 'Sirius',
-          items: [
-            'Planeten haben Ring, Ablaufzeit und optional eine neue Spawn-Zeit.',
-            'Ring 1 bis 4 nutzt Ressourcen-Slots; Ring 5 nutzt 18er, 14er, 12er, 5er und 2er.',
-          ],
+          items: ['Planeten haben Ring, Ablaufzeit und optional eine neue Spawn-Zeit.', 'Ring 1 bis 4 nutzt Ressourcen-Slots; Ring 5 nutzt 18er, 14er, 12er, 5er und 2er.'],
         },
         checker: {
           title: 'BP Checker',
@@ -564,7 +582,8 @@ const baseMessages = {
           items: [
             'Admin verwaltet die gesamte Instanz und kann Admirale delegieren.',
             'Admiral verwaltet den eigenen Clan, aber keine globalen Admins.',
-            'Kommandant pflegt Sirius-Planeten und Drops.',
+            'Leutnant pflegt Sirius-Planeten, Drops und Roadmap.',
+            'Kommandant verwaltet zusätzlich Mitglieder und Tracking.',
             'Mitglied pflegt eigene Baupläne und Wünsche.',
           ],
         },
@@ -652,6 +671,7 @@ const baseMessages = {
     },
     role: {
       MEMBER: 'Mitglied',
+      LIEUTENANT: 'Leutnant',
       COMMANDER: 'Kommandant',
       ADMIRAL: 'Admiral',
       ADMIN: 'Admin',
@@ -710,6 +730,7 @@ const baseMessages = {
       blueprints: 'Blueprints',
       sirius: 'Sirius',
       checker: 'Checker',
+      overview: 'Overview',
       account: 'Account',
       admin: 'Admin',
       clanManagement: 'Clan management',
@@ -780,6 +801,8 @@ const baseMessages = {
       compactHint: 'Grouped by planet so active drops are easier to scan.',
       nextSpawnTitle: 'Next spawn',
       nextSpawnSubtitle: 'Open or overdue new Sirius planets.',
+      editSiriusDrops: 'Edit blueprints',
+      editSiriusDropsFor: 'Edit blueprints for {planet}',
       openSpawnPlanner: 'Open spawn planner',
       spawnExpectedAt: 'Expected at {date}',
       noSpawnPlan: 'No open spawn windows for this clan.',
@@ -788,8 +811,7 @@ const baseMessages = {
       openJourneyPlanner: 'Open roadmap',
       noJourney: 'No clan route planned yet.',
       guestTitle: 'You are browsing as a guest',
-      guestSubtitle:
-        'Public drop data remains visible. Logging in unlocks personal status tracking, notifications, and the internal clan roadmap.',
+      guestSubtitle: 'Public drop data remains visible. Logging in unlocks personal status tracking, notifications, and the internal clan roadmap.',
     },
     blueprints: {
       title: 'Blueprints',
@@ -1005,6 +1027,33 @@ const baseMessages = {
       excludedFromTracking: 'Excluded',
       noResults: 'No checker results yet.',
     },
+    overview: {
+      title: 'Overview',
+      exportCsv: 'Export CSV',
+      members: 'Members',
+      membersCaption: 'of {total} loaded',
+      blueprints: 'Blueprints',
+      blueprintsCaption: 'of {total} matches visible',
+      openWork: 'Open',
+      openWorkCaption: '{missing} missing · {wanted} wanted',
+      scope: 'Scope',
+      scopes: {
+        all: 'All blueprints',
+        siriusOwn: 'Sirius ancient',
+        siriusAllRing5: 'All ancient',
+      },
+      status: 'Status',
+      allStatuses: 'All statuses',
+      search: 'Search',
+      searchPlaceholder: 'Member or blueprint',
+      includeResources: 'Include Sirius resources',
+      results: 'Member overview',
+      resultsSubtitle: '{members} members · {blueprints} entries',
+      progress: '{percent}% owned',
+      showAll: 'Show all {count}',
+      showLess: 'Show less',
+      noResults: 'No matching entries.',
+    },
     account: {
       title: 'Account',
       notLoggedIn: 'Not logged in',
@@ -1118,8 +1167,7 @@ const baseMessages = {
       discordChannelId: 'Notification channel ID',
       discordChannelName: 'Display name',
       discordChannelPlaceholder: '#blueprints',
-      discordChannelHelp:
-        'Messages are sent to the channel ID. The display name is only for orientation and is filled automatically when a bot-visible channel is selected.',
+      discordChannelHelp: 'Messages are sent to the channel ID. The display name is only for orientation and is filled automatically when a bot-visible channel is selected.',
       discordServerIdRequired: 'Enter a valid Discord server ID first.',
       discordChannelsUnavailable: 'Discord channels could not be loaded. Manual channel ID entry remains available.',
       discordChannelsLoaded: '{count} Discord channels loaded.',
@@ -1141,8 +1189,7 @@ const baseMessages = {
       discordStatusRoadmapMessage: 'Roadmap message',
       discordStatusPlanetsMessage: 'Sirius message',
       discordStatusLastPublished: 'Last published',
-      discordStatusHelp:
-        'The bot updates existing status messages automatically after roadmap, Sirius and blueprint changes. Mentions are shown but never trigger pings.',
+      discordStatusHelp: 'The bot updates existing status messages automatically after roadmap, Sirius and blueprint changes. Mentions are shown but never trigger pings.',
       discordStatusPublish: 'Publish status',
       discordStatusRecreate: 'Recreate messages',
       discordStatusPublished: 'Discord status has been published.',
@@ -1172,6 +1219,7 @@ const baseMessages = {
       blueprints: 'Manage your personal blueprint status here. Select multiple records and set them to owned, missing or wanted at once.',
       sirius: 'Enter Sirius planet runs and select only blueprints that can actually drop in the chosen ring and slot.',
       checker: 'Compares ships, systems or special groups with clan progress and shows missing or wanted blueprints per member.',
+      overview: 'Shows all members with owned, missing and wanted blueprints in an exportable overview.',
       admin: 'Manage clan members, registrations, roles, password resets and Discord channels.',
       clanMembers: 'Shows members of the selected clan and their tracking status without management fields.',
       bulkSelection: 'Applies the selected status to all currently selected visible blueprints.',
@@ -1183,11 +1231,7 @@ const baseMessages = {
       sections: {
         gettingStarted: {
           title: 'Getting Started',
-          items: [
-            'Select the clan you want to work with in the top bar.',
-            'Registrations must be approved by an admiral or admin.',
-            'Members maintain their own blueprint progress and wishlist.',
-          ],
+          items: ['Select the clan you want to work with in the top bar.', 'Registrations must be approved by an admiral or admin.', 'Members maintain their own blueprint progress and wishlist.'],
         },
         blueprints: {
           title: 'Blueprints',
@@ -1200,10 +1244,7 @@ const baseMessages = {
         },
         sirius: {
           title: 'Sirius',
-          items: [
-            'Planets have a ring, expiry time and optional next spawn time.',
-            'Rings 1 to 4 use resource slots; ring 5 uses 18, 14, 12, 5 and 2-slot drops.',
-          ],
+          items: ['Planets have a ring, expiry time and optional next spawn time.', 'Rings 1 to 4 use resource slots; ring 5 uses 18, 14, 12, 5 and 2-slot drops.'],
         },
         checker: {
           title: 'BP Checker',
@@ -1214,7 +1255,8 @@ const baseMessages = {
           items: [
             'Admin manages the whole instance and can delegate admirals.',
             'Admiral manages their own clan but not global admins.',
-            'Commander maintains Sirius planets and drops.',
+            'Lieutenant maintains Sirius planets, drops, and roadmap.',
+            'Commander also manages members and tracking.',
             'Member maintains their own blueprints and wishlist.',
           ],
         },
@@ -1262,8 +1304,7 @@ const baseMessages = {
         button: 'Ko-fi',
       },
       disclaimerTitle: 'Disclaimer',
-      disclaimerBody:
-        'This project is a fan tool and is not officially affiliated with Pirate Galaxy, Splitscreen Studios or Looki. Names and game terms belong to their respective rights holders.',
+      disclaimerBody: 'This project is a fan tool and is not officially affiliated with Pirate Galaxy, Splitscreen Studios or Looki. Names and game terms belong to their respective rights holders.',
     },
     phase: {
       CURRENT: 'Current',
@@ -1302,6 +1343,7 @@ const baseMessages = {
     },
     role: {
       MEMBER: 'Member',
+      LIEUTENANT: 'Lieutenant',
       COMMANDER: 'Commander',
       ADMIRAL: 'Admiral',
       ADMIN: 'Admin',
@@ -1319,21 +1361,11 @@ const baseMessages = {
   },
 } as const
 
-type WidenMessages<T> = T extends string
-  ? string
-  : T extends readonly (infer Item)[]
-    ? readonly WidenMessages<Item>[]
-    : T extends object
-      ? { readonly [K in keyof T]: WidenMessages<T[K]> }
-      : T
+type WidenMessages<T> = T extends string ? string : T extends readonly (infer Item)[] ? readonly WidenMessages<Item>[] : T extends object ? { readonly [K in keyof T]: WidenMessages<T[K]> } : T
 
 type LocaleMessageSchema = WidenMessages<typeof baseMessages.en>
 
-type DeepPartial<T> = T extends readonly (infer Item)[]
-  ? readonly WidenMessages<Item>[]
-  : T extends object
-    ? { readonly [K in keyof T]?: DeepPartial<T[K]> }
-    : T
+type DeepPartial<T> = T extends readonly (infer Item)[] ? readonly WidenMessages<Item>[] : T extends object ? { readonly [K in keyof T]?: DeepPartial<T[K]> } : T
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
 
@@ -1386,6 +1418,7 @@ const esOverrides = {
     blueprints: 'Planos',
     sirius: 'Sirius',
     checker: 'Comprobador',
+    overview: 'Resumen',
     account: 'Cuenta',
     admin: 'Administración',
     clanManagement: 'Gestión del clan',
@@ -1454,6 +1487,8 @@ const esOverrides = {
     compactHint: 'Agrupado por planeta para revisar los drops activos más rápido.',
     nextSpawnTitle: 'Próxima aparición',
     nextSpawnSubtitle: 'Nuevos planetas de Sirius abiertos o vencidos.',
+    editSiriusDrops: 'Editar planos',
+    editSiriusDropsFor: 'Editar planos de {planet}',
     openSpawnPlanner: 'Abrir planificador',
     spawnExpectedAt: 'Esperado el {date}',
     noSpawnPlan: 'No hay ventanas de aparición abiertas para este clan.',
@@ -1462,8 +1497,7 @@ const esOverrides = {
     openJourneyPlanner: 'Abrir ruta',
     noJourney: 'Todavía no hay una ruta del clan planificada.',
     guestTitle: 'Estás navegando como invitado',
-    guestSubtitle:
-      'Los datos públicos de drops siguen visibles. Iniciar sesión habilita estado personal, notificaciones y ruta interna del clan.',
+    guestSubtitle: 'Los datos públicos de drops siguen visibles. Iniciar sesión habilita estado personal, notificaciones y ruta interna del clan.',
   },
   blueprints: {
     title: 'Planos',
@@ -1678,6 +1712,33 @@ const esOverrides = {
     excludedFromTracking: 'Excluido',
     noResults: 'Todavía no hay resultados del comprobador.',
   },
+  overview: {
+    title: 'Resumen',
+    exportCsv: 'Exportar CSV',
+    members: 'Miembros',
+    membersCaption: 'de {total} cargados',
+    blueprints: 'Planos',
+    blueprintsCaption: 'de {total} coincidencias visibles',
+    openWork: 'Abierto',
+    openWorkCaption: '{missing} faltan · {wanted} deseados',
+    scope: 'Alcance',
+    scopes: {
+      all: 'Todos los planos',
+      siriusOwn: 'Sirius ancient',
+      siriusAllRing5: 'Todos ancient',
+    },
+    status: 'Estado',
+    allStatuses: 'Todos los estados',
+    search: 'Buscar',
+    searchPlaceholder: 'Miembro o plano',
+    includeResources: 'Incluir recursos de Sirius',
+    results: 'Resumen de miembros',
+    resultsSubtitle: '{members} miembros · {blueprints} entradas',
+    progress: '{percent}% completo',
+    showAll: 'Mostrar {count}',
+    showLess: 'Mostrar menos',
+    noResults: 'No hay entradas coincidentes.',
+  },
   account: {
     title: 'Cuenta',
     notLoggedIn: 'No has iniciado sesión',
@@ -1790,8 +1851,7 @@ const esOverrides = {
     discordChannelId: 'ID del canal de notificaciones',
     discordChannelName: 'Nombre visible',
     discordChannelPlaceholder: '#planos',
-    discordChannelHelp:
-      'Los mensajes se envían al ID del canal. El nombre visible solo orienta y se rellena automáticamente al elegir un canal visible para el bot.',
+    discordChannelHelp: 'Los mensajes se envían al ID del canal. El nombre visible solo orienta y se rellena automáticamente al elegir un canal visible para el bot.',
     discordServerIdRequired: 'Introduce primero un ID de servidor Discord válido.',
     discordChannelsUnavailable: 'No se pudieron cargar los canales de Discord. La entrada manual del ID sigue disponible.',
     discordChannelsLoaded: '{count} canales de Discord cargados.',
@@ -1813,8 +1873,7 @@ const esOverrides = {
     discordStatusRoadmapMessage: 'Mensaje de ruta',
     discordStatusPlanetsMessage: 'Mensaje de Sirius',
     discordStatusLastPublished: 'Última publicación',
-    discordStatusHelp:
-      'El bot actualiza automáticamente los mensajes de estado existentes tras cambios de ruta, Sirius y planos. Las menciones se muestran, pero no generan pings.',
+    discordStatusHelp: 'El bot actualiza automáticamente los mensajes de estado existentes tras cambios de ruta, Sirius y planos. Las menciones se muestran, pero no generan pings.',
     discordStatusPublish: 'Publicar estado',
     discordStatusRecreate: 'Recrear mensajes',
     discordStatusPublished: 'El estado de Discord se ha publicado.',
@@ -1840,11 +1899,11 @@ const esOverrides = {
     systemActor: 'Sistema',
   },
   tooltips: {
-    dashboard:
-      'Muestra los planetas Sirius activos del clan seleccionado y cuenta qué planos activos faltan o son deseados por los miembros.',
+    dashboard: 'Muestra los planetas Sirius activos del clan seleccionado y cuenta qué planos activos faltan o son deseados por los miembros.',
     blueprints: 'Aquí gestionas tu estado personal de planos. Selecciona varios registros y márcalos juntos como completo, falta o deseo.',
     sirius: 'Registra recorridos de planetas Sirius y elige solo planos que realmente puedan caer en ese anillo y ranura.',
     checker: 'Compara naves, sistemas o grupos especiales con el progreso del clan y muestra planos faltantes o deseados por miembro.',
+    overview: 'Muestra todos los miembros con planos completos, faltantes y deseados en un resumen exportable.',
     admin: 'Gestiona miembros del clan, registros, roles, restablecimientos de contraseña y canales de Discord.',
     clanMembers: 'Muestra los miembros del clan seleccionado y su estado de seguimiento sin campos administrativos.',
     bulkSelection: 'Aplica el estado seleccionado a todos los planos visibles seleccionados.',
@@ -1873,24 +1932,19 @@ const esOverrides = {
       },
       sirius: {
         title: 'Sirius',
-        items: [
-          'Los planetas tienen anillo, hora de expiración y opcionalmente una próxima aparición.',
-          'Los anillos 1 a 4 usan ranuras de recursos; el anillo 5 usa drops de 18, 14, 12, 5 y 2.',
-        ],
+        items: ['Los planetas tienen anillo, hora de expiración y opcionalmente una próxima aparición.', 'Los anillos 1 a 4 usan ranuras de recursos; el anillo 5 usa drops de 18, 14, 12, 5 y 2.'],
       },
       checker: {
         title: 'Comprobador',
-        items: [
-          'Las naves comprueban exactamente los planos requeridos por la nave seleccionada.',
-          'Los sistemas comprueban todos los planos de un sistema.',
-        ],
+        items: ['Las naves comprueban exactamente los planos requeridos por la nave seleccionada.', 'Los sistemas comprueban todos los planos de un sistema.'],
       },
       roles: {
         title: 'Roles',
         items: [
           'El administrador gestiona toda la instancia y puede delegar almirantes.',
           'El almirante gestiona su propio clan, pero no administradores globales.',
-          'El comandante mantiene planetas y drops de Sirius.',
+          'El teniente mantiene planetas, drops y ruta de Sirius.',
+          'El comandante también gestiona miembros y seguimiento.',
           'El miembro mantiene sus propios planos y deseos.',
         ],
       },
@@ -1966,6 +2020,7 @@ const esOverrides = {
   },
   role: {
     MEMBER: 'Miembro',
+    LIEUTENANT: 'Teniente',
     COMMANDER: 'Comandante',
     ADMIRAL: 'Almirante',
     ADMIN: 'Administrador',

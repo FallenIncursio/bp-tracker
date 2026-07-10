@@ -43,7 +43,7 @@ const iso = '2026-07-09T20:00:00.000Z'
 describe('contract constants', () => {
   it('exposes stable enum values used by API and web', () => {
     expect(globalRoles).toEqual(['USER', 'ADMIN'])
-    expect(clanRoles).toEqual(['MEMBER', 'COMMANDER', 'ADMIRAL'])
+    expect(clanRoles).toEqual(['MEMBER', 'LIEUTENANT', 'COMMANDER', 'ADMIRAL'])
     expect(membershipStatuses).toContain('PENDING')
     expect(blueprintStatuses).toEqual(['MISSING', 'OWNED', 'WANTED'])
     expect(blueprintSlotGroups).toContain('RESOURCE')
@@ -73,9 +73,13 @@ describe('auth and account schemas', () => {
       displayName: 'Admin',
       setupToken: 'token',
     })
-    expect(
-      registerSchema.parse({ username: 'pilot', password: '12345678', displayName: 'Pilot', email: '', clanId: uuid })
-    ).toEqual({ username: 'pilot', password: '12345678', displayName: 'Pilot', email: '', clanId: uuid })
+    expect(registerSchema.parse({ username: 'pilot', password: '12345678', displayName: 'Pilot', email: '', clanId: uuid })).toEqual({
+      username: 'pilot',
+      password: '12345678',
+      displayName: 'Pilot',
+      email: '',
+      clanId: uuid,
+    })
   })
 
   it('rejects short auth and profile values', () => {
@@ -94,6 +98,7 @@ describe('clan and membership schemas', () => {
       isPublic: true,
     })
     expect(updateMembershipRoleSchema.parse({ role: 'ADMIRAL' })).toEqual({ role: 'ADMIRAL' })
+    expect(updateMembershipRoleSchema.parse({ role: 'LIEUTENANT' })).toEqual({ role: 'LIEUTENANT' })
     expect(updateMembershipTrackingSchema.parse({ trackingExcluded: true, reason: 'inactive' })).toEqual({
       trackingExcluded: true,
       reason: 'inactive',
@@ -109,7 +114,7 @@ describe('clan and membership schemas', () => {
         notificationChannelName: '#bauplaene',
         statusChannelId: '323456789012345678',
         statusChannelName: '#bp-status',
-      })
+      }),
     ).toEqual({
       enabled: true,
       statusEnabled: true,
@@ -212,9 +217,7 @@ describe('Sirius schemas', () => {
       slots: [{ slotGroup: 'RESOURCE', blueprintId: uuid }],
     })
     expect(() => upsertSiriusSlotSchema.parse({ slotGroup: 'SLOT_2', enemyType: 'Soris', blueprintId: uuid })).toThrow()
-    expect(() =>
-      replaceSiriusSlotsSchema.parse({ slots: Array.from({ length: 41 }, () => ({ slotGroup: 'RESOURCE', blueprintId: uuid })) })
-    ).toThrow()
+    expect(() => replaceSiriusSlotsSchema.parse({ slots: Array.from({ length: 41 }, () => ({ slotGroup: 'RESOURCE', blueprintId: uuid })) })).toThrow()
   })
 
   it('validates clan journey stops and reordering', () => {
@@ -232,7 +235,7 @@ describe('Sirius schemas', () => {
         departAt: '2026-07-10T20:00:00.000Z',
         status: 'CURRENT',
         certainty: 'TENTATIVE',
-      })
+      }),
     ).toMatchObject({
       appearanceId: uuid,
       ring: 4,
