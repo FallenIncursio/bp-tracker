@@ -54,7 +54,12 @@ const appearance = {
       slotGroup: 'SLOT_18',
       enemyType: null,
       createdAt: now,
-      blueprint: { id: 'bp-1', nameDe: 'Sirius Sammler', nameEn: 'Sirius Collector', translations: [] },
+      blueprint: {
+        id: 'bp-1',
+        nameDe: 'Sirius Sammler',
+        nameEn: 'Sirius Collector',
+        translations: [],
+      },
     },
   ],
 }
@@ -93,9 +98,21 @@ const configureSnapshotMocks = (settings: Record<string, unknown>) => {
       resolvedAppearance: null,
     },
   ])
-  prismaMock.auditLog.findMany.mockResolvedValue([{ action: 'sirius.appearance.update', summary: 'Miequs updated', createdAt: now }])
+  prismaMock.auditLog.findMany.mockResolvedValue([
+    {
+      action: 'sirius.appearance.update',
+      summary: 'Miequs updated',
+      createdAt: now,
+    },
+  ])
   prismaMock.clanMembership.findMany.mockResolvedValue([
-    { user: { id: 'user-1', displayName: 'Ashura', discordUserId: '111111111111111111' } },
+    {
+      user: {
+        id: 'user-1',
+        displayName: 'Ashura',
+        discordUserId: '111111111111111111',
+      },
+    },
     { user: { id: 'user-2', displayName: 'Bassman', discordUserId: null } },
   ])
   prismaMock.userBlueprintStatus.findMany.mockResolvedValue([{ userId: 'user-1', blueprintId: 'bp-1', status: 'WANTED' }])
@@ -121,10 +138,11 @@ describe('Discord status service', () => {
 
   it('publishes roadmap and Sirius status messages without Discord pings', async () => {
     const { publishClanDiscordStatus } = await import('../src/notifications/discord-status.service.js')
-    configureSnapshotMocks({ statusRoadmapMessageId: null, statusPlanetsMessageId: null })
-    discordMock.sendDiscordChannelMessage
-      .mockResolvedValueOnce({ ok: true, messageId: 'roadmap-message' })
-      .mockResolvedValueOnce({ ok: true, messageId: 'planets-message' })
+    configureSnapshotMocks({
+      statusRoadmapMessageId: null,
+      statusPlanetsMessageId: null,
+    })
+    discordMock.sendDiscordChannelMessage.mockResolvedValueOnce({ ok: true, messageId: 'roadmap-message' }).mockResolvedValueOnce({ ok: true, messageId: 'planets-message' })
     discordMock.pinDiscordChannelMessage.mockResolvedValue({ ok: true })
 
     await expect(publishClanDiscordStatus('clan-1')).resolves.toEqual({
@@ -141,15 +159,31 @@ describe('Discord status service', () => {
     })
     expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ name: 'Wunsch-Treffer', value: expect.stringContaining('<@111111111111111111>') }),
-      ])
+        expect.objectContaining({
+          name: expect.stringContaining('Wunsch-Treffer'),
+          value: expect.stringContaining('<@111111111111111111>'),
+        }),
+      ]),
     )
-    expect(discordMock.sendDiscordChannelMessage.mock.calls[0][1].embeds[0].fields).not.toEqual(
-      expect.arrayContaining([expect.objectContaining({ name: 'Zuletzt bearbeitet' })])
-    )
-    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).not.toEqual(
-      expect.arrayContaining([expect.objectContaining({ name: 'Fehlend kompakt' })])
-    )
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0]).toMatchObject({
+      description: expect.stringContaining('🪐 1 aktiv'),
+      fields: expect.arrayContaining([
+        expect.objectContaining({
+          name: expect.stringContaining('🪐'),
+          value: expect.stringContaining('🟢 platzt'),
+        }),
+        expect.objectContaining({
+          name: expect.stringContaining('⏳'),
+          value: expect.stringContaining('⏳ **Miequs**'),
+        }),
+        expect.objectContaining({
+          name: expect.stringContaining('⭐'),
+          value: expect.stringContaining('Miequs 5. Ring'),
+        }),
+      ]),
+    })
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[0][1].embeds[0].fields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Zuletzt bearbeitet' })]))
+    expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Fehlend kompakt' })]))
     expect(prismaMock.clanDiscordSettings.update).toHaveBeenCalledWith({
       where: { clanId: 'clan-1' },
       data: expect.objectContaining({
@@ -162,44 +196,64 @@ describe('Discord status service', () => {
 
   it('uses the configured status language for status messages', async () => {
     const { publishClanDiscordStatus } = await import('../src/notifications/discord-status.service.js')
-    configureSnapshotMocks({ statusLocale: 'en', statusRoadmapMessageId: null, statusPlanetsMessageId: null })
-    discordMock.sendDiscordChannelMessage
-      .mockResolvedValueOnce({ ok: true, messageId: 'roadmap-message' })
-      .mockResolvedValueOnce({ ok: true, messageId: 'planets-message' })
+    configureSnapshotMocks({
+      statusLocale: 'en',
+      statusRoadmapMessageId: null,
+      statusPlanetsMessageId: null,
+    })
+    discordMock.sendDiscordChannelMessage.mockResolvedValueOnce({ ok: true, messageId: 'roadmap-message' }).mockResolvedValueOnce({ ok: true, messageId: 'planets-message' })
     discordMock.pinDiscordChannelMessage.mockResolvedValue({ ok: true })
 
     await publishClanDiscordStatus('clan-1')
 
     expect(discordMock.sendDiscordChannelMessage.mock.calls[0][1].embeds[0]).toMatchObject({
-      description: expect.stringContaining('Updated'),
+      description: expect.stringContaining('updated'),
       fields: expect.arrayContaining([
-        expect.objectContaining({ name: 'Current' }),
-        expect.objectContaining({ name: 'Next stations' }),
-        expect.objectContaining({ name: 'Wanted BPs', value: expect.stringContaining('Sirius Collector') }),
+        expect.objectContaining({ name: expect.stringContaining('Current') }),
+        expect.objectContaining({
+          name: expect.stringContaining('Next stations'),
+        }),
+        expect.objectContaining({
+          name: expect.stringContaining('Wanted BPs'),
+          value: expect.stringContaining('Sirius Collector'),
+        }),
       ]),
     })
     expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).toEqual(
-      expect.arrayContaining([expect.objectContaining({ name: 'Wanted hits', value: expect.stringContaining('Sirius Collector') })])
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: expect.stringContaining('Wanted hits'),
+          value: expect.stringContaining('Sirius Collector'),
+        }),
+      ]),
     )
   })
 
   it('edits existing status messages and recreates deleted ones', async () => {
     const { publishClanDiscordStatus } = await import('../src/notifications/discord-status.service.js')
-    configureSnapshotMocks({ statusRoadmapMessageId: 'old-roadmap', statusPlanetsMessageId: 'missing-planets' })
-    discordMock.editDiscordChannelMessage
-      .mockResolvedValueOnce({ ok: true })
-      .mockResolvedValueOnce({ ok: false, status: 404, error: 'Unknown Message' })
-    discordMock.sendDiscordChannelMessage.mockResolvedValueOnce({ ok: true, messageId: 'new-planets' })
-    discordMock.pinDiscordChannelMessage.mockResolvedValueOnce({ ok: false, error: 'Missing Permissions' })
+    configureSnapshotMocks({
+      statusRoadmapMessageId: 'old-roadmap',
+      statusPlanetsMessageId: 'missing-planets',
+    })
+    discordMock.editDiscordChannelMessage.mockResolvedValueOnce({ ok: true }).mockResolvedValueOnce({
+      ok: false,
+      status: 404,
+      error: 'Unknown Message',
+    })
+    discordMock.sendDiscordChannelMessage.mockResolvedValueOnce({
+      ok: true,
+      messageId: 'new-planets',
+    })
+    discordMock.pinDiscordChannelMessage.mockResolvedValueOnce({
+      ok: false,
+      error: 'Missing Permissions',
+    })
 
     await expect(publishClanDiscordStatus('clan-1')).resolves.toEqual({
       published: true,
       roadmapMessageId: 'old-roadmap',
       planetsMessageId: 'new-planets',
-      warnings: [
-        'Stored Discord status message was not found and has been recreated.',
-        'Status message was created but could not be pinned: Missing Permissions',
-      ],
+      warnings: ['Stored Discord status message was not found and has been recreated.', 'Status message was created but could not be pinned: Missing Permissions'],
     })
 
     expect(discordMock.editDiscordChannelMessage).toHaveBeenCalledTimes(2)

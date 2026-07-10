@@ -1,12 +1,6 @@
 import type { BlueprintTranslation, Prisma } from '../generated/prisma/client.js'
 import { prisma } from '../utils/prisma.js'
-import {
-  editDiscordChannelMessage,
-  pinDiscordChannelMessage,
-  sendDiscordChannelMessage,
-  type DiscordEmbedPayload,
-  type DiscordMessagePayload,
-} from './discord.js'
+import { editDiscordChannelMessage, pinDiscordChannelMessage, sendDiscordChannelMessage, type DiscordEmbedPayload, type DiscordMessagePayload } from './discord.js'
 
 type StatusUser = {
   id: string
@@ -93,8 +87,7 @@ const colors = {
 type DiscordStatusLocale = 'de' | 'en' | 'es'
 
 const discordStatusLocales = ['de', 'en', 'es'] as const
-const normalizeStatusLocale = (value: string | null | undefined): DiscordStatusLocale =>
-  discordStatusLocales.includes(value as DiscordStatusLocale) ? (value as DiscordStatusLocale) : 'de'
+const normalizeStatusLocale = (value: string | null | undefined): DiscordStatusLocale => (discordStatusLocales.includes(value as DiscordStatusLocale) ? (value as DiscordStatusLocale) : 'de')
 
 const statusCopy: Record<
   DiscordStatusLocale,
@@ -147,14 +140,14 @@ const statusCopy: Record<
     capturedAs: 'erfasst als',
     roadmapTitleSuffix: 'Roadmap',
     siriusTitleSuffix: 'Sirius-Status',
-    roadmapDescription: 'Clan-Route und Wunsch-BPs. Aktualisiert {updated}.',
-    siriusDescription: 'Aktive Planeten, Spawn-Fenster und Wunsch-Treffer. Aktualisiert {updated}.',
-    currentField: 'Aktuell',
-    nextStationsField: 'Nächste Stationen',
-    wantedBlueprintsField: 'Wunsch-BPs',
-    activePlanetsField: 'Aktive Planeten',
-    spawnWindowsField: 'Spawn-Fenster',
-    wantedHitsField: 'Wunsch-Treffer',
+    roadmapDescription: '📍 {current} aktuell · 🧭 {planned} geplant · 🎯 {wanted} Wunsch-BPs · aktualisiert {updated}.',
+    siriusDescription: '🪐 {active} aktiv · ⏳ {windows} Spawn-Fenster · 🎯 {wanted} Wunsch-Treffer · aktualisiert {updated}.',
+    currentField: '📍 Aktuell',
+    nextStationsField: '🧭 Nächste Stationen',
+    wantedBlueprintsField: '🎯 Wunsch-BPs',
+    activePlanetsField: '🪐 Aktive Planeten',
+    spawnWindowsField: '⏳ Spawn-Fenster',
+    wantedHitsField: '⭐ Wunsch-Treffer',
     noCurrent: 'Keine aktuelle Station gesetzt.',
     noPlanned: 'Keine geplanten Stationen.',
     noRoadmapWanted: 'Keine Wunsch-BPs auf den nächsten Roadmap-Stationen.',
@@ -187,14 +180,14 @@ const statusCopy: Record<
     capturedAs: 'captured as',
     roadmapTitleSuffix: 'Roadmap',
     siriusTitleSuffix: 'Sirius status',
-    roadmapDescription: 'Clan route and wanted BPs. Updated {updated}.',
-    siriusDescription: 'Active planets, spawn windows, and wanted hits. Updated {updated}.',
-    currentField: 'Current',
-    nextStationsField: 'Next stations',
-    wantedBlueprintsField: 'Wanted BPs',
-    activePlanetsField: 'Active planets',
-    spawnWindowsField: 'Spawn windows',
-    wantedHitsField: 'Wanted hits',
+    roadmapDescription: '📍 {current} current · 🧭 {planned} planned · 🎯 {wanted} wanted BPs · updated {updated}.',
+    siriusDescription: '🪐 {active} active · ⏳ {windows} spawn windows · 🎯 {wanted} wanted hits · updated {updated}.',
+    currentField: '📍 Current',
+    nextStationsField: '🧭 Next stations',
+    wantedBlueprintsField: '🎯 Wanted BPs',
+    activePlanetsField: '🪐 Active planets',
+    spawnWindowsField: '⏳ Spawn windows',
+    wantedHitsField: '⭐ Wanted hits',
     noCurrent: 'No current station set.',
     noPlanned: 'No planned stations.',
     noRoadmapWanted: 'No wanted BPs on the next roadmap stations.',
@@ -227,14 +220,14 @@ const statusCopy: Record<
     capturedAs: 'registrado como',
     roadmapTitleSuffix: 'Ruta',
     siriusTitleSuffix: 'Estado Sirius',
-    roadmapDescription: 'Ruta del clan y BPs deseados. Actualizado {updated}.',
-    siriusDescription: 'Planetas activos, ventanas de spawn y deseados. Actualizado {updated}.',
-    currentField: 'Actual',
-    nextStationsField: 'Siguientes estaciones',
-    wantedBlueprintsField: 'BPs deseados',
-    activePlanetsField: 'Planetas activos',
-    spawnWindowsField: 'Ventanas de spawn',
-    wantedHitsField: 'Deseados activos',
+    roadmapDescription: '📍 {current} actual · 🧭 {planned} planificadas · 🎯 {wanted} BPs deseados · actualizado {updated}.',
+    siriusDescription: '🪐 {active} activos · ⏳ {windows} ventanas · 🎯 {wanted} deseados · actualizado {updated}.',
+    currentField: '📍 Actual',
+    nextStationsField: '🧭 Siguientes estaciones',
+    wantedBlueprintsField: '🎯 BPs deseados',
+    activePlanetsField: '🪐 Planetas activos',
+    spawnWindowsField: '⏳ Ventanas de spawn',
+    wantedHitsField: '⭐ Deseados activos',
     noCurrent: 'No hay estación actual.',
     noPlanned: 'No hay estaciones planificadas.',
     noRoadmapWanted: 'No hay BPs deseados en las siguientes estaciones.',
@@ -290,13 +283,13 @@ const truncateFieldValue = (value: string, limit: number) => {
   return `${kept.join('\n')}${suffix}`
 }
 
-const timestamp = (date: Date | null | undefined, style: 'f' | 'R' = 'f') =>
-  date ? `<t:${Math.floor(date.getTime() / 1000)}:${style}>` : copyFor('de').open
+const timestamp = (date: Date | null | undefined, style: 'f' | 'R' = 'f') => (date ? `<t:${Math.floor(date.getTime() / 1000)}:${style}>` : copyFor('de').open)
 
 const mentionOrName = (user: StatusUser) => (user.discordUserId ? `<@${user.discordUserId}>` : user.displayName)
 
-const timestampFor = (date: Date | null | undefined, locale: DiscordStatusLocale, style: 'f' | 'R' = 'f') =>
-  date ? timestamp(date, style) : copyFor(locale).open
+const timestampFor = (date: Date | null | undefined, locale: DiscordStatusLocale, style: 'f' | 'R' = 'f') => (date ? timestamp(date, style) : copyFor(locale).open)
+
+const replaceTokens = (template: string, tokens: Record<string, string | number>) => Object.entries(tokens).reduce((result, [key, value]) => result.replaceAll(`{${key}}`, String(value)), template)
 
 const localizedBlueprintName = (
   blueprint: {
@@ -320,36 +313,41 @@ const localizedBlueprintName = (
   return mappedLocale === 'en' ? en || de || '-' : de || en || '-'
 }
 
-const formatPlanetTitle = (planetName: string | null, ring: number, locale: DiscordStatusLocale) =>
-  `${planetName ?? copyFor(locale).unknownPlanet} - ${ring}. Ring`
+const formatPlanetTitle = (planetName: string | null, ring: number, locale: DiscordStatusLocale) => `${planetName ?? copyFor(locale).unknownPlanet} - ${ring}. Ring`
+
+const compactPlanetTitle = (appearance: StatusAppearance, locale: DiscordStatusLocale) => `${appearance.planetName ?? copyFor(locale).unknownPlanet} ${appearance.ring}. Ring`
+
+const expiryIconFor = (expiresAt: Date, generatedAt: Date) => {
+  const hoursLeft = (expiresAt.getTime() - generatedAt.getTime()) / 3_600_000
+  if (hoursLeft <= 0) return '🔴'
+  if (hoursLeft <= 6) return '🟡'
+  return '🟢'
+}
+
+const stopStatusIcon = (stop: StatusJourneyStop) => {
+  if (stop.status === 'CURRENT') return '🟢'
+  if (stop.certainty === 'TENTATIVE') return '🟡'
+  return '🧭'
+}
 
 const formatStopLine = (stop: StatusJourneyStop, locale: DiscordStatusLocale) => {
   const copy = copyFor(locale)
   const title = formatPlanetTitle(stop.planetName ?? stop.appearance?.planetName ?? null, stop.ring, locale)
   const timing = [
-    stop.arriveAt ? `${copy.arrival} ${timestampFor(stop.arriveAt, locale, 'f')} (${timestampFor(stop.arriveAt, locale, 'R')})` : null,
-    stop.departAt ? `${copy.departure} ${timestampFor(stop.departAt, locale, 'f')} (${timestampFor(stop.departAt, locale, 'R')})` : null,
+    stop.arriveAt ? `🛬 ${copy.arrival} ${timestampFor(stop.arriveAt, locale, 'f')} · ${timestampFor(stop.arriveAt, locale, 'R')}` : null,
+    stop.departAt ? `🛫 ${copy.departure} ${timestampFor(stop.departAt, locale, 'f')} · ${timestampFor(stop.departAt, locale, 'R')}` : null,
   ].filter(Boolean)
-  const suffix = timing.length ? `\n${timing.join(' · ')}` : `\n${copy.timeOpen}`
-  return `**${title}** · ${copy.statuses[stop.status] ?? stop.status.toLowerCase()}${
-    stop.certainty === 'TENTATIVE' ? ` · ${copy.tentative}` : ''
-  }${suffix}`
+  const suffix = timing.length ? timing.join('\n') : `🕓 ${copy.timeOpen}`
+  return `🪐 **${title}**\n${stopStatusIcon(stop)} ${copy.statuses[stop.status] ?? stop.status.toLowerCase()}${stop.certainty === 'TENTATIVE' ? ` · ${copy.tentative}` : ''}\n${suffix}`
 }
 
-const formatAppearanceLine = (appearance: StatusAppearance, locale: DiscordStatusLocale) => {
+const formatAppearanceLine = (appearance: StatusAppearance, locale: DiscordStatusLocale, generatedAt: Date) => {
   const copy = copyFor(locale)
-  const nextSpawn = appearance.nextSpawnAt
-    ? ` · ${copy.newSpawn} ${timestampFor(appearance.nextSpawnAt, locale, 'f')} (${timestampFor(appearance.nextSpawnAt, locale, 'R')})`
-    : ''
-  return `**${formatPlanetTitle(appearance.planetName, appearance.ring, locale)}** · ${copy.bursts} ${timestampFor(
+  const nextSpawn = appearance.nextSpawnAt ? `\n🔁 ${copy.newSpawn} ${timestampFor(appearance.nextSpawnAt, locale, 'f')} · ${timestampFor(appearance.nextSpawnAt, locale, 'R')}` : ''
+  return `🪐 **${formatPlanetTitle(appearance.planetName, appearance.ring, locale)}**\n${expiryIconFor(
     appearance.expiresAt,
-    locale,
-    'f',
-  )} (${timestampFor(
-    appearance.expiresAt,
-    locale,
-    'R'
-  )})${nextSpawn}`
+    generatedAt,
+  )} ${copy.bursts} ${timestampFor(appearance.expiresAt, locale, 'f')} · ${timestampFor(appearance.expiresAt, locale, 'R')}${nextSpawn}`
 }
 
 const compactUserList = (users: StatusUser[], locale: DiscordStatusLocale, limit = 8) => {
@@ -358,29 +356,31 @@ const compactUserList = (users: StatusUser[], locale: DiscordStatusLocale, limit
   return rest > 0 ? `${visible.join(', ')} +${rest} ${copyFor(locale).more}` : visible.join(', ')
 }
 
-const uniqueBlueprintsForAppearances = (appearances: StatusAppearance[]) => {
-  const byId = new Map<string, StatusBlueprint>()
+const wantedLinesForAppearances = (appearances: StatusAppearance[], locale: DiscordStatusLocale, maxLines = 10) => {
+  const byId = new Map<string, { blueprint: StatusBlueprint; locations: Set<string> }>()
   for (const appearance of appearances) {
     for (const slot of appearance.slots) {
-      if (!slot.blueprint) continue
-      const existing = byId.get(slot.blueprint.id)
-      if (!existing) {
-        byId.set(slot.blueprint.id, slot.blueprint)
+      if (!slot.blueprint || slot.blueprint.wantedUsers.length === 0) continue
+      const entry = byId.get(slot.blueprint.id) ?? {
+        blueprint: slot.blueprint,
+        locations: new Set<string>(),
       }
+      entry.locations.add(compactPlanetTitle(appearance, locale))
+      byId.set(slot.blueprint.id, entry)
     }
   }
-  return Array.from(byId.values())
-}
 
-const wantedLinesForAppearances = (appearances: StatusAppearance[], locale: DiscordStatusLocale, maxLines = 10) =>
-  uniqueBlueprintsForAppearances(appearances)
+  return Array.from(byId.values())
+    .map(entry => entry.blueprint)
     .filter(blueprint => blueprint.wantedUsers.length > 0)
-    .sort(
-      (left, right) =>
-        right.wantedUsers.length - left.wantedUsers.length || left.name.localeCompare(right.name, collatorLocaleFor(locale)),
-    )
+    .sort((left, right) => right.wantedUsers.length - left.wantedUsers.length || left.name.localeCompare(right.name, collatorLocaleFor(locale)))
     .slice(0, maxLines)
-    .map(blueprint => `**${blueprint.name}** (${blueprint.wantedUsers.length}): ${compactUserList(blueprint.wantedUsers, locale)}`)
+    .map(blueprint => {
+      const locations = byId.get(blueprint.id)?.locations ?? new Set<string>()
+      const locationText = locations.size > 0 ? ` · ${Array.from(locations).slice(0, 3).join(', ')}` : ''
+      return `🎯 **${blueprint.name}** (${blueprint.wantedUsers.length})${locationText}\n${compactUserList(blueprint.wantedUsers, locale)}`
+    })
+}
 
 const field = (name: string, lines: string[], fallback: string): NonNullable<DiscordEmbedPayload['fields']>[number] => ({
   name,
@@ -393,19 +393,26 @@ export const buildClanRoadmapStatusEmbed = (snapshot: ClanStatusSnapshot): Disco
   const copy = copyFor(locale)
   const current = snapshot.journeyStops.find(stop => stop.status === 'CURRENT') ?? null
   const planned = snapshot.journeyStops.filter(stop => stop.status === 'PLANNED')
-  const relevantAppearances = [current?.appearance, ...planned.slice(0, 2).map(stop => stop.appearance)].filter(
-    (appearance): appearance is StatusAppearance => Boolean(appearance)
-  )
+  const relevantAppearances = [current?.appearance, ...planned.slice(0, 2).map(stop => stop.appearance)].filter((appearance): appearance is StatusAppearance => Boolean(appearance))
   const wantedLines = wantedLinesForAppearances(relevantAppearances, locale, 10)
 
   return {
     title: `${snapshot.clan.name} ${copy.roadmapTitleSuffix}`,
-    description: copy.roadmapDescription.replace('{updated}', timestampFor(snapshot.generatedAt, locale, 'R')),
+    description: replaceTokens(copy.roadmapDescription, {
+      current: current ? 1 : 0,
+      planned: planned.length,
+      wanted: wantedLines.length,
+      updated: timestampFor(snapshot.generatedAt, locale, 'R'),
+    }),
     color: wantedLines.length > 0 ? colors.warning : colors.info,
     timestamp: snapshot.generatedAt.toISOString(),
     fields: [
       field(copy.currentField, current ? [formatStopLine(current, locale)] : [], copy.noCurrent),
-      field(copy.nextStationsField, planned.slice(0, 5).map(stop => formatStopLine(stop, locale)), copy.noPlanned),
+      field(
+        copy.nextStationsField,
+        planned.slice(0, 5).map(stop => formatStopLine(stop, locale)),
+        copy.noPlanned,
+      ),
       field(copy.wantedBlueprintsField, wantedLines, copy.noRoadmapWanted),
     ],
     footer: { text: copy.roadmapFooter },
@@ -416,23 +423,29 @@ export const buildClanPlanetsStatusEmbed = (snapshot: ClanStatusSnapshot): Disco
   const locale = snapshot.statusLocale
   const copy = copyFor(locale)
   const spawnLines = snapshot.spawnWindows.slice(0, 8).map(window => {
-    const resolved = window.resolvedPlanetName ? ` · ${copy.capturedAs} **${window.resolvedPlanetName}**` : ''
-    return `**${window.sourcePlanetName}** · ${copy.expected} ${timestampFor(window.expectedAt, locale, 'f')} (${timestampFor(
-      window.expectedAt,
-      locale,
-      'R',
-    )})${resolved}`
+    const icon = window.resolvedPlanetName ? '✅' : window.expectedAt < snapshot.generatedAt ? '🔴' : '⏳'
+    const resolved = window.resolvedPlanetName ? `\n✅ ${copy.capturedAs} **${window.resolvedPlanetName}**` : ''
+    return `⏳ **${window.sourcePlanetName}**\n${icon} ${copy.expected} ${timestampFor(window.expectedAt, locale, 'f')} · ${timestampFor(window.expectedAt, locale, 'R')}${resolved}`
   })
 
   const wantedLines = wantedLinesForAppearances(snapshot.activeAppearances, locale, 8)
 
   return {
     title: `${snapshot.clan.name} ${copy.siriusTitleSuffix}`,
-    description: copy.siriusDescription.replace('{updated}', timestampFor(snapshot.generatedAt, locale, 'R')),
+    description: replaceTokens(copy.siriusDescription, {
+      active: snapshot.activeAppearances.length,
+      windows: snapshot.spawnWindows.length,
+      wanted: wantedLines.length,
+      updated: timestampFor(snapshot.generatedAt, locale, 'R'),
+    }),
     color: snapshot.spawnWindows.some(window => window.expectedAt < snapshot.generatedAt && !window.resolvedPlanetName) ? colors.warning : colors.ok,
     timestamp: snapshot.generatedAt.toISOString(),
     fields: [
-      field(copy.activePlanetsField, snapshot.activeAppearances.slice(0, 10).map(appearance => formatAppearanceLine(appearance, locale)), copy.noActivePlanets),
+      field(
+        copy.activePlanetsField,
+        snapshot.activeAppearances.slice(0, 10).map(appearance => formatAppearanceLine(appearance, locale, snapshot.generatedAt)),
+        copy.noActivePlanets,
+      ),
       field(copy.spawnWindowsField, spawnLines, copy.noSpawnWindows),
       field(copy.wantedHitsField, wantedLines, copy.noWantedHits),
     ],
@@ -456,13 +469,11 @@ const statusAppearanceInclude = {
   },
 } satisfies Prisma.SiriusPlanetAppearanceInclude
 
-type AppearanceWithSlots = Prisma.SiriusPlanetAppearanceGetPayload<{ include: typeof statusAppearanceInclude }>
+type AppearanceWithSlots = Prisma.SiriusPlanetAppearanceGetPayload<{
+  include: typeof statusAppearanceInclude
+}>
 
-const mapAppearance = (
-  appearance: AppearanceWithSlots,
-  blueprintUsers: Map<string, { wanted: StatusUser[]; missing: StatusUser[] }>,
-  locale: DiscordStatusLocale,
-): StatusAppearance => ({
+const mapAppearance = (appearance: AppearanceWithSlots, blueprintUsers: Map<string, { wanted: StatusUser[]; missing: StatusUser[] }>, locale: DiscordStatusLocale): StatusAppearance => ({
   id: appearance.id,
   planetName: appearance.planet.name,
   ring: appearance.ring,
@@ -531,7 +542,10 @@ const buildBlueprintUsers = async (clanId: string, blueprintIds: string[]) => {
 }
 
 export const collectClanDiscordStatusSnapshot = async (clanId: string): Promise<ClanStatusSnapshot> => {
-  const settings = await prisma.clanDiscordSettings.findUnique({ where: { clanId }, include: { clan: true } })
+  const settings = await prisma.clanDiscordSettings.findUnique({
+    where: { clanId },
+    include: { clan: true },
+  })
   if (!settings?.statusEnabled || !settings.statusChannelId) {
     throw new Error('Discord status channel is not enabled for this clan.')
   }
@@ -603,13 +617,7 @@ export const collectClanDiscordStatusSnapshot = async (clanId: string): Promise<
   }
 }
 
-const updateOrCreateStatusMessage = async (input: {
-  channelId: string
-  messageId: string | null
-  recreate: boolean
-  pin: boolean
-  payload: DiscordMessagePayload
-}) => {
+const updateOrCreateStatusMessage = async (input: { channelId: string; messageId: string | null; recreate: boolean; pin: boolean; payload: DiscordMessagePayload }) => {
   const warnings: string[] = []
   if (input.messageId && !input.recreate) {
     const editResult = await editDiscordChannelMessage(input.channelId, input.messageId, input.payload)
