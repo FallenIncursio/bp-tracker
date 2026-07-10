@@ -26,6 +26,7 @@ describe('OpenAPI specification', () => {
     expect(openApiSpec.paths['/api/blueprints']?.get).toBeDefined()
     expect(openApiSpec.paths['/api/sirius/clans/{clanId}/active']?.get).toBeDefined()
     expect(openApiSpec.paths['/api/sirius/clans/{clanId}/spawn-plan']?.get).toBeDefined()
+    expect(openApiSpec.paths['/api/sirius/spawn-windows/{spawnWindowId}/cancel']?.patch).toBeDefined()
     expect(openApiSpec.paths['/api/sirius/clans/{clanId}/journey']?.get).toBeDefined()
     expect(openApiSpec.paths['/api/sirius/clans/{clanId}/journey']?.post).toBeDefined()
     expect(openApiSpec.paths['/api/sirius/journey/{stopId}']?.patch).toBeDefined()

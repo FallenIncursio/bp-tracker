@@ -1,5 +1,6 @@
-import type { BlueprintTranslation, Prisma } from '../generated/prisma/client.js'
+import type { BlueprintTranslation, Prisma, SiriusAppearanceStatus, SiriusSpawnWindowStatus } from '../generated/prisma/client.js'
 import { prisma } from '../utils/prisma.js'
+import { deriveSpawnWindowStatus } from '../sirius/spawn-windows.js'
 import { editDiscordChannelMessage, pinDiscordChannelMessage, sendDiscordChannelMessage, type DiscordEmbedPayload, type DiscordMessagePayload } from './discord.js'
 
 type StatusUser = {
@@ -45,8 +46,9 @@ type StatusJourneyStop = {
 type StatusSpawnWindow = {
   id: string
   expectedAt: Date
-  status: string
+  status: SiriusSpawnWindowStatus
   sourcePlanetName: string
+  sourceStatus: SiriusAppearanceStatus
   sourceExpiresAt: Date
   resolvedPlanetName: string | null
 }
@@ -370,11 +372,21 @@ const appendMoreLine = (lines: string[], total: number, locale: DiscordStatusLoc
   return hidden > 0 ? [...lines, `+${hidden} ${copyFor(locale).more}`] : lines
 }
 
-const wantedLinesForAppearances = (appearances: StatusAppearance[], locale: DiscordStatusLocale, maxLines = 10) => {
+const blueprintIdsForAppearances = (appearances: StatusAppearance[]) =>
+  new Set(appearances.flatMap(appearance => appearance.slots.map(slot => slot.blueprint?.id).filter((id): id is string => Boolean(id))))
+
+const relevantRoadmapAppearancesForSnapshot = (snapshot: ClanStatusSnapshot) => {
+  const current = snapshot.journeyStops.find(stop => stop.status === 'CURRENT') ?? null
+  const planned = snapshot.journeyStops.filter(stop => stop.status === 'PLANNED')
+  return [current?.appearance, ...planned.slice(0, 2).map(stop => stop.appearance)].filter((appearance): appearance is StatusAppearance => Boolean(appearance))
+}
+
+const wantedLinesForAppearances = (appearances: StatusAppearance[], locale: DiscordStatusLocale, maxLines = 10, excludedBlueprintIds = new Set<string>()) => {
   const byId = new Map<string, { blueprint: StatusBlueprint; locations: Set<string> }>()
   for (const appearance of appearances) {
     for (const slot of appearance.slots) {
       if (!slot.blueprint || slot.blueprint.wantedUsers.length === 0) continue
+      if (excludedBlueprintIds.has(slot.blueprint.id)) continue
       const entry = byId.get(slot.blueprint.id) ?? {
         blueprint: slot.blueprint,
         locations: new Set<string>(),
@@ -407,7 +419,7 @@ export const buildClanRoadmapStatusEmbed = (snapshot: ClanStatusSnapshot): Disco
   const copy = copyFor(locale)
   const current = snapshot.journeyStops.find(stop => stop.status === 'CURRENT') ?? null
   const planned = snapshot.journeyStops.filter(stop => stop.status === 'PLANNED')
-  const relevantAppearances = [current?.appearance, ...planned.slice(0, 2).map(stop => stop.appearance)].filter((appearance): appearance is StatusAppearance => Boolean(appearance))
+  const relevantAppearances = relevantRoadmapAppearancesForSnapshot(snapshot)
   const wantedLines = wantedLinesForAppearances(relevantAppearances, locale, 10)
 
   return {
@@ -437,7 +449,17 @@ export const buildClanPlanetsStatusEmbed = (snapshot: ClanStatusSnapshot): Disco
   const locale = snapshot.statusLocale
   const copy = copyFor(locale)
   const openSpawnWindows = snapshot.spawnWindows
-    .filter(window => window.status === 'PENDING' && !window.resolvedPlanetName)
+    .filter(window => {
+      const derivedStatus = deriveSpawnWindowStatus({
+        status: window.status,
+        expectedAt: window.expectedAt,
+        resolvedAppearanceId: window.resolvedPlanetName,
+        sourceStatus: window.sourceStatus,
+        sourceExpiresAt: window.sourceExpiresAt,
+        now: snapshot.generatedAt,
+      })
+      return derivedStatus === 'WAITING_FOR_SPAWN' || derivedStatus === 'OVERDUE'
+    })
     .sort((left, right) => {
       const leftOverdue = left.expectedAt < snapshot.generatedAt ? 0 : 1
       const rightOverdue = right.expectedAt < snapshot.generatedAt ? 0 : 1
@@ -459,7 +481,8 @@ export const buildClanPlanetsStatusEmbed = (snapshot: ClanStatusSnapshot): Disco
     snapshot.activeAppearances.length,
     locale,
   )
-  const wantedLines = wantedLinesForAppearances(snapshot.activeAppearances, locale, 8)
+  const roadmapBlueprintIds = blueprintIdsForAppearances(relevantRoadmapAppearancesForSnapshot(snapshot))
+  const wantedLines = wantedLinesForAppearances(snapshot.activeAppearances, locale, 8, roadmapBlueprintIds)
 
   return {
     title: `${snapshot.clan.name} ${copy.siriusTitleSuffix}`,
@@ -638,6 +661,7 @@ export const collectClanDiscordStatusSnapshot = async (clanId: string): Promise<
       expectedAt: window.expectedAt,
       status: window.status,
       sourcePlanetName: window.sourceAppearance.planet.name,
+      sourceStatus: window.sourceAppearance.status,
       sourceExpiresAt: window.sourceAppearance.expiresAt,
       resolvedPlanetName: window.resolvedAppearance?.planet.name ?? null,
     })),

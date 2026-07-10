@@ -162,6 +162,8 @@ const journeyFormOpen = ref(false)
 const journeyError = ref('')
 const journeyBusy = ref(false)
 const journeyReorderBusy = ref(false)
+const spawnPlanError = ref('')
+const cancelingSpawnWindowId = ref('')
 const slotSaveMessage = ref('')
 const slotSaveError = ref('')
 const draggedJourneyStopId = ref('')
@@ -204,12 +206,14 @@ const filteredHistoryRows = computed(() => {
       .filter(Boolean)
       .join(' ')
       .toLowerCase()
-      .includes(query)
+      .includes(query),
   )
 })
 const visibleHistoryRows = computed(() => filteredHistoryRows.value.slice(0, historyVisibleCount.value))
 const canShowMoreHistory = computed(() => visibleHistoryRows.value.length < filteredHistoryRows.value.length)
-const openSpawnWindows = computed(() => spawnWindows.value.filter(row => row.derivedStatus !== 'RESOLVED' && row.derivedStatus !== 'CANCELLED'))
+const openSpawnWindows = computed(() =>
+  spawnWindows.value.filter(row => row.derivedStatus !== 'RESOLVED' && row.derivedStatus !== 'CANCELLED'),
+)
 const recentResolvedSpawnWindows = computed(() => spawnWindows.value.filter(row => row.derivedStatus === 'RESOLVED').slice(0, 8))
 const resolvingSpawnWindow = computed(() => spawnWindows.value.find(row => row.id === resolvingSpawnWindowId.value) ?? null)
 const visibleJourneyStops = computed(() => journeyStops.value.filter(stop => stop.status !== 'CANCELLED'))
@@ -218,9 +222,15 @@ const currentJourneyStop = computed(() => visibleJourneyStops.value.find(stop =>
 const nextJourneyStop = computed(() => {
   const currentIndex = visibleJourneyStops.value.findIndex(stop => stop.status === 'CURRENT')
   const candidates = currentIndex >= 0 ? visibleJourneyStops.value.slice(currentIndex + 1) : visibleJourneyStops.value
-  return candidates.find(stop => stop.status === 'PLANNED') ?? candidates.find(stop => stop.status !== 'COMPLETED' && stop.status !== 'SKIPPED') ?? null
+  return (
+    candidates.find(stop => stop.status === 'PLANNED') ??
+    candidates.find(stop => stop.status !== 'COMPLETED' && stop.status !== 'SKIPPED') ??
+    null
+  )
 })
-const openJourneyStopCount = computed(() => visibleJourneyStops.value.filter(stop => stop.status === 'CURRENT' || stop.status === 'PLANNED').length)
+const openJourneyStopCount = computed(
+  () => visibleJourneyStops.value.filter(stop => stop.status === 'CURRENT' || stop.status === 'PLANNED').length,
+)
 const tentativeJourneyStopCount = computed(() => visibleJourneyStops.value.filter(stop => stop.certainty === 'TENTATIVE').length)
 const dateTime = (value: string | null | undefined) => formatDateTime(value, locale.value)
 const enumLabel = (scope: 'slot' | 'enemy' | 'techTier', value: string | null | undefined) => {
@@ -242,10 +252,11 @@ const spawnStatusClass = (value: SpawnWindow['derivedStatus']) => ({
 const showSpawnCountdown = (spawnWindow: SpawnWindow) =>
   spawnWindow.derivedStatus !== 'RESOLVED' && spawnWindow.derivedStatus !== 'CANCELLED'
 const canCaptureSpawnWindow = (spawnWindow: SpawnWindow) =>
-  spawnWindow.derivedStatus !== 'RESOLVED' &&
-  spawnWindow.derivedStatus !== 'CANCELLED' &&
-  spawnWindow.derivedStatus !== 'ACTIVE_SOURCE'
-const journeyStopName = (stop: JourneyStop) => stop.planetName ?? stop.planet?.name ?? stop.appearance?.planet.name ?? t('sirius.unknownPlanet')
+  spawnWindow.derivedStatus !== 'RESOLVED' && spawnWindow.derivedStatus !== 'CANCELLED' && spawnWindow.derivedStatus !== 'ACTIVE_SOURCE'
+const canCancelSpawnWindow = (spawnWindow: SpawnWindow) =>
+  spawnWindow.derivedStatus !== 'RESOLVED' && spawnWindow.derivedStatus !== 'CANCELLED'
+const journeyStopName = (stop: JourneyStop) =>
+  stop.planetName ?? stop.planet?.name ?? stop.appearance?.planet.name ?? t('sirius.unknownPlanet')
 const journeyStatusLabel = (value: JourneyStopStatus) => t(`sirius.journeyStatuses.${value}`)
 const journeyCertaintyLabel = (value: JourneyStopCertainty) => t(`sirius.journeyCertainties.${value}`)
 const journeyWarningLabel = (value: string) => (te(`sirius.journeyWarnings.${value}`) ? t(`sirius.journeyWarnings.${value}`) : value)
@@ -260,7 +271,8 @@ const journeyStopClass = (stop: JourneyStop) => ({
   'journey-stop-drag-over': dragOverJourneyStopId.value === stop.id && draggedJourneyStopId.value !== stop.id,
 })
 const journeyTimeLabel = (stop: JourneyStop) => {
-  if (stop.arriveAt && stop.departAt) return `${formatSourceDateTime(stop.arriveAt, locale.value)} - ${formatSourceDateTime(stop.departAt, locale.value)}`
+  if (stop.arriveAt && stop.departAt)
+    return `${formatSourceDateTime(stop.arriveAt, locale.value)} - ${formatSourceDateTime(stop.departAt, locale.value)}`
   if (stop.arriveAt) return t('sirius.arrivesAt', { date: formatSourceDateTime(stop.arriveAt, locale.value) })
   if (stop.departAt) return t('sirius.departsAt', { date: formatSourceDateTime(stop.departAt, locale.value) })
   return t('sirius.noJourneyTime')
@@ -269,7 +281,7 @@ const journeySourceLabel = (stop: JourneyStop) => (stop.appearanceId ? t('sirius
 const journeyOpenSummary = computed(() =>
   tentativeJourneyStopCount.value > 0
     ? t('sirius.openJourneySummaryWithTentative', { count: openJourneyStopCount.value, tentative: tentativeJourneyStopCount.value })
-    : t('sirius.openJourneySummary', { count: openJourneyStopCount.value })
+    : t('sirius.openJourneySummary', { count: openJourneyStopCount.value }),
 )
 
 function techTierForRing(ring: number) {
@@ -295,11 +307,10 @@ function isSiriusBlueprint(name: string | null | undefined) {
 const blueprintName = (blueprint: Blueprint | null | undefined) => localizedName(blueprint, locale.value)
 const slotPartsLabel = (partsRequired: number | null | undefined) => (partsRequired ? `${partsRequired}er` : '-')
 const slotLabel = (slotGroup: string | null | undefined, partsRequired?: number | null) =>
-  slotGroup === 'RESOURCE' && partsRequired
-    ? slotPartsLabel(partsRequired)
-    : enumLabel('slot', slotGroup)
+  slotGroup === 'RESOURCE' && partsRequired ? slotPartsLabel(partsRequired) : enumLabel('slot', slotGroup)
 const enemyLabel = (slot: Appearance['slots'][number]) => slot.locationName ?? enumLabel('enemy', slot.enemyType)
-const appearanceBlueprintName = (slot: Appearance['slots'][number]) => (slot.blueprint ? blueprintName(slot.blueprint) : slot.rawBlueprintName ?? '-')
+const appearanceBlueprintName = (slot: Appearance['slots'][number]) =>
+  slot.blueprint ? blueprintName(slot.blueprint) : (slot.rawBlueprintName ?? '-')
 
 function relativeAge(value: string | null | undefined) {
   if (!value) return t('sirius.neverDropped')
@@ -336,7 +347,7 @@ function defaultRowsForAppearance(appearance: Appearance): SlotRow[] {
     { slotGroup: 'SLOT_12', enemyType: null, blueprintId: '', partsRequired: 12 },
     { slotGroup: 'SLOT_5', enemyType: null, blueprintId: '', partsRequired: 5 },
     ...enemyOptions.flatMap(enemyType =>
-      Array.from({ length: 3 }, () => ({ slotGroup: 'SLOT_2', enemyType, blueprintId: '', partsRequired: 2 }))
+      Array.from({ length: 3 }, () => ({ slotGroup: 'SLOT_2', enemyType, blueprintId: '', partsRequired: 2 })),
     ),
   ]
 }
@@ -374,6 +385,21 @@ const loadSpawnPlan = async () => {
   if (!selectedClanId.value) return
   const response = await api.get<{ spawnWindows: SpawnWindow[] }>(`/sirius/clans/${selectedClanId.value}/spawn-plan`)
   spawnWindows.value = response.spawnWindows
+}
+
+const cancelSpawnWindow = async (spawnWindow: SpawnWindow) => {
+  if (!window.confirm(t('sirius.ignoreSpawnConfirm', { planet: spawnWindow.sourceAppearance.planet.name }))) return
+  cancelingSpawnWindowId.value = spawnWindow.id
+  spawnPlanError.value = ''
+  try {
+    await api.patch(`/sirius/spawn-windows/${spawnWindow.id}/cancel`)
+    if (resolvingSpawnWindowId.value === spawnWindow.id) resolvingSpawnWindowId.value = ''
+    await loadSpawnPlan()
+  } catch (error) {
+    spawnPlanError.value = error instanceof Error ? error.message : t('sirius.ignoreSpawnFailed')
+  } finally {
+    cancelingSpawnWindowId.value = ''
+  }
 }
 
 const loadJourney = async () => {
@@ -718,7 +744,7 @@ watch(
     if (!appearance) return
     journeyForm.value.ring = appearance.ring
     journeyForm.value.planetName = appearance.planet.name
-  }
+  },
 )
 
 watch(
@@ -731,7 +757,7 @@ watch(
     slotRows.value = defaultRowsForAppearance(appearance)
     await loadDropRulesForSelected()
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
@@ -744,7 +770,9 @@ watch(
       </div>
       <div class="page-actions">
         <AppTooltip :text="t('tooltips.sirius')" />
-        <button class="secondary-button" :disabled="loading" @click="refreshSiriusData"><RefreshCw :size="16" /> {{ t('app.actions.refresh') }}</button>
+        <button class="secondary-button" :disabled="loading" @click="refreshSiriusData">
+          <RefreshCw :size="16" /> {{ t('app.actions.refresh') }}
+        </button>
       </div>
     </div>
 
@@ -786,7 +814,12 @@ watch(
             </label>
             <label class="expires-field">
               {{ t('sirius.expiresAt') }}
-              <input id="sirius-appearance-expires-at" v-model="appearanceForm.expiresAt" name="siriusAppearanceExpiresAt" type="datetime-local" />
+              <input
+                id="sirius-appearance-expires-at"
+                v-model="appearanceForm.expiresAt"
+                name="siriusAppearanceExpiresAt"
+                type="datetime-local"
+              />
             </label>
           </div>
           <p class="muted">{{ t('sirius.techTier') }}: {{ enumLabel('techTier', techTierForRing(appearanceForm.ring)) }}</p>
@@ -808,7 +841,9 @@ watch(
           <div>
             <h2 class="panel-title">{{ t('sirius.editDrops') }}</h2>
             <p class="panel-subtitle">
-              {{ selectedAppearance ? `${selectedAppearance.planet.name} · ${t('sirius.ringLabel', { ring: selectedAppearance.ring })}` : '-' }}
+              {{
+                selectedAppearance ? `${selectedAppearance.planet.name} · ${t('sirius.ringLabel', { ring: selectedAppearance.ring })}` : '-'
+              }}
             </p>
           </div>
         </div>
@@ -877,11 +912,18 @@ watch(
                 :placeholder="t('sirius.blueprintSearch')"
               />
             </label>
-            <button class="icon-button" :title="t('app.actions.delete')" :aria-label="t('app.actions.delete')" @click="removeSlotRow(index)">
+            <button
+              class="icon-button"
+              :title="t('app.actions.delete')"
+              :aria-label="t('app.actions.delete')"
+              @click="removeSlotRow(index)"
+            >
               <Trash2 :size="16" />
             </button>
           </div>
-          <button class="primary-button" :disabled="saveSlotsBusy" @click="saveSlots"><Save :size="16" /> {{ t('sirius.saveDrops') }}</button>
+          <button class="primary-button" :disabled="saveSlotsBusy" @click="saveSlots">
+            <Save :size="16" /> {{ t('sirius.saveDrops') }}
+          </button>
           <p v-if="slotSaveMessage" class="success-text">{{ slotSaveMessage }}</p>
           <p v-if="slotSaveError" class="error-text">{{ slotSaveError }}</p>
         </div>
@@ -896,7 +938,12 @@ watch(
         </div>
         <div class="journey-header-actions">
           <span class="muted">{{ t('sirius.journeyStopCount', { count: visibleJourneyStops.length }) }}</span>
-          <button v-if="canEditSelectedClan" class="secondary-button" type="button" @click="journeyFormOpen ? closeJourneyForm() : openJourneyForm()">
+          <button
+            v-if="canEditSelectedClan"
+            class="secondary-button"
+            type="button"
+            @click="journeyFormOpen ? closeJourneyForm() : openJourneyForm()"
+          >
             <X v-if="journeyFormOpen" :size="16" />
             <Plus v-else :size="16" />
             {{ journeyFormOpen ? t('sirius.hideJourneyForm') : t('sirius.planJourneyStop') }}
@@ -934,11 +981,21 @@ watch(
         </label>
         <label v-if="!journeyForm.appearanceId">
           {{ t('sirius.planet') }}
-          <input id="sirius-journey-planet-name" v-model="journeyForm.planetName" name="siriusJourneyPlanetName" :placeholder="t('sirius.journeyPlanetPlaceholder')" />
+          <input
+            id="sirius-journey-planet-name"
+            v-model="journeyForm.planetName"
+            name="siriusJourneyPlanetName"
+            :placeholder="t('sirius.journeyPlanetPlaceholder')"
+          />
         </label>
         <label>
           {{ t('sirius.ring') }}
-          <select id="sirius-journey-ring" v-model.number="journeyForm.ring" name="siriusJourneyRing" :disabled="Boolean(journeyForm.appearanceId)">
+          <select
+            id="sirius-journey-ring"
+            v-model.number="journeyForm.ring"
+            name="siriusJourneyRing"
+            :disabled="Boolean(journeyForm.appearanceId)"
+          >
             <option v-for="ring in ringOptions" :key="ring" :value="ring">{{ t('sirius.ringLabel', { ring }) }}</option>
           </select>
         </label>
@@ -1018,12 +1075,22 @@ watch(
               </div>
               <div class="journey-stop-tools">
                 <div class="journey-stop-chips">
-                  <span v-if="stop.certainty === 'TENTATIVE'" class="status-chip status-chip-warning">{{ journeyCertaintyLabel(stop.certainty) }}</span>
-                  <span v-if="stop.metrics.missing" class="metric metric-missing" :title="t('sirius.journeyMissingTitle', { count: stop.metrics.missing })">
+                  <span v-if="stop.certainty === 'TENTATIVE'" class="status-chip status-chip-warning">{{
+                    journeyCertaintyLabel(stop.certainty)
+                  }}</span>
+                  <span
+                    v-if="stop.metrics.missing"
+                    class="metric metric-missing"
+                    :title="t('sirius.journeyMissingTitle', { count: stop.metrics.missing })"
+                  >
                     <span>{{ t('dashboard.missing') }}</span>
                     {{ stop.metrics.missing }}
                   </span>
-                  <span v-if="stop.metrics.wanted" class="metric metric-wanted" :title="t('sirius.journeyWantedTitle', { count: stop.metrics.wanted })">
+                  <span
+                    v-if="stop.metrics.wanted"
+                    class="metric metric-wanted"
+                    :title="t('sirius.journeyWantedTitle', { count: stop.metrics.wanted })"
+                  >
                     <span>{{ t('dashboard.wanted') }}</span>
                     {{ stop.metrics.wanted }}
                   </span>
@@ -1033,16 +1100,31 @@ watch(
                     <MoreHorizontal :size="16" />
                   </summary>
                   <div class="journey-action-popover" @click="closeJourneyActionMenus()">
-                    <button class="menu-action" type="button" :disabled="index === 0 || journeyReorderBusy" @click="moveJourneyStop(stop, -1)">
+                    <button
+                      class="menu-action"
+                      type="button"
+                      :disabled="index === 0 || journeyReorderBusy"
+                      @click="moveJourneyStop(stop, -1)"
+                    >
                       <ArrowUp :size="16" /> {{ t('sirius.moveUp') }}
                     </button>
-                    <button class="menu-action" type="button" :disabled="index === visibleJourneyStops.length - 1 || journeyReorderBusy" @click="moveJourneyStop(stop, 1)">
+                    <button
+                      class="menu-action"
+                      type="button"
+                      :disabled="index === visibleJourneyStops.length - 1 || journeyReorderBusy"
+                      @click="moveJourneyStop(stop, 1)"
+                    >
                       <ArrowDown :size="16" /> {{ t('sirius.moveDown') }}
                     </button>
                     <button v-if="stop.status !== 'CURRENT'" class="menu-action" type="button" @click="setJourneyStatus(stop, 'CURRENT')">
                       <PlayCircle :size="16" /> {{ t('sirius.setCurrent') }}
                     </button>
-                    <button v-if="stop.status !== 'COMPLETED'" class="menu-action" type="button" @click="setJourneyStatus(stop, 'COMPLETED')">
+                    <button
+                      v-if="stop.status !== 'COMPLETED'"
+                      class="menu-action"
+                      type="button"
+                      @click="setJourneyStatus(stop, 'COMPLETED')"
+                    >
                       <CheckCircle2 :size="16" /> {{ t('sirius.markCompleted') }}
                     </button>
                     <button class="menu-action" type="button" @click="editJourneyStop(stop)">
@@ -1126,16 +1208,27 @@ watch(
                 <span v-else>-</span>
               </td>
               <td v-if="canEditSelectedClan">
-                <button
-                  v-if="canCaptureSpawnWindow(spawnWindow)"
-                  class="secondary-button"
-                  type="button"
-                  @click="startResolveSpawnWindow(spawnWindow)"
-                >
-                  <Plus :size="16" /> {{ t('sirius.captureSpawn') }}
-                </button>
-                <span v-else-if="spawnWindow.derivedStatus === 'ACTIVE_SOURCE'" class="muted">{{ t('sirius.spawnNotReady') }}</span>
-                <span v-else class="muted">{{ t('sirius.spawnResolved') }}</span>
+                <div class="inline-actions">
+                  <button
+                    v-if="canCaptureSpawnWindow(spawnWindow)"
+                    class="secondary-button"
+                    type="button"
+                    @click="startResolveSpawnWindow(spawnWindow)"
+                  >
+                    <Plus :size="16" /> {{ t('sirius.captureSpawn') }}
+                  </button>
+                  <span v-else-if="spawnWindow.derivedStatus === 'ACTIVE_SOURCE'" class="muted">{{ t('sirius.spawnNotReady') }}</span>
+                  <span v-else-if="spawnWindow.derivedStatus === 'RESOLVED'" class="muted">{{ t('sirius.spawnResolved') }}</span>
+                  <button
+                    v-if="canCancelSpawnWindow(spawnWindow)"
+                    class="danger-button"
+                    type="button"
+                    :disabled="cancelingSpawnWindowId === spawnWindow.id"
+                    @click="cancelSpawnWindow(spawnWindow)"
+                  >
+                    <X :size="16" /> {{ t('sirius.ignoreSpawn') }}
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -1190,11 +1283,21 @@ watch(
               <Plus :size="16" /> {{ t('sirius.captureSpawn') }}
             </button>
             <span v-else-if="spawnWindow.derivedStatus === 'ACTIVE_SOURCE'" class="muted">{{ t('sirius.spawnNotReady') }}</span>
-            <span v-else class="muted">{{ t('sirius.spawnResolved') }}</span>
+            <span v-else-if="spawnWindow.derivedStatus === 'RESOLVED'" class="muted">{{ t('sirius.spawnResolved') }}</span>
+            <button
+              v-if="canCancelSpawnWindow(spawnWindow)"
+              class="danger-button"
+              type="button"
+              :disabled="cancelingSpawnWindowId === spawnWindow.id"
+              @click="cancelSpawnWindow(spawnWindow)"
+            >
+              <X :size="16" /> {{ t('sirius.ignoreSpawn') }}
+            </button>
           </div>
         </article>
       </div>
       <div v-else class="empty-state">{{ t('sirius.noSpawnWindows') }}</div>
+      <p v-if="spawnPlanError" class="error-text">{{ spawnPlanError }}</p>
       <div v-if="recentResolvedSpawnWindows.length" class="spawn-resolved-summary">
         <span class="muted">{{ t('sirius.recentResolvedSpawns') }}</span>
         <span v-for="spawnWindow in recentResolvedSpawnWindows" :key="spawnWindow.id" class="data-chip">
@@ -1251,9 +1354,7 @@ watch(
         <article v-for="appearance in appearances" :key="`active-mobile-${appearance.id}`" class="mobile-card">
           <header class="mobile-card-header">
             <div>
-              <h3 class="mobile-card-title">
-                {{ appearance.planet.name }} - {{ t('sirius.ringLabel', { ring: appearance.ring }) }}
-              </h3>
+              <h3 class="mobile-card-title">{{ appearance.planet.name }} - {{ t('sirius.ringLabel', { ring: appearance.ring }) }}</h3>
               <p class="mobile-card-subtitle">{{ dateTime(appearance.expiresAt) }}</p>
             </div>
           </header>

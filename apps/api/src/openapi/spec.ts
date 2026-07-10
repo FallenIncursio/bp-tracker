@@ -162,6 +162,7 @@ const userIdParam = param('userId', id, 'User ID.')
 const blueprintIdParam = param('blueprintId', id, 'Blueprint ID.')
 const appearanceIdParam = param('appearanceId', id, 'Sirius appearance ID.')
 const slotIdParam = param('slotId', id, 'Sirius slot ID.')
+const spawnWindowIdParam = param('spawnWindowId', id, 'Sirius spawn window ID.')
 const journeyStopIdParam = param('stopId', id, 'Clan journey stop ID.')
 const clanIdQuery = param('clanId', id, 'Clan ID.', 'query')
 const includeExcludedQuery = param('includeExcluded', { type: 'boolean' }, 'Include members excluded from tracking.', 'query', false)
@@ -1068,6 +1069,18 @@ const paths: OpenApiSpec['paths'] = {
         ...errorResponses,
       },
     },
+  },
+  '/api/sirius/spawn-windows/{spawnWindowId}/cancel': {
+    patch: secured(
+      {
+        tags: ['Sirius'],
+        summary: 'Cancel one Sirius spawn window',
+        operationId: 'cancelSiriusSpawnWindow',
+        parameters: [spawnWindowIdParam],
+        responses: { '204': empty(), ...errorResponses },
+      },
+      'Clan COMMANDER for the spawn window clan',
+    ),
   },
   '/api/sirius/clans/{clanId}/journey': {
     get: secured(

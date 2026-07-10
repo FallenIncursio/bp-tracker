@@ -37,6 +37,7 @@ vi.mock('../src/notifications/discord.js', () => discordMock)
 const now = new Date('2026-07-08T10:00:00.000Z')
 const expiresAt = new Date('2026-07-09T02:00:00.000Z')
 const nextSpawnAt = new Date('2026-07-10T02:00:00.000Z')
+const otherExpiresAt = new Date('2026-07-10T08:00:00.000Z')
 
 const appearance = {
   id: 'appearance-1',
@@ -58,6 +59,29 @@ const appearance = {
         id: 'bp-1',
         nameDe: 'Sirius Sammler',
         nameEn: 'Sirius Collector',
+        translations: [],
+      },
+    },
+  ],
+}
+
+const otherAppearance = {
+  ...appearance,
+  id: 'appearance-2',
+  planet: { name: 'Baltra' },
+  expiresAt: otherExpiresAt,
+  nextSpawnAt: new Date('2026-07-11T08:00:00.000Z'),
+  slots: [
+    {
+      id: 'slot-2',
+      blueprintId: 'bp-2',
+      slotGroup: 'SLOT_18',
+      enemyType: null,
+      createdAt: now,
+      blueprint: {
+        id: 'bp-2',
+        nameDe: 'Orion Kanone',
+        nameEn: 'Orion Cannon',
         translations: [],
       },
     },
@@ -88,20 +112,27 @@ const configureSnapshotMocks = (settings: Record<string, unknown>) => {
       appearance,
     },
   ])
-  prismaMock.siriusPlanetAppearance.findMany.mockResolvedValue([appearance])
+  prismaMock.siriusPlanetAppearance.findMany.mockResolvedValue([appearance, otherAppearance])
   prismaMock.siriusSpawnWindow.findMany.mockResolvedValue([
     {
       id: 'spawn-resolved',
       expectedAt: new Date('2026-07-07T02:00:00.000Z'),
       status: 'RESOLVED',
-      sourceAppearance: { planet: { name: 'Habal' }, expiresAt },
+      sourceAppearance: { planet: { name: 'Habal' }, status: 'EXPIRED', expiresAt },
       resolvedAppearance: { planet: { name: 'Osbal' } },
     },
     {
-      id: 'spawn-1',
+      id: 'spawn-active-source',
       expectedAt: nextSpawnAt,
       status: 'PENDING',
-      sourceAppearance: { planet: { name: 'Miequs' }, expiresAt },
+      sourceAppearance: { planet: { name: 'Miequs' }, status: 'ACTIVE', expiresAt },
+      resolvedAppearance: null,
+    },
+    {
+      id: 'spawn-1',
+      expectedAt: new Date('2026-07-08T18:00:00.000Z'),
+      status: 'PENDING',
+      sourceAppearance: { planet: { name: 'Xeigos' }, status: 'EXPIRED', expiresAt: new Date('2026-07-08T02:00:00.000Z') },
       resolvedAppearance: null,
     },
   ])
@@ -122,7 +153,10 @@ const configureSnapshotMocks = (settings: Record<string, unknown>) => {
     },
     { user: { id: 'user-2', displayName: 'Bassman', discordUserId: null } },
   ])
-  prismaMock.userBlueprintStatus.findMany.mockResolvedValue([{ userId: 'user-1', blueprintId: 'bp-1', status: 'WANTED' }])
+  prismaMock.userBlueprintStatus.findMany.mockResolvedValue([
+    { userId: 'user-1', blueprintId: 'bp-1', status: 'WANTED' },
+    { userId: 'user-1', blueprintId: 'bp-2', status: 'WANTED' },
+  ])
 }
 
 describe('Discord status service', () => {
@@ -166,13 +200,14 @@ describe('Discord status service', () => {
     })
     const siriusEmbed = discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0]
     const siriusFields = siriusEmbed.fields ?? []
+    const siriusWantedField = siriusFields.find(field => field.name.includes('Wunsch-Treffer'))
     expect(siriusFields.map(field => field.name)).toEqual(['⭐ Wunsch-Treffer', '🪐 Aktive Planeten', '⏳ Nächste Spawn-Fenster'])
     expect(siriusEmbed).toMatchObject({
-      description: expect.stringContaining('🪐 1 aktiv · ⏳ 1 Spawn-Fenster · 🎯 1 Wunsch-Treffer'),
+      description: expect.stringContaining('🪐 2 aktiv · ⏳ 1 Spawn-Fenster · 🎯 1 Wunsch-Treffer'),
       fields: expect.arrayContaining([
         expect.objectContaining({
           name: expect.stringContaining('Wunsch-Treffer'),
-          value: expect.stringContaining('<@111111111111111111>'),
+          value: expect.stringContaining('Orion Kanone'),
         }),
         expect.objectContaining({
           name: expect.stringContaining('🪐'),
@@ -180,12 +215,14 @@ describe('Discord status service', () => {
         }),
         expect.objectContaining({
           name: expect.stringContaining('⏳'),
-          value: expect.stringContaining('⏳ **Miequs** · erwartet'),
+          value: expect.stringContaining('⏳ **Xeigos** · erwartet'),
         }),
       ]),
     })
+    expect(siriusWantedField?.value).not.toContain('Sirius Sammler')
     expect(siriusFields.find(field => field.name.includes('🪐'))?.value).not.toContain('spawnt neu')
     expect(siriusFields.find(field => field.name.includes('⏳'))?.value).not.toContain('Habal')
+    expect(siriusFields.find(field => field.name.includes('⏳'))?.value).not.toContain('Miequs')
     expect(discordMock.sendDiscordChannelMessage.mock.calls[0][1].embeds[0].fields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Zuletzt bearbeitet' })]))
     expect(discordMock.sendDiscordChannelMessage.mock.calls[1][1].embeds[0].fields).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Fehlend kompakt' })]))
     expect(prismaMock.clanDiscordSettings.update).toHaveBeenCalledWith({
@@ -227,7 +264,7 @@ describe('Discord status service', () => {
       expect.arrayContaining([
         expect.objectContaining({
           name: expect.stringContaining('Wanted hits'),
-          value: expect.stringContaining('Sirius Collector'),
+          value: expect.stringContaining('Orion Cannon'),
         }),
       ]),
     )

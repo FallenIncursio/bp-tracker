@@ -187,6 +187,26 @@ const ensureCanEditAppearance = async (
   return appearance;
 };
 
+const ensureCanEditSpawnWindow = async (
+  req: Parameters<typeof hasClanRole>[0],
+  spawnWindowId: string,
+) => {
+  const spawnWindow = await prisma.siriusSpawnWindow.findUnique({
+    where: { id: spawnWindowId },
+    include: {
+      sourceAppearance: { include: { planet: true } },
+      resolvedAppearance: { include: { planet: true } },
+    },
+  });
+  if (!spawnWindow) {
+    throw new HttpError(404, "Sirius spawn window not found.");
+  }
+  if (!hasClanRole(req, spawnWindow.clanId, "COMMANDER")) {
+    throw new HttpError(403, "Commander role required for this clan.");
+  }
+  return spawnWindow;
+};
+
 export const buildSlotCounts = async (
   clanId: string,
   blueprintIds: string[],
@@ -780,6 +800,39 @@ siriusRouter.get(
       });
 
     res.json({ spawnWindows: rows });
+  }),
+);
+
+siriusRouter.patch(
+  "/spawn-windows/:spawnWindowId/cancel",
+  requireUser,
+  asyncHandler(async (req, res) => {
+    const spawnWindowId = routeParam(req, "spawnWindowId");
+    const existing = await ensureCanEditSpawnWindow(req, spawnWindowId);
+
+    if (existing.status === "RESOLVED" || existing.resolvedAppearanceId) {
+      throw new HttpError(409, "Sirius spawn window is already resolved.");
+    }
+
+    if (existing.status !== "CANCELLED") {
+      const spawnWindow = await prisma.siriusSpawnWindow.update({
+        where: { id: existing.id },
+        data: { status: "CANCELLED" },
+      });
+      await prisma.auditLog.create({
+        data: {
+          actorUserId: req.auth!.user.id,
+          action: "sirius.spawn_window.cancel",
+          entityType: "SiriusSpawnWindow",
+          entityId: existing.id,
+          beforeJson: existing,
+          afterJson: spawnWindow,
+        },
+      });
+      scheduleClanDiscordStatusPublish(existing.clanId);
+    }
+
+    res.status(204).send();
   }),
 );
 

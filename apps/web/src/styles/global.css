@@ -746,6 +746,7 @@ textarea {
 
 .primary-button,
 .secondary-button,
+.danger-button,
 .icon-button,
 .discord-button {
   min-height: 38px;
@@ -783,6 +784,25 @@ textarea {
 .secondary-button:hover {
   border-color: var(--border-strong);
   background: var(--surface-strong);
+}
+
+.danger-button {
+  padding: 0 12px;
+  background: color-mix(in srgb, var(--danger) 12%, var(--surface-soft));
+  border-color: color-mix(in srgb, var(--danger) 34%, var(--border));
+  color: var(--danger);
+}
+
+.danger-button:hover {
+  background: color-mix(in srgb, var(--danger) 18%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--danger) 52%, var(--border-strong));
+}
+
+.inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
 .discord-button {
@@ -951,7 +971,8 @@ textarea {
   padding: 0 12px 12px;
 }
 
-.mobile-card-actions .secondary-button {
+.mobile-card-actions .secondary-button,
+.mobile-card-actions .danger-button {
   width: 100%;
 }
 
